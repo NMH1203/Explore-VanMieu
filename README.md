@@ -29,55 +29,7 @@ Explore Van Mieu sử dụng GPS kết hợp với nhận diện hình ảnh đ�
 
 Sau khi nhận diện hiện vật, hệ thống AI có thể cung cấp phần thuyết minh ngắn gọn về lịch sử, kiến trúc và ý nghĩa văn hóa. Người dùng cũng có thể đặt câu hỏi để tìm hiểu thêm về nội dung mình quan tâm.
 
-## 2. Chức năng chính
-
-### 2.1 Chức năng dành cho du khách
-
-- Đăng ký và đăng nhập tài khoản.
-- Xem thông tin và vị trí các địa điểm trên bản đồ.
-- Xem vị trí hiện tại của người dùng.
-- Tự động mở khóa địa điểm khi người dùng đi vào phạm vi cho phép.
-- Chụp ảnh hiện vật bằng camera.
-- Xem kết quả nhận diện hiện vật.
-- Đọc nội dung thuyết minh được hỗ trợ bởi AI.
-- Đặt câu hỏi về địa điểm, lịch sử và hiện vật.
-- Check-in tại các địa điểm đã đến.
-- Xem lịch sử tham quan.
-- Sưu tầm con dấu trong hộ chiếu di sản số.
-- Theo dõi tiến độ hoàn thành các cột mốc.
-- Nhận thông báo khi đủ điều kiện nhận phần thưởng.
-- Quản lý thông tin tài khoản cá nhân.
-
-### 2.2 Chức năng dành cho quản trị viên
-
-- Quản lý thông tin địa điểm.
-- Quản lý thông tin di tích và hiện vật.
-- Quản lý hình ảnh của địa điểm và hiện vật.
-- Quản lý tài khoản người dùng.
-- Quản lý con dấu và lịch sử check-in.
-- Thiết lập điều kiện hoàn thành cột mốc.
-- Quản lý phần thưởng và trạng thái đổi thưởng.
-
-### 2.3 Chế độ giả lập
-
-Simulator Mode cho phép nhóm phát triển lựa chọn một vị trí GPS giả lập ngay trên giao diện. Chế độ này được sử dụng để kiểm thử và trình diễn các chức năng phụ thuộc vị trí mà không cần phải có mặt trực tiếp tại địa điểm.
-
-Vị trí giả lập chỉ phục vụ phát triển và kiểm thử, không được sử dụng để xác nhận lượt check-in thật.
-
-## 3. Luồng sử dụng cơ bản
-
-1. Người dùng mở ứng dụng trên điện thoại.
-2. Người dùng đăng nhập và cho phép ứng dụng truy cập vị trí.
-3. Bản đồ hiển thị vị trí hiện tại và các địa điểm di sản ở gần.
-4. Khi người dùng đi vào phạm vi của một địa điểm, nội dung tương ứng được mở khóa.
-5. Người dùng mở camera và chụp ảnh hiện vật.
-6. Backend kiểm tra tọa độ GPS và gửi ảnh đến hệ thống nhận diện.
-7. Ứng dụng hiển thị tên hiện vật và nội dung thuyết minh.
-8. Nếu kết quả xác thực hợp lệ, hệ thống ghi nhận lượt check-in.
-9. Một con dấu mới được thêm vào hộ chiếu di sản số.
-10. Hệ thống kiểm tra tiến độ và thông báo nếu người dùng đạt mốc phần thưởng.
-
-## 4. Công nghệ dự kiến
+## 2. Công nghệ dự kiến
 
 ### Frontend
 
@@ -127,7 +79,7 @@ Cơ sở dữ liệu dự kiến lưu trữ:
 - Điều kiện hoàn thành cột mốc.
 - Phần thưởng và trạng thái đổi thưởng.
 
-## 5. Cấu trúc thư mục
+## 3. Cấu trúc thư mục
 
 ```text
 Explore VanMieu/
@@ -204,7 +156,7 @@ Explore VanMieu/
 | `docs` | Chứa tài liệu API, cơ sở dữ liệu, sơ đồ và yêu cầu dự án. |
 | `deployment` | Chứa cấu hình Docker, Nginx và các script triển khai. |
 
-## 6. Cài đặt và chạy frontend
+## 4. Cài đặt và chạy frontend
 
 ### Yêu cầu
 
@@ -244,7 +196,7 @@ npm run build
 npm run preview
 ```
 
-## 7. Thành viên
+## 5. Thành viên
 
 ### Nhóm Frontend
 
