@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Explore Van Mieu — hành trình số tại Văn Miếu Quốc Tử Giám">
+  <title>Explore Van Mieu — HTML & CSS</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <input class="theme-toggle" type="checkbox" id="heritage-awakened" aria-label="Trạng thái mở khóa bảng màu Sơn son – Hoàng kỳ">
+  <input class="scan-toggle" type="checkbox" id="scan-complete" aria-label="Trạng thái nhận diện công trình">
+  <aside class="sidebar">
+    <a class="brand" href="#explore"><span class="brand-mark">V</span><span><strong>Explore Van Mieu</strong><small>Di sản Việt Nam</small></span></a>
+    <nav class="side-links" aria-label="Điều hướng chính">
+      <a href="#explore"><span class="icon">✦</span>Khám phá</a>
+      <a href="#map"><span class="icon">⌖</span>Bản đồ</a>
+      <a href="#camera"><span class="icon">◎</span>Camera</a>
+      <a href="#passport"><span class="icon">▣</span>Hộ chiếu</a>
+      <a href="#account"><span class="icon">○</span>Tài khoản</a>
+    </nav>
+    <div class="side-note">v1.0 · Văn Miếu — Quốc Tử Giám</div>
+  </aside>
+
+  <nav class="bottom-nav" aria-label="Điều hướng di động">
+    <a href="#explore"><b>✦</b>Khám phá</a><a href="#map"><b>⌖</b>Bản đồ</a><a href="#camera"><b>◎</b>Camera</a><a href="#passport"><b>▣</b>Hộ chiếu</a><a href="#account"><b>○</b>Tài khoản</a>
+  </nav>
+
+  <main>
+    <section class="screen" id="explore">
+      <div class="hero">
+        <div class="hero-bg shape-art architecture-art" role="img" aria-label="Khối hình học mô phỏng kiến trúc Văn Miếu"></div>
+        <header class="hero-header"><a class="hero-logo" href="#explore"><b>V</b> Explore Van Mieu</a><a class="avatar" href="#account">N</a></header>
+        <div class="hero-copy">
+          <div class="eyebrow">Văn Miếu – Quốc Tử Giám</div>
+          <h1>Chạm vào những lớp ký ức <span>của nghìn năm hiếu học</span></h1>
+          <p>Mỗi bước chân mở ra một công trình, một nhân vật và một câu chuyện đã góp phần tạo nên di sản tri thức Việt Nam.</p>
+          <div class="hero-actions"><a class="btn btn-gold" href="#journey">Bắt đầu khám phá →</a><a class="btn btn-light" href="#journey">Xem hành trình hôm nay</a></div>
+        </div>
+        <a class="scroll-cue" href="#intro">Cuộn để bắt đầu ↓</a>
+      </div>
+
+      <div class="intro" id="intro"><div class="container intro-grid">
+        <div><span class="kicker">Di sản tri thức</span><h2>Nơi đạo học Việt Nam được gìn giữ qua nhiều thế kỷ</h2><p>Không chỉ là một quần thể kiến trúc, Văn Miếu còn lưu giữ ký ức về giáo dục, khoa cử và những thế hệ hiền tài của dân tộc.</p></div>
+        <div class="intro-stat"><div><strong>1070</strong><span>Năm khởi dựng</span></div><div><strong>10</strong><span>Công trình</span></div><div><strong>82</strong><span>Bia tiến sĩ</span></div></div>
+      </div></div>
+
+      <section class="how-it-works" aria-labelledby="how-title">
+        <div class="container">
+          <div class="how-heading"><div><span class="kicker">Bắt đầu thật đơn giản</span><h2 id="how-title">Khám phá Văn Miếu theo cách của bạn</h2></div><p>Chỉ cần điện thoại và vài phút tại mỗi điểm đến, bạn có thể mở từng lớp câu chuyện của di sản.</p></div>
+          <div class="use-flow">
+            <article class="flow-step"><div class="flow-visual map-visual"><span class="flow-icon">⌖</span><i></i><b>01</b></div><div class="flow-copy"><span>Bước 1</span><h3>Tìm di sản gần bạn</h3><p>Mở bản đồ để xem các công trình và chọn điểm muốn khám phá.</p></div></article>
+            <span class="flow-arrow" aria-hidden="true">→</span>
+            <article class="flow-step"><div class="flow-visual scan-visual"><span class="flow-icon">◎</span><i></i><b>02</b></div><div class="flow-copy"><span>Bước 2</span><h3>Đưa máy lên quét</h3><p>Hướng camera vào công trình để xác minh hình ảnh và vị trí.</p></div></article>
+            <span class="flow-arrow" aria-hidden="true">→</span>
+            <article class="flow-step"><div class="flow-visual story-visual"><span class="flow-icon">✦</span><i></i><b>03</b></div><div class="flow-copy"><span>Bước 3</span><h3>Mở câu chuyện</h3><p>Đọc, nghe hoặc hỏi AI để hiểu sâu hơn về dấu tích trước mắt.</p></div></article>
+            <span class="flow-arrow" aria-hidden="true">→</span>
+            <article class="flow-step"><div class="flow-visual stamp-visual"><span class="flow-icon">★</span><i></i><b>04</b></div><div class="flow-copy"><span>Bước 4</span><h3>Lưu dấu hành trình</h3><p>Nhận con dấu vào Hộ chiếu Di sản và tiếp tục điểm đến mới.</p></div></article>
+          </div>
+          <div class="how-action"><a class="btn btn-primary" href="#map">Bắt đầu từ bản đồ →</a><span>Không cần tải ứng dụng</span></div>
+        </div>
+      </section>
+
+      <div class="container">
+        <section class="section" id="journey">
+          <div class="journey-card">
+            <div class="journey-copy"><span class="eyebrow">Hành trình của bạn hôm nay</span><h2>Năm điểm chạm, một mạch ký ức</h2><p>Hệ thống đã chọn 5 địa điểm không trùng lặp. Hoàn thành xác minh GPS và camera để đánh thức từng lớp di sản.</p><div class="progress-label"><span>Tiến trình khám phá</span><strong>1/5 địa điểm</strong></div><div class="progress"><i></i></div><br><a class="btn btn-gold" href="#map">Tiếp tục hành trình</a></div>
+            <div class="journey-list"><div class="journey-stop"><span class="stop-no">✓</span>Khuê Văn Các</div><div class="journey-stop"><span class="stop-no">2</span>Cổng Đại Trung</div><div class="journey-stop"><span class="stop-no">3</span>Điện Đại Thành</div><div class="journey-stop"><span class="stop-no">4</span>Nhà Thái Học</div><div class="journey-stop"><span class="stop-no">5</span>Phương Đình</div></div>
+          </div>
+        </section>
+
+        <section class="section"><div class="section-head"><div><span class="kicker">Bản đồ tương tác</span><h2>Di sản quanh bạn</h2><p>Tìm công trình gần nhất và theo dõi phần không gian đã được đánh thức.</p></div><a class="btn btn-outline" href="#map">Mở bản đồ lớn</a></div>
+          <div class="map-preview"><div class="map-art"></div><div class="map-marker jade" style="left:35%;top:40%"><span>✓</span></div><div class="map-marker" style="left:55%;top:27%"><span>2</span></div><div class="map-marker locked" style="left:71%;top:57%"><span>3</span></div><div class="map-marker" style="left:48%;top:68%"><span>4</span></div><div class="map-card"><strong>Khuê Văn Các · Đã xác minh</strong><p>Cách bạn 32 m · Dấu ấn đầu tiên trong hành trình hôm nay.</p><a class="btn btn-primary" href="#interpret">Xem câu chuyện</a></div></div>
+        </section>
+
+        <section class="section"><div class="section-head"><div><span class="kicker">Gần bạn</span><h2>Các công trình nổi bật</h2><p>Mỗi trạng thái đều có nhãn rõ ràng cùng hành động tiếp theo.</p></div></div>
+          <div class="cards">
+            <article class="location-card"><div class="location-image"><div class="shape-art art-a" role="img" aria-label="Khối hình học Khuê Văn Các"></div><span class="badge done">✓ Đã mở khóa</span></div><div class="location-body"><h3>Khuê Văn Các</h3><p>Biểu tượng văn chương và trí tuệ, được xây dựng dưới triều Nguyễn.</p><div class="meta"><span>⌖ 32 m</span><span>✓ Camera xác minh</span></div><a class="btn btn-outline btn-block" href="#interpret">Xem câu chuyện</a></div></article>
+            <article class="location-card"><div class="location-image"><div class="shape-art art-b" role="img" aria-label="Khối hình học Cổng Đại Trung"></div><span class="badge near">⌖ Đang ở gần</span></div><div class="location-body"><h3>Cổng Đại Trung</h3><p>Cánh cổng dẫn vào không gian trung tâm của quần thể Văn Miếu.</p><div class="meta"><span>⌖ 46 m</span><span>◎ Cần xác minh</span></div><a class="btn btn-primary btn-block" href="#camera">Bắt đầu xác minh</a></div></article>
+            <article class="location-card locked"><div class="location-image"><div class="shape-art art-c" role="img" aria-label="Khối hình học Nhà Thái Học"></div><span class="badge">◉ Chưa đến gần</span></div><div class="location-body"><h3>Nhà Thái Học</h3><p>Nội dung lịch sử đang ngủ. Hãy đến gần để mở khóa câu chuyện.</p><div class="meta"><span>⌖ 210 m</span><span>◇ GPS chưa xác nhận</span></div><a class="btn btn-outline btn-block" href="#map">Chỉ đường</a></div></article>
+          </div>
+          <div class="more-row"><a class="btn btn-outline" href="#all-locations">Xem thêm tất cả công trình →</a></div>
+        </section>
+
+        <section class="section"><div class="section-head"><div><span class="kicker">Thư viện tri thức</span><h2>Danh nhân và bậc hiền triết</h2></div></div>
+          <div class="figures"><article class="figure-card"><div class="portrait-shape" role="img" aria-label="Khối chân dung Chu Văn An"></div><div class="figure-copy"><h3>Chu Văn An</h3><small>Người thầy mẫu mực</small><p>Gắn với lịch sử Quốc Tử Giám và truyền thống tôn sư trọng đạo.</p><a class="text-link" href="#interpret">Nghe câu chuyện →</a></div></article><article class="figure-card"><div class="portrait-shape portrait-b" role="img" aria-label="Khối chân dung Lý Thánh Tông"></div><div class="figure-copy"><h3>Lý Thánh Tông</h3><small>1023–1072</small><p>Vị vua cho dựng Văn Miếu vào năm 1070.</p><a class="text-link" href="#interpret">Hỏi AI →</a></div></article><article class="figure-card"><div class="portrait-shape portrait-c" role="img" aria-label="Khối chân dung Khổng Tử"></div><div class="figure-copy"><h3>Khổng Tử</h3><small>Bậc vạn thế sư biểu</small><p>Nhân vật trung tâm trong không gian thờ tự của Văn Miếu.</p><a class="text-link" href="#interpret">Nghe câu chuyện →</a></div></article></div>
+          <div class="more-row"><a class="btn btn-outline" href="#all-figures">Xem thêm tất cả danh nhân →</a></div>
+        </section>
+
+        <section class="section"><div class="passport-teaser"><div class="passport-cover"><div><div class="star">★</div><div class="eyebrow">Digital Heritage Passport</div><h2>Hộ chiếu Di sản</h2><p>1 trong 10 dấu ấn đã thu thập</p><a class="btn btn-gold" href="#passport">Mở hộ chiếu</a></div></div><div class="passport-stamps"><div class="stamp collected">★</div><div class="stamp">○</div><div class="stamp">○</div><div class="stamp">○</div><div class="stamp">○</div><div class="stamp">○</div><div class="stamp">○</div><div class="stamp">○</div><div class="stamp">○</div><div class="stamp">○</div></div></div></section>
+
+        <section class="section">
+          <div class="ai-guide ai-guide-home" aria-label="Trò chuyện với AI Heritage Guide">
+            <header class="ai-guide-header"><div class="ai-avatar">AI</div><div><span>AI Heritage Guide</span><h2>Hỏi để hiểu sâu hơn</h2></div><span class="ai-status">● Đang trực tuyến</span></header>
+            <div class="ai-chat-body">
+              <div class="ai-message"><div class="mini-avatar">AI</div><div><span class="message-label">Trợ lý di sản</span><div class="bubble ai">Xin chào! Bạn đang đứng trước Khuê Văn Các. Tôi có thể kể về kiến trúc, ý nghĩa biểu tượng hoặc lịch sử của công trình này.</div></div></div>
+              <div class="ai-message user-message"><div><span class="message-label">Bạn</span><div class="bubble user">Vì sao hình ảnh Khuê Văn Các được in trên tiền Việt Nam?</div></div></div>
+              <p class="suggestion-label">Bạn có thể hỏi tiếp</p>
+              <div class="question-row"><button class="chip">Kiến trúc có gì đặc biệt?</button><button class="chip">Nghe câu chuyện 2 phút</button><button class="chip">Nhân vật liên quan</button></div>
+            </div>
+            <div class="ai-composer"><button class="composer-tool" aria-label="Thêm nội dung">＋</button><label><span class="sr-only">Câu hỏi dành cho AI</span><input type="text" placeholder="Hỏi AI về di sản bạn đang khám phá..."></label><button class="send-button" aria-label="Gửi câu hỏi">↑</button></div>
+            <p class="ai-note">AI có thể mắc lỗi. Hãy kiểm chứng những thông tin lịch sử quan trọng.</p>
+          </div>
+        </section>
+      </div>
+      <footer class="footer"><strong>Explore Van Mieu</strong>Một hành trình số đánh thức di sản và truyền thống hiếu học Việt Nam.</footer>
+    </section>
+
+    <section class="screen" id="map">
+      <header class="topbar"><div class="inner"><div class="eyebrow">All locations</div><h1>Bản đồ Văn Miếu</h1><p>Theo dõi vị trí hiện tại, các điểm trong hành trình và trạng thái mở khóa.</p></div></header>
+      <div class="container"><div class="map-layout"><div class="map-full"><div class="map-art"></div><div class="map-legend"><span><i class="dot jade"></i>Đã mở khóa</span><span><i class="dot"></i>Trong hành trình</span><span><i class="dot stone"></i>Đang khóa</span></div><div class="map-marker jade" style="left:25%;top:36%"><span>✓</span></div><div class="map-marker" style="left:46%;top:22%"><span>2</span></div><div class="map-marker" style="left:67%;top:39%"><span>3</span></div><div class="map-marker locked" style="left:79%;top:69%"><span>4</span></div><div class="map-marker locked" style="left:39%;top:72%"><span>5</span></div><div class="map-card"><strong>Vị trí của bạn</strong><p>Gần Cổng Đại Trung · còn 46 m để xác nhận GPS.</p><a class="btn btn-primary" href="#camera">Mở xác minh</a></div></div><aside class="map-side"><article class="mini-location"><div class="mini-shape" role="img" aria-label="Khối hình học Khuê Văn Các"></div><div><h3>Khuê Văn Các</h3><p>✓ Đã hoàn tất · 32 m</p></div></article><article class="mini-location"><div class="mini-shape art-b" role="img" aria-label="Khối hình học Cổng Đại Trung"></div><div><h3>Cổng Đại Trung</h3><p>⌖ Đang ở gần · 46 m</p></div></article><article class="mini-location"><div class="mini-shape art-c" role="img" aria-label="Khối hình học Điện Đại Thành"></div><div><h3>Điện Đại Thành</h3><p>◇ Trong hành trình · 120 m</p></div></article><article class="mini-location"><div class="mini-shape art-a" role="img" aria-label="Khối hình học Nhà Thái Học"></div><div><h3>Nhà Thái Học</h3><p>◉ Chưa đến gần · 210 m</p></div></article></aside></div></div>
+    </section>
+
+    <section class="screen" id="all-locations">
+      <header class="topbar"><div class="inner"><div class="catalog-back"><a class="btn btn-light" href="#explore">← Quay lại</a></div><div class="eyebrow">Công trình kiến trúc</div><h1>Tất cả địa điểm</h1><p>Khám phá đầy đủ 10 công trình trong quần thể Văn Miếu – Quốc Tử Giám.</p></div></header>
+      <div class="container">
+        <div class="catalog-summary"><span>10 công trình</span><span>1 đã mở khóa</span><span>5 thuộc hành trình hôm nay</span></div>
+        <div class="cards all-cards">
+          <article class="location-card locked"><div class="location-image"><div class="shape-art art-c" role="img" aria-label="Khối hình học Cổng Văn Miếu"></div><span class="badge">◉ Đang khóa</span></div><div class="location-body"><h3>Cổng Văn Miếu</h3><p>Lối vào đầu tiên mở ra trục kiến trúc và không gian đạo học.</p><div class="meta"><span>⌖ 280 m</span><span>◇ GPS chưa xác nhận</span></div><a class="btn btn-outline btn-block" href="#map">Chỉ đường</a></div></article>
+          <article class="location-card"><div class="location-image"><div class="shape-art art-b" role="img" aria-label="Khối hình học Cổng Đại Trung"></div><span class="badge near">⌖ Đang ở gần</span></div><div class="location-body"><h3>Cổng Đại Trung</h3><p>Cánh cổng dẫn vào không gian trung tâm của quần thể.</p><div class="meta"><span>⌖ 46 m</span><span>◎ Cần xác minh</span></div><a class="btn btn-primary btn-block" href="#camera">Bắt đầu xác minh</a></div></article>
+          <article class="location-card"><div class="location-image"><div class="shape-art art-a" role="img" aria-label="Khối hình học Khuê Văn Các"></div><span class="badge done">✓ Đã mở khóa</span></div><div class="location-body"><h3>Khuê Văn Các</h3><p>Biểu tượng của văn chương, trí tuệ và Thủ đô Hà Nội.</p><div class="meta"><span>⌖ 32 m</span><span>✓ Camera xác minh</span></div><a class="btn btn-outline btn-block" href="#interpret">Xem câu chuyện</a></div></article>
+          <article class="location-card"><div class="location-image"><div class="shape-art art-b" role="img" aria-label="Khối hình học Cổng Đại Thành"></div><span class="badge near">◇ Trong hành trình</span></div><div class="location-body"><h3>Cổng Đại Thành</h3><p>Cánh cổng đánh dấu lối vào khu điện thờ trang nghiêm.</p><div class="meta"><span>⌖ 95 m</span><span>◇ Chưa xác minh</span></div><a class="btn btn-outline btn-block" href="#map">Chỉ đường</a></div></article>
+          <article class="location-card"><div class="location-image"><div class="shape-art art-a" role="img" aria-label="Khối hình học Điện Đại Thành"></div><span class="badge near">◇ Trong hành trình</span></div><div class="location-body"><h3>Điện Đại Thành</h3><p>Không gian thờ Khổng Tử và các bậc hiền triết Nho học.</p><div class="meta"><span>⌖ 120 m</span><span>◇ GPS chưa xác nhận</span></div><a class="btn btn-outline btn-block" href="#map">Chỉ đường</a></div></article>
+          <article class="location-card locked"><div class="location-image"><div class="shape-art art-c" role="img" aria-label="Khối hình học Cổng Thái Học"></div><span class="badge">◉ Đang khóa</span></div><div class="location-body"><h3>Cổng Thái Học</h3><p>Lối chuyển tiếp vào khu vực tưởng niệm truyền thống giáo dục.</p><div class="meta"><span>⌖ 185 m</span><span>◇ GPS chưa xác nhận</span></div><a class="btn btn-outline btn-block" href="#map">Chỉ đường</a></div></article>
+          <article class="location-card locked"><div class="location-image"><div class="shape-art art-c" role="img" aria-label="Khối hình học Nhà Thái Học"></div><span class="badge">◉ Đang khóa</span></div><div class="location-body"><h3>Nhà Thái Học</h3><p>Công trình tôn vinh Quốc Tử Giám và những người thầy tiêu biểu.</p><div class="meta"><span>⌖ 210 m</span><span>◇ GPS chưa xác nhận</span></div><a class="btn btn-outline btn-block" href="#map">Chỉ đường</a></div></article>
+          <article class="location-card locked"><div class="location-image"><div class="shape-art art-b" role="img" aria-label="Khối hình học Lầu Chuông – Lầu Trống"></div><span class="badge">◉ Đang khóa</span></div><div class="location-body"><h3>Lầu Chuông – Lầu Trống</h3><p>Cặp công trình tạo nhịp điệu cân xứng cho khu Thái Học.</p><div class="meta"><span>⌖ 235 m</span><span>◇ GPS chưa xác nhận</span></div><a class="btn btn-outline btn-block" href="#map">Chỉ đường</a></div></article>
+          <article class="location-card locked"><div class="location-image"><div class="shape-art art-a" role="img" aria-label="Khối hình học Nhà Bát Giác"></div><span class="badge">◉ Đang khóa</span></div><div class="location-body"><h3>Nhà Bát Giác</h3><p>Không gian kiến trúc tám cạnh giàu tính biểu tượng.</p><div class="meta"><span>⌖ 260 m</span><span>◇ GPS chưa xác nhận</span></div><a class="btn btn-outline btn-block" href="#map">Chỉ đường</a></div></article>
+          <article class="location-card"><div class="location-image"><div class="shape-art art-b" role="img" aria-label="Khối hình học Phương Đình"></div><span class="badge near">◇ Trong hành trình</span></div><div class="location-body"><h3>Phương Đình</h3><p>Điểm dừng chân nối kết cảnh quan và trục tham quan.</p><div class="meta"><span>⌖ 175 m</span><span>◇ Chưa xác minh</span></div><a class="btn btn-outline btn-block" href="#map">Chỉ đường</a></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="all-figures">
+      <header class="topbar"><div class="inner"><div class="catalog-back"><a class="btn btn-light" href="#explore">← Quay lại</a></div><div class="eyebrow">Danh nhân</div><h1>Danh nhân và bậc hiền triết</h1><p>Sáu nhân vật gắn với lịch sử hình thành, giáo dục và đời sống tinh thần của Văn Miếu.</p></div></header>
+      <div class="container">
+        <div class="catalog-summary"><span>6 nhân vật</span><span>3 đã mở khóa</span><span>Thư viện tri thức</span></div>
+        <div class="figures all-figures">
+          <article class="figure-card"><div class="portrait-shape" role="img" aria-label="Khối chân dung Lý Thánh Tông"></div><div class="figure-copy"><h3>Lý Thánh Tông</h3><small>1023–1072 · Người dựng Văn Miếu</small><p>Nhà vua cho dựng Văn Miếu năm 1070, đặt nền móng cho không gian tôn vinh đạo học.</p><a class="text-link" href="#interpret">Nghe câu chuyện →</a></div></article>
+          <article class="figure-card"><div class="portrait-shape portrait-b" role="img" aria-label="Khối chân dung Lý Nhân Tông"></div><div class="figure-copy"><h3>Lý Nhân Tông</h3><small>1066–1128 · Người lập Quốc Tử Giám</small><p>Nhà vua cho thành lập Quốc Tử Giám, trường đại học đầu tiên của Việt Nam.</p><a class="text-link" href="#interpret">Hỏi AI →</a></div></article>
+          <article class="figure-card"><div class="portrait-shape portrait-c" role="img" aria-label="Khối chân dung Lê Thánh Tông"></div><div class="figure-copy"><h3>Lê Thánh Tông</h3><small>1442–1497 · Vị vua trọng hiền tài</small><p>Khởi xướng việc dựng bia ghi danh tiến sĩ, lưu lại truyền thống khoa bảng.</p><a class="text-link" href="#interpret">Nghe câu chuyện →</a></div></article>
+          <article class="figure-card"><div class="portrait-shape portrait-b" role="img" aria-label="Khối chân dung Chu Văn An"></div><div class="figure-copy"><h3>Chu Văn An</h3><small>1292–1370 · Người thầy mẫu mực</small><p>Biểu tượng về nhân cách người thầy và tinh thần tôn sư trọng đạo.</p><a class="text-link" href="#interpret">Hỏi AI →</a></div></article>
+          <article class="figure-card"><div class="portrait-shape" role="img" aria-label="Khối chân dung Khổng Tử"></div><div class="figure-copy"><h3>Khổng Tử</h3><small>551–479 TCN · Vạn thế sư biểu</small><p>Nhân vật trung tâm trong không gian thờ tự và tư tưởng Nho học tại Văn Miếu.</p><a class="text-link" href="#interpret">Nghe câu chuyện →</a></div></article>
+          <article class="figure-card"><div class="portrait-shape portrait-c" role="img" aria-label="Khối chân dung Tứ Phối"></div><div class="figure-copy"><h3>Tứ Phối</h3><small>Bốn bậc hiền triết phối thờ</small><p>Nhan Hồi, Tăng Sâm, Tử Tư và Mạnh Tử — những người kế thừa, phát triển Nho học.</p><a class="text-link" href="#interpret">Hỏi AI →</a></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="camera">
+      <div class="camera-screen">
+        <div class="camera-art" role="img" aria-label="Khối hình học mô phỏng góc nhìn camera"></div>
+        <div class="camera-ui">
+          <div class="camera-top"><a class="round-btn" href="#map">←</a><div class="camera-progress"><span class="active">1 · Quét</span><i></i><span>2 · Xác định vị trí</span><i></i><span>3 · Khám phá</span></div><button class="round-btn" aria-label="Bật đèn">☼</button></div>
+          <div class="camera-location"><span class="location-dot">●</span><div><small>Vị trí hiện tại</small><strong>Sân Khuê Văn Các</strong><span>Văn Miếu – Quốc Tử Giám · Chính xác ±8 m</span></div></div>
+          <div class="viewfinder"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><div class="scan-line"></div><div class="scan-hint">Giữ công trình nằm trọn trong khung</div></div>
+          <div class="camera-bottom scan-ready"><span class="camera-kicker">Nhận diện công trình</span><h2>Hướng camera về phía Khuê Văn Các</h2><p>AI sẽ đối chiếu kiến trúc và GPS để tìm đúng câu chuyện di sản tại vị trí của bạn.</p><label class="scan-button" for="scan-complete"><span>◎</span> Bắt đầu quét</label></div>
+          <div class="camera-bottom scan-result"><div class="result-check">✓</div><div class="result-copy"><span class="camera-kicker">Đã nhận diện · độ tin cậy 98%</span><h2>Khuê Văn Các</h2><p><b>⌖ Bạn đang ở Sân Khuê Văn Các</b><br>Cách công trình 12 m · GPS và hình ảnh đã trùng khớp.</p><div class="result-actions"><a class="btn btn-gold" href="#interpret">Xem thông tin di sản →</a><label class="scan-again" for="scan-complete">Quét lại</label></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="interpret">
+      <div class="interpret-layout">
+        <div class="interpret-visual">
+          <div class="interpret-art" role="img" aria-label="Khối hình học Khuê Văn Các"></div>
+          <div class="interpret-title"><span class="eyebrow">Di sản đã thức tỉnh</span><h1>Khuê Văn Các</h1><span>Văn Miếu – Quốc Tử Giám</span></div>
+          <a class="interpret-scroll" href="#heritage-story">Khám phá câu chuyện <span>↓</span></a>
+        </div>
+        <div class="interpret-content" id="heritage-story">
+          <div class="interpret-story-grid">
+            <div>
+              <div class="success"><span>✓</span><div><b>Đã mở khóa — một phần di sản vừa được đánh thức</b><span>GPS và hình ảnh đã được xác minh thành công.</span></div></div>
+              <article class="article"><span class="kicker">Câu chuyện di sản</span><h2>Biểu tượng của văn chương và ánh sáng tri thức</h2><p>Khuê Văn Các được dựng vào đầu thế kỷ XIX. Công trình nhỏ nhắn nhưng cân đối, nổi bật với lầu vuông tám mái và bốn cửa sổ tròn tựa những mặt trời tỏa sáng.</p><p>Tên gọi gợi đến sao Khuê — ngôi sao chủ về văn chương trong quan niệm phương Đông. Công trình trở thành biểu tượng của Thủ đô Hà Nội.</p></article>
+              <div class="fact"><strong>Bạn có biết?</strong><br>Hình ảnh Khuê Văn Các xuất hiện trên tờ tiền polymer 100.000 đồng và biểu trưng của thành phố Hà Nội.</div>
+            </div>
+            <div>
+              <div class="achievement-gate"><div class="before-unlock"><div class="achievement-icon">◇</div><h2>Thành tựu mới đang chờ</h2><p>Bạn đã xác minh thành công địa điểm đầu tiên. Nhận thành tựu để đánh thức bảng màu Sơn son – Hoàng kỳ trên toàn bộ ứng dụng.</p><label class="btn btn-primary" for="heritage-awakened">Nhận thành tựu và mở khóa màu sắc</label></div><div class="after-unlock"><div class="achievement-icon">★</div><h2>Bảng màu Sơn son đã mở khóa</h2><p>Thành tựu “Bước đầu hành trình” đã kích hoạt sắc đỏ sơn mài, vàng quốc kỳ và xanh ngọc xác minh.</p><label class="btn btn-outline" for="heritage-awakened">Xem lại trạng thái ban đầu</label></div></div>
+              <article class="article heritage-stamp"><span class="kicker">Dấu ấn của bạn</span><h2>Hành trình đã được ghi lại</h2><p>Tem di sản đã được thêm vào Digital Heritage Passport. Tiến trình hành trình hôm nay được cập nhật thành 1/5.</p><div class="hero-actions"><a class="btn btn-primary" href="#passport">Xem hộ chiếu</a><a class="btn btn-outline" href="#explore">Tiếp tục hành trình</a></div></article>
+            </div>
+          </div>
+          <section class="ai-guide" aria-label="Trò chuyện với AI Heritage Guide">
+            <header class="ai-guide-header"><div class="ai-avatar">AI</div><div><span>AI Heritage Guide</span><h2>Hỏi thêm về Khuê Văn Các</h2></div><span class="ai-status">● Đang trực tuyến</span></header>
+            <div class="ai-chat-body">
+              <div class="ai-message"><div class="mini-avatar">AI</div><div><span class="message-label">Trợ lý di sản</span><div class="bubble ai">Xin chào! Tôi có thể giúp bạn khám phá kiến trúc, ý nghĩa của sao Khuê và vai trò của công trình trong lịch sử Hà Nội.</div></div></div>
+              <p class="suggestion-label">Gợi ý câu hỏi</p>
+              <div class="question-row"><button class="chip">Vì sao có cửa sổ tròn?</button><button class="chip">Kiến trúc thời Nguyễn</button><button class="chip">Kể chuyện trong 2 phút</button></div>
+            </div>
+            <div class="ai-composer"><button class="composer-tool" aria-label="Thêm nội dung">＋</button><label><span class="sr-only">Câu hỏi dành cho AI</span><input type="text" placeholder="Hỏi AI về Khuê Văn Các..."></label><button class="send-button" aria-label="Gửi câu hỏi">↑</button></div>
+            <p class="ai-note">AI có thể mắc lỗi. Thông tin lịch sử được đối chiếu từ tư liệu Văn Miếu – Quốc Tử Giám.</p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="passport">
+      <header class="topbar"><div class="inner"><div class="eyebrow">Hộ chiếu Di sản</div><h1>Bộ sưu tập dấu ấn</h1><p>Văn Miếu – Quốc Tử Giám · 1/10 công trình đã khám phá</p></div></header>
+      <div class="container passport-page"><section class="section"><div class="section-head"><div><h2>Dấu ấn di sản</h2><p>Mỗi công trình hoàn tất sẽ để lại một con dấu riêng.</p></div><strong>1/10</strong></div><div class="stamp-grid"><div class="stamp-wrap"><div class="stamp collected">★</div><span>Khuê Văn Các</span></div><div class="stamp-wrap"><div class="stamp">○</div><span>Cổng Văn Miếu</span></div><div class="stamp-wrap"><div class="stamp">○</div><span>Cổng Đại Trung</span></div><div class="stamp-wrap"><div class="stamp">○</div><span>Cổng Đại Thành</span></div><div class="stamp-wrap"><div class="stamp">○</div><span>Điện Đại Thành</span></div><div class="stamp-wrap"><div class="stamp">○</div><span>Cổng Thái Học</span></div><div class="stamp-wrap"><div class="stamp">○</div><span>Nhà Thái Học</span></div><div class="stamp-wrap"><div class="stamp">○</div><span>Lầu Chuông</span></div><div class="stamp-wrap"><div class="stamp">○</div><span>Nhà Bát Giác</span></div><div class="stamp-wrap"><div class="stamp">○</div><span>Phương Đình</span></div></div></section><section class="section"><h2>Cột mốc</h2><br><div class="milestones"><article class="milestone current"><div class="milestone-icon">★</div><div><h3>Bước đầu hành trình</h3><p>Đạt 1/1 · Huy hiệu Explore Van Mieu</p></div></article><article class="milestone"><div class="milestone-icon">○</div><div><h3>Người tìm kiếm di sản</h3><p>1/3 · Bưu thiếp kỹ thuật số độc quyền</p></div></article><article class="milestone"><div class="milestone-icon">○</div><div><h3>Hoàn thành hành trình</h3><p>1/5 · Chứng nhận Đại sứ Văn hóa</p></div></article><article class="milestone"><div class="milestone-icon">○</div><div><h3>Bậc hiếu học</h3><p>1/10 · Danh hiệu Học giả Di sản</p></div></article></div></section><a class="btn btn-primary btn-block" href="#explore">Tiếp tục khám phá</a></div>
+    </section>
+
+    <section class="screen" id="account">
+      <div class="profile-hero"><div class="profile"><div class="avatar">N</div><div><h1>Nguyễn Văn An</h1><p>nguyen.van.an@email.com</p><br><span class="btn btn-gold">★ Explore Van Mieu</span></div></div></div>
+      <div class="container passport-page"><div class="account-grid section"><div class="stat-card"><strong>1</strong><span>Địa điểm / 10</span></div><div class="stat-card"><strong>1</strong><span>Dấu ấn / 10</span></div><div class="stat-card"><strong>1</strong><span>Cột mốc / 4</span></div></div><section class="panel section"><h2>Truy cập nhanh</h2><div class="quick-grid"><a class="btn btn-outline" href="#passport">Hộ chiếu</a><a class="btn btn-outline" href="#map">Bản đồ</a><a class="btn btn-outline" href="#camera">Camera</a><a class="btn btn-outline" href="#explore">Khám phá</a></div></section><section class="panel settings section"><h2>Cài đặt</h2><div class="setting"><span>🌐 Ngôn ngữ</span><span>Tiếng Việt ›</span></div><div class="setting"><span>🔔 Thông báo</span><span>Đang bật ›</span></div><div class="setting"><span>📍 GPS</span><span>Luôn bật ›</span></div><div class="setting"><span>☀ Chủ đề</span><span>Sáng ›</span></div></section><a class="btn btn-outline btn-block" href="#explore">Đăng xuất</a></div>
+    </section>
+  </main>
+</body>
+</html>
