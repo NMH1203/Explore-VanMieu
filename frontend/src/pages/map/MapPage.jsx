@@ -1,4 +1,4 @@
-import PageMarkup from '../../components/common/PageMarkup.jsx'
+import PageMarkup from '../../components/PageMarkup.jsx'
 import markup from './template.html?raw'
 
 function MapPage() {
