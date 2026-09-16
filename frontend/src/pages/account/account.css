@@ -1,11 +1,82 @@
-.profile-hero { padding: 36px 5vw; color: white; background: var(--lacquer); }
-.profile { max-width: 880px; margin: auto; display: flex; align-items: center; gap: 18px; }
-.profile .avatar { width: 72px; height: 72px; color: var(--lacquer); background: var(--gold); font-size: 25px; }
-.profile h1 { margin: 0 0 3px; }.profile p { margin: 0; color: #ffffff8c; font-size: 11px; }
-.account-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-.stat-card, .panel { padding: 20px; border: 1px solid var(--border); border-radius: 15px; background: var(--warm); }
-.stat-card { text-align: center; }.stat-card strong { display: block; color: var(--lacquer); font-size: 28px; }.stat-card span { color: var(--stone); font-size: 10px; }
-.settings { padding: 0; overflow: hidden; }
-.settings h2 { padding: 17px 20px; border-bottom: 1px solid var(--border); font-size: 14px; }
-.setting { display: flex; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--border); font-size: 11px; }.setting:last-child { border: 0; }.setting span:last-child { color: var(--stone); }
-.quick-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.profile-hero {
+  padding: 36px 5vw;
+  color: white;
+  background: var(--lacquer);
+}
+
+.profile {
+  max-width: 880px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.profile .avatar {
+  width: 72px;
+  height: 72px;
+  color: var(--lacquer);
+  background: var(--gold);
+  font-size: 25px;
+}
+.profile h1 {
+  margin: 0 0 3px;
+}
+
+.profile p {
+  margin: 0;
+  color: #ffffff8c;
+  font-size: 11px;
+}
+.account-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.stat-card,
+.panel {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--warm);
+}
+.stat-card {
+  text-align: center;
+}
+.stat-card strong {
+  display: block;
+  color: var(--lacquer);
+  font-size: 28px;
+}
+.stat-card span {
+  color: var(--stone);
+  font-size: 10px;
+}
+
+.settings {
+  padding: 0;
+  overflow: hidden;
+}
+.settings h2 {
+  padding: 17px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.setting {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+}
+.setting:last-child {
+  border: 0;
+}
+.setting span:last-child {
+  color: var(--stone);
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}

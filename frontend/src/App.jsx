@@ -11,8 +11,18 @@ import PassportPage from './pages/passport/PassportPage.jsx'
 function App() {
   return (
     <div className="heritage-app">
-      <input className="theme-toggle" type="checkbox" id="heritage-awakened" aria-label="Trạng thái mở khóa bảng màu Sơn son – Hoàng kỳ" />
-      <input className="scan-toggle" type="checkbox" id="scan-complete" aria-label="Trạng thái nhận diện công trình" />
+      <input
+        className="theme-toggle"
+        type="checkbox"
+        id="heritage-awakened"
+        aria-label="Trạng thái mở khóa bảng màu Sơn son – Hoàng kỳ"
+      />
+      <input
+        className="scan-toggle"
+        type="checkbox"
+        id="scan-complete"
+        aria-label="Trạng thái nhận diện công trình"
+      />
       <Navigation />
       <main>
         <HomePage />

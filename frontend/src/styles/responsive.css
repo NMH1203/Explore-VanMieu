@@ -1,87 +1,311 @@
 @media (min-width: 1101px) {
-  .hero-logo { display: none; }
-  .scroll-cue { right: 5vw; bottom: 32px; writing-mode: horizontal-tb; }
+  .hero-logo {
+    display: none;
+  }
+  .scroll-cue {
+    right: 5vw;
+    bottom: 32px;
+    writing-mode: horizontal-tb;
+  }
 }
 
 @media (max-width: 1100px) {
-  :root { --sidebar: 0px; }
-  .sidebar { display: none; }
-  .bottom-nav { position: fixed; z-index: 60; inset: auto 0 0; display: grid; grid-template-columns: repeat(5, 1fr); min-height: var(--nav); padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid var(--border); background: #fffdf7f5; backdrop-filter: blur(12px); }
-  .bottom-nav a { display: grid; place-items: center; align-content: center; gap: 3px; color: var(--stone); font-size: 9px; font-weight: 600; }
-  .bottom-nav b { color: var(--lacquer); font-size: 17px; }
-  .screen { padding-bottom: var(--nav); }
-  .cards, .figures { grid-template-columns: repeat(2, 1fr); }
-  .all-cards, .all-figures { grid-template-columns: repeat(2, 1fr); }
+  :root {
+    --sidebar: 0px;
+  }
+  .sidebar {
+    display: none;
+  }
+  .bottom-nav {
+    position: fixed;
+    z-index: 60;
+    inset: auto 0 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    min-height: var(--nav);
+    padding-bottom: env(safe-area-inset-bottom);
+    border-top: 1px solid var(--border);
+    background: #fffdf7f5;
+    backdrop-filter: blur(12px);
+  }
+  .bottom-nav a {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 3px;
+    color: var(--stone);
+    font-size: 9px;
+    font-weight: 600;
+  }
+  .bottom-nav b {
+    color: var(--lacquer);
+    font-size: 17px;
+  }
+  .screen {
+    padding-bottom: var(--nav);
+  }
+  .cards,
+  .figures {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .all-cards,
+  .all-figures {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 720px) {
-  .container { width: min(100% - 28px, 620px); padding: 32px 0 56px; }
-  .section { margin-bottom: 48px; }
-  .hero-copy { padding: 28vh 22px 92px; }
-  .hero-copy h1 { font-size: clamp(34px, 10.5vw, 47px); }
-  .hero-copy p { font-size: 12px; }
-  .hero-header { padding: 18px 20px; }
-  .scroll-cue { display: none; }
-  .intro-grid, .journey-card, .passport-teaser, .guide, .map-layout, .interpret-layout { grid-template-columns: 1fr; }
-  .intro-grid { gap: 28px; }
-  .how-it-works { padding: 48px 0 54px; }
-  .how-heading { grid-template-columns: 1fr; gap: 12px; margin-bottom: 26px; }
-  .use-flow { grid-template-columns: 1fr; gap: 12px; }
-  .flow-step { display: grid; grid-template-columns: 112px 1fr; gap: 14px; align-items: center; padding: 10px; border: 1px solid var(--border); border-radius: 16px; background: var(--warm); }
-  .flow-visual { width: 112px; height: 112px; border: 0; border-radius: 12px; }
-  .flow-visual::before { width: 75px; height: 75px; }
-  .flow-visual::after { width: 55px; top: 19px; }
-  .flow-visual i { transform: scale(.68); transform-origin: center; }
-  .flow-icon { left: 12px; bottom: 12px; width: 36px; height: 36px; border-radius: 10px; font-size: 16px; }
-  .flow-copy { padding: 0; }
-  .flow-arrow { display: none; }
-  .how-action { align-items: flex-start; flex-direction: column; margin-top: 22px; }
-  .journey-copy { padding: 27px; }
-  .cards, .figures { grid-template-columns: 1fr; }
-  .all-cards, .all-figures { grid-template-columns: 1fr; }
-  .location-card { display: grid; grid-template-columns: 125px 1fr; }
-  .location-image { height: 100%; min-height: 175px; }
-  .location-body p { min-height: 0; }
-  .passport-stamps, .stamp-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .guide-intro, .chat { padding: 24px; }
-  .map-full { min-height: 430px; }
-  .map-side { grid-template-columns: 1fr 1fr; }
-  .camera-ui { padding: 18px 16px 30px; }
-  .camera-progress { gap: 6px; padding: 9px 11px; }
-  .camera-progress i { width: 12px; }
-  .camera-progress span { font-size: 7px; }
-  .camera-location { padding: 10px 12px; }
-  .viewfinder { width: 88vw; aspect-ratio: 1.1; }
-  .camera-bottom { padding: 18px; }
-  .scan-result { grid-template-columns: 42px 1fr; gap: 12px; }
-  .result-check { width: 42px; height: 42px; font-size: 18px; }
-  .result-actions { flex-wrap: wrap; }
-  .interpret-visual { height: 72vh; min-height: 520px; }
-  .interpret-title { bottom: 14%; }
-  .interpret-title h1 { font-size: 42px; }
-  .interpret-scroll { left: 8%; right: auto; bottom: 5%; }
-  .interpret-content { padding: 44px 20px 90px; }
-  .interpret-story-grid { grid-template-columns: 1fr; gap: 26px; }
-  .ai-guide { margin-top: 44px; border-radius: 18px; }
-  .ai-guide-header { padding: 18px; }
-  .ai-guide-header .ai-status { display: none; }
-  .ai-chat-body { padding: 22px 18px; }
-  .ai-guide .question-row, .suggestion-label { margin-left: 0; }
-  .ai-composer { margin: 0 14px; }
-  .ai-composer { grid-template-columns: 34px minmax(0, 1fr) 38px; }
-  .ai-guide .bubble { max-width: calc(100vw - 116px); font-size: 11px; }
-  .ai-guide .user-message .bubble { max-width: calc(100vw - 82px); }
-  .ai-note { margin-right: 16px; margin-left: 16px; }
-  .account-grid { gap: 8px; }
-  .stat-card { padding: 14px 8px; }
+  .container {
+    width: min(100% - 28px, 620px);
+    padding: 32px 0 56px;
+  }
+  .section {
+    margin-bottom: 48px;
+  }
+  .hero-copy {
+    padding: 28vh 22px 92px;
+  }
+  .hero-copy h1 {
+    font-size: clamp(34px, 10.5vw, 47px);
+  }
+  .hero-copy p {
+    font-size: 12px;
+  }
+  .hero-header {
+    padding: 18px 20px;
+  }
+  .scroll-cue {
+    display: none;
+  }
+  .intro-grid,
+  .journey-card,
+  .passport-teaser,
+  .guide,
+  .map-layout,
+  .interpret-layout {
+    grid-template-columns: 1fr;
+  }
+  .intro-grid {
+    gap: 28px;
+  }
+  .how-it-works {
+    padding: 48px 0 54px;
+  }
+  .how-heading {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+  .use-flow {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .flow-step {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--warm);
+  }
+  .flow-visual {
+    width: 112px;
+    height: 112px;
+    border: 0;
+    border-radius: 12px;
+  }
+  .flow-visual::before {
+    width: 75px;
+    height: 75px;
+  }
+  .flow-visual::after {
+    width: 55px;
+    top: 19px;
+  }
+  .flow-visual i {
+    transform: scale(0.68);
+    transform-origin: center;
+  }
+  .flow-icon {
+    left: 12px;
+    bottom: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 16px;
+  }
+  .flow-copy {
+    padding: 0;
+  }
+  .flow-arrow {
+    display: none;
+  }
+  .how-action {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-top: 22px;
+  }
+  .journey-copy {
+    padding: 27px;
+  }
+  .cards,
+  .figures {
+    grid-template-columns: 1fr;
+  }
+  .all-cards,
+  .all-figures {
+    grid-template-columns: 1fr;
+  }
+  .location-card {
+    display: grid;
+    grid-template-columns: 125px 1fr;
+  }
+  .location-image {
+    height: 100%;
+    min-height: 175px;
+  }
+  .location-body p {
+    min-height: 0;
+  }
+  .passport-stamps,
+  .stamp-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .guide-intro,
+  .chat {
+    padding: 24px;
+  }
+  .map-full {
+    min-height: 430px;
+  }
+  .map-side {
+    grid-template-columns: 1fr 1fr;
+  }
+  .camera-ui {
+    padding: 18px 16px 30px;
+  }
+  .camera-progress {
+    gap: 6px;
+    padding: 9px 11px;
+  }
+  .camera-progress i {
+    width: 12px;
+  }
+  .camera-progress span {
+    font-size: 7px;
+  }
+  .camera-location {
+    padding: 10px 12px;
+  }
+  .viewfinder {
+    width: 88vw;
+    aspect-ratio: 1.1;
+  }
+  .camera-bottom {
+    padding: 18px;
+  }
+  .scan-result {
+    grid-template-columns: 42px 1fr;
+    gap: 12px;
+  }
+  .result-check {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+  .result-actions {
+    flex-wrap: wrap;
+  }
+  .interpret-visual {
+    height: 72vh;
+    min-height: 520px;
+  }
+  .interpret-title {
+    bottom: 14%;
+  }
+  .interpret-title h1 {
+    font-size: 42px;
+  }
+  .interpret-scroll {
+    left: 8%;
+    right: auto;
+    bottom: 5%;
+  }
+  .interpret-content {
+    padding: 44px 20px 90px;
+  }
+  .interpret-story-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .ai-guide {
+    margin-top: 44px;
+    border-radius: 18px;
+  }
+  .ai-guide-header {
+    padding: 18px;
+  }
+  .ai-guide-header .ai-status {
+    display: none;
+  }
+  .ai-chat-body {
+    padding: 22px 18px;
+  }
+  .ai-guide .question-row,
+  .suggestion-label {
+    margin-left: 0;
+  }
+  .ai-composer {
+    margin: 0 14px;
+  }
+  .ai-composer {
+    grid-template-columns: 34px minmax(0, 1fr) 38px;
+  }
+  .ai-guide .bubble {
+    max-width: calc(100vw - 116px);
+    font-size: 11px;
+  }
+  .ai-guide .user-message .bubble {
+    max-width: calc(100vw - 82px);
+  }
+  .ai-note {
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+  .account-grid {
+    gap: 8px;
+  }
+  .stat-card {
+    padding: 14px 8px;
+  }
 }
 
 @media (max-width: 450px) {
-  .map-side { grid-template-columns: 1fr; }
-  .location-card { grid-template-columns: 105px 1fr; }
-  .location-body { padding: 13px; }
-  .passport-stamps { padding: 22px; }
-  .topbar { padding: 26px 20px 22px; }
+  .map-side {
+    grid-template-columns: 1fr;
+  }
+  .location-card {
+    grid-template-columns: 105px 1fr;
+  }
+  .location-body {
+    padding: 13px;
+  }
+  .passport-stamps {
+    padding: 22px;
+  }
+  .topbar {
+    padding: 26px 20px 22px;
+  }
 }
 
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition: none !important;
+  }
+}
