@@ -1,0 +1,6 @@
+.map-layout { display: grid; grid-template-columns: 1.5fr .8fr; gap: 20px; }
+.map-side { display: grid; gap: 12px; align-content: start; }
+.mini-location { display: flex; gap: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 13px; background: var(--warm); }
+.mini-location .mini-shape { width: 72px; height: 72px; flex: none; border-radius: 10px; }
+.mini-location h3 { margin: 4px 0; color: var(--lacquer); font-size: 12px; }
+.mini-location p { margin: 0; color: var(--stone); font-size: 9px; line-height: 1.5; }

@@ -1,0 +1,11 @@
+.figures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.figure-card { display: grid; grid-template-columns: 92px 1fr; overflow: hidden; border: 1px solid var(--border); border-radius: 15px; background: var(--warm); }
+.figure-card .portrait-shape { width: 100%; height: 100%; min-height: 145px; filter: sepia(.25); }
+.figure-portrait-collage { display: grid; grid-template-columns: repeat(2, 1fr); width: 100%; height: 100%; min-height: 145px; overflow: hidden; background: var(--gold-pale); }
+.figure-portrait-collage img { width: 100%; height: 100%; min-height: 72px; object-fit: cover; }
+.figure-copy { padding: 15px; }
+.figure-copy h3 { margin: 0 0 3px; color: var(--lacquer); font-size: 13px; }
+.figure-copy small { color: var(--gold); font-size: 9px; font-weight: 700; }
+.figure-copy p { margin: 8px 0; color: var(--stone); font-size: 9px; line-height: 1.55; }
+.text-link { color: var(--lacquer); font-size: 9px; font-weight: 700; }
+.more-row { display: flex; justify-content: center; margin-top: 24px; }
