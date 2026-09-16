@@ -1,0 +1,16 @@
+{
+  "name": "explore-van-mieu",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24.0.0" },
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "dev": "npm --prefix backend run dev",
+    "test": "npm --prefix backend test",
+    "db:migrate": "npm --prefix backend run db:migrate",
+    "db:seed": "npm --prefix backend run db:seed",
+    "db:backup": "npm --prefix backend run db:backup",
+    "admin:create": "npm --prefix backend run admin:create"
+  }
+}

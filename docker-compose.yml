@@ -1,0 +1,22 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: deployment/docker/Dockerfile
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      DATABASE_PATH: /app/data/vanmieu.sqlite
+    ports:
+      - "127.0.0.1:${PORT:-3000}:3000"
+    volumes:
+      - vanmieu-data:/app/data
+      - vanmieu-backups:/app/database/backups
+      - vanmieu-storage:/app/storage
+    restart: unless-stopped
+
+volumes:
+  vanmieu-data:
+  vanmieu-backups:
+  vanmieu-storage:

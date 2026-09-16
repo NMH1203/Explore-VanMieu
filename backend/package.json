@@ -1,0 +1,16 @@
+{
+  "name": "van-mieu-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24.0.0" },
+  "scripts": {
+    "start": "node src/app/server.js",
+    "dev": "node --watch src/app/server.js",
+    "test": "node --test",
+    "db:migrate": "node src/app/cli.js migrate",
+    "db:seed": "node src/app/cli.js seed",
+    "db:backup": "node src/app/cli.js backup",
+    "admin:create": "node src/app/cli.js admin"
+  }
+}

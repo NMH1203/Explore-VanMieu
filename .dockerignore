@@ -1,0 +1,9 @@
+.env
+.git
+node_modules
+**/node_modules
+database/*.sqlite*
+database/backups/*
+*.zip
+test-results
+*.log
