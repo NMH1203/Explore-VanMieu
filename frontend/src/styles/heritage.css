@@ -1,0 +1,10 @@
+@import './base.css';
+@import '../pages/home/home.css';
+@import '../pages/locations/locations.css';
+@import '../pages/figures/figures.css';
+@import '../pages/map/map.css';
+@import '../pages/camera/camera.css';
+@import '../pages/location-detail/location-detail.css';
+@import '../pages/passport/passport.css';
+@import '../pages/account/account.css';
+@import './responsive.css';

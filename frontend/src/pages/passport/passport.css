@@ -1,0 +1,64 @@
+.passport-page {
+  max-width: 880px;
+}
+.stamp-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--warm);
+}
+.stamp-wrap {
+  text-align: center;
+}
+.stamp-wrap .stamp {
+  margin-bottom: 7px;
+}
+.stamp-wrap span {
+  display: block;
+  color: var(--stone);
+  font-size: 8px;
+  line-height: 1.4;
+}
+.milestones {
+  display: grid;
+  gap: 12px;
+}
+.milestone {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 17px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--warm);
+}
+.milestone-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 11px;
+  color: white;
+  background: var(--stone);
+}
+.milestone.current {
+  border-color: #d9a44180;
+  background: var(--gold-pale);
+}
+.milestone.current .milestone-icon {
+  color: var(--wood);
+  background: var(--gold);
+}
+.milestone h3 {
+  margin: 0 0 4px;
+  font-size: 12px;
+}
+.milestone p {
+  margin: 0;
+  color: var(--stone);
+  font-size: 9px;
+}
