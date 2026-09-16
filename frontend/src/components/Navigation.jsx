@@ -1,11 +1,12 @@
 import { Camera, Compass, Map, NotebookTabs, UserRound } from 'lucide-react'
+import { paths } from '../routes.js'
 
 const navigationItems = [
-  { href: '#explore', Icon: Compass, label: 'Khám phá' },
-  { href: '#map', Icon: Map, label: 'Bản đồ' },
-  { href: '#camera', Icon: Camera, label: 'Camera' },
-  { href: '#passport', Icon: NotebookTabs, label: 'Hộ chiếu' },
-  { href: '#account', Icon: UserRound, label: 'Tài khoản' },
+  { href: paths.explore, Icon: Compass, label: 'Khám phá' },
+  { href: paths.map, Icon: Map, label: 'Bản đồ' },
+  { href: paths.camera, Icon: Camera, label: 'Camera' },
+  { href: paths.passport, Icon: NotebookTabs, label: 'Hộ chiếu' },
+  { href: paths.account, Icon: UserRound, label: 'Tài khoản' },
 ]
 
 function NavigationLinks({ mobile = false }) {
@@ -29,7 +30,7 @@ function Navigation() {
   return (
     <>
       <aside className="sidebar">
-        <a className="brand" href="#explore">
+        <a className="brand" href={paths.explore}>
           <img className="brand-icon" src="/images/brand-khue-van-cac.jpg" alt="" />
           <span>
             <strong>Explore Van Mieu</strong>

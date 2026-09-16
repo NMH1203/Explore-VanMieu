@@ -34,16 +34,16 @@ function AccountPage() {
         <section className="panel section">
           <h2>Truy cập nhanh</h2>
           <div className="quick-grid">
-            <a className="btn btn-outline" href="#passport">
+            <a className="btn btn-outline" href="/Explore/Ho-Chieu">
               Hộ chiếu
             </a>
-            <a className="btn btn-outline" href="#map">
+            <a className="btn btn-outline" href="/Explore/Ban-Do">
               Bản đồ
             </a>
-            <a className="btn btn-outline" href="#camera">
+            <a className="btn btn-outline" href="/Explore/Camera">
               Camera
             </a>
-            <a className="btn btn-outline" href="#explore">
+            <a className="btn btn-outline" href="/Explore">
               Khám phá
             </a>
           </div>
@@ -67,7 +67,7 @@ function AccountPage() {
             <span>Sáng ›</span>
           </div>
         </section>
-        <a className="btn btn-outline btn-block" href="#explore">
+        <a className="btn btn-outline btn-block" href="/Explore">
           Đăng xuất
         </a>
       </div>

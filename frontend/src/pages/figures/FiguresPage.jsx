@@ -4,7 +4,7 @@ function FiguresPage() {
       <header className="topbar">
         <div className="inner">
           <div className="catalog-back">
-            <a className="btn btn-light" href="#explore">
+            <a className="btn btn-light" href="/Explore">
               ← Quay lại
             </a>
           </div>
@@ -31,13 +31,13 @@ function FiguresPage() {
             />
             <div className="figure-copy">
               <h3>
-                <a href="#figure-ly-thanh-tong">Lý Thánh Tông</a>
+                <a href="/Explore/Danh-Nhan/Ly-Thanh-Tong">Lý Thánh Tông</a>
               </h3>
               <small>1023–1072 · Người dựng Văn Miếu</small>
               <p>
                 Nhà vua cho dựng Văn Miếu năm 1070, đặt nền móng cho không gian tôn vinh đạo học.
               </p>
-              <a className="text-link" href="#figure-ly-thanh-tong">
+              <a className="text-link" href="/Explore/Danh-Nhan/Ly-Thanh-Tong">
                 Nghe câu chuyện →
               </a>
             </div>
@@ -51,11 +51,11 @@ function FiguresPage() {
             />
             <div className="figure-copy">
               <h3>
-                <a href="#figure-ly-nhan-tong">Lý Nhân Tông</a>
+                <a href="/Explore/Danh-Nhan/Ly-Nhan-Tong">Lý Nhân Tông</a>
               </h3>
               <small>1066–1128 · Người lập Quốc Tử Giám</small>
               <p>Nhà vua cho thành lập Quốc Tử Giám, trường đại học đầu tiên của Việt Nam.</p>
-              <a className="text-link" href="#figure-ly-nhan-tong">
+              <a className="text-link" href="/Explore/Danh-Nhan/Ly-Nhan-Tong">
                 Hỏi AI →
               </a>
             </div>
@@ -69,11 +69,11 @@ function FiguresPage() {
             />
             <div className="figure-copy">
               <h3>
-                <a href="#figure-le-thanh-tong">Lê Thánh Tông</a>
+                <a href="/Explore/Danh-Nhan/Le-Thanh-Tong">Lê Thánh Tông</a>
               </h3>
               <small>1442–1497 · Vị vua trọng hiền tài</small>
               <p>Khởi xướng việc dựng bia ghi danh tiến sĩ, lưu lại truyền thống khoa bảng.</p>
-              <a className="text-link" href="#figure-le-thanh-tong">
+              <a className="text-link" href="/Explore/Danh-Nhan/Le-Thanh-Tong">
                 Nghe câu chuyện →
               </a>
             </div>
@@ -87,11 +87,11 @@ function FiguresPage() {
             />
             <div className="figure-copy">
               <h3>
-                <a href="#figure-chu-van-an">Chu Văn An</a>
+                <a href="/Explore/Danh-Nhan/Chu-Van-An">Chu Văn An</a>
               </h3>
               <small>1292–1370 · Người thầy mẫu mực</small>
               <p>Biểu tượng về nhân cách người thầy và tinh thần tôn sư trọng đạo.</p>
-              <a className="text-link" href="#figure-chu-van-an">
+              <a className="text-link" href="/Explore/Danh-Nhan/Chu-Van-An">
                 Hỏi AI →
               </a>
             </div>
@@ -105,11 +105,11 @@ function FiguresPage() {
             />
             <div className="figure-copy">
               <h3>
-                <a href="#figure-confucius">Khổng Tử</a>
+                <a href="/Explore/Danh-Nhan/Khong-Tu">Khổng Tử</a>
               </h3>
               <small>551–479 TCN · Vạn thế sư biểu</small>
               <p>Nhân vật trung tâm trong không gian thờ tự và tư tưởng Nho học tại Văn Miếu.</p>
-              <a className="text-link" href="#figure-confucius">
+              <a className="text-link" href="/Explore/Danh-Nhan/Khong-Tu">
                 Nghe câu chuyện →
               </a>
             </div>
@@ -127,11 +127,11 @@ function FiguresPage() {
             </div>
             <div className="figure-copy">
               <h3>
-                <a href="#figure-four-sages">Tứ Phối</a>
+                <a href="/Explore/Danh-Nhan/Tu-Phoi">Tứ Phối</a>
               </h3>
               <small>Bốn bậc hiền triết phối thờ</small>
               <p>Nhan Hồi, Tăng Sâm, Tử Tư và Mạnh Tử — những người kế thừa, phát triển Nho học.</p>
-              <a className="text-link" href="#figure-four-sages">
+              <a className="text-link" href="/Explore/Danh-Nhan/Tu-Phoi">
                 Hỏi AI →
               </a>
             </div>

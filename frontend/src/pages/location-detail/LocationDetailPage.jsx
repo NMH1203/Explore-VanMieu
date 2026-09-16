@@ -1,5 +1,6 @@
 import { Award, Check, LockKeyhole, Plus, Send } from 'lucide-react'
 import { useUnlockedLocations } from '../../state/heritageProgress.js'
+import { paths } from '../../routes.js'
 
 const items = [
   [
@@ -147,7 +148,7 @@ function Detail({ item, unlocked }) {
           <LockKeyhole size={44} aria-hidden="true" />
           <h1>{item.title}</h1>
           <p>Câu chuyện của địa điểm này chưa được mở khóa.</p>
-          <a className="btn btn-primary" href="#all-locations">
+          <a className="btn btn-primary" href={paths.locations}>
             Quay lại các công trình
           </a>
         </div>
@@ -200,7 +201,7 @@ function Detail({ item, unlocked }) {
                   </div>
                   <h2>Tiếp tục hành trình</h2>
                   <p>Khám phá thêm những lớp lịch sử và truyền thống hiếu học của di tích.</p>
-                  <a className="btn btn-primary" href="#explore">
+                  <a className="btn btn-primary" href={paths.explore}>
                     Quay lại hành trình
                   </a>
                 </div>
@@ -209,7 +210,7 @@ function Detail({ item, unlocked }) {
                 <span className="kicker">Dấu ấn của bạn</span>
                 <h2>Câu chuyện đã được ghi nhận</h2>
                 <p>Nội dung này đã được thêm vào hành trình khám phá.</p>
-                <a className="btn btn-outline" href="#passport">
+                <a className="btn btn-outline" href={paths.passport}>
                   Xem hộ chiếu
                 </a>
               </article>
@@ -254,13 +255,10 @@ function Detail({ item, unlocked }) {
   )
 }
 
-export default function LocationDetailPage() {
+export default function LocationDetailPage({ id }) {
   const unlockedLocations = useUnlockedLocations()
-  return items.map((item) => (
-    <Detail
-      item={item}
-      unlocked={item.type === 'Danh nhân' || unlockedLocations.has(item.id)}
-      key={item.id}
-    />
-  ))
+  const item = items.find((candidate) => candidate.id === id)
+  if (!item) return null
+
+  return <Detail item={item} unlocked={item.type === 'Danh nhân' || unlockedLocations.has(item.id)} />
 }

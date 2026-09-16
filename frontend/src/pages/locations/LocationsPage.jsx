@@ -1,5 +1,6 @@
 import { LockKeyhole } from 'lucide-react'
 import { useUnlockedLocations } from '../../state/heritageProgress.js'
+import { detailPaths, paths } from '../../routes.js'
 
 const locations = [
   {
@@ -90,14 +91,14 @@ function LocationCard({ location, unlocked }) {
       </div>
       <div className="location-body">
         <h3>
-          {unlocked ? <a href={`#${location.id}`}>{location.name}</a> : location.name}
+          {unlocked ? <a href={detailPaths[location.id]}>{location.name}</a> : location.name}
         </h3>
         <p>{location.description}</p>
         <div className="meta">
           <span>⌖ {location.distance}</span>
         </div>
         {unlocked ? (
-          <a className="btn btn-outline btn-block" href={`#${location.id}`}>
+          <a className="btn btn-outline btn-block" href={detailPaths[location.id]}>
             Xem câu chuyện
           </a>
         ) : (
@@ -120,7 +121,7 @@ function LocationsPage() {
       <header className="topbar">
         <div className="inner">
           <div className="catalog-back">
-            <a className="btn btn-light" href="#explore">
+            <a className="btn btn-light" href={paths.explore}>
               ← Quay lại
             </a>
           </div>
