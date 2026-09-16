@@ -11,16 +11,38 @@
   background: var(--warm);
 }
 .stamp-wrap {
+  min-width: 0;
   text-align: center;
 }
 .stamp-wrap .stamp {
-  margin-bottom: 7px;
+  margin: 0 auto 10px;
+}
+.stamp-wrap .art-stamp {
+  width: min(100%, 180px);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: #fffbf2;
+}
+.stamp-wrap .art-stamp.collected {
+  border-color: var(--gold);
+}
+.art-stamp img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(0.88);
+}
+.art-stamp:not(.collected) img {
+  opacity: 0.52;
+  filter: grayscale(0.8) blur(2px);
 }
 .stamp-wrap span {
   display: block;
-  color: var(--stone);
-  font-size: 8px;
-  line-height: 1.4;
+  color: var(--lacquer-dark);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
 }
 .milestones {
   display: grid;

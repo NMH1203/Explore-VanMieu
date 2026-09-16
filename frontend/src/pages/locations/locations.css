@@ -22,8 +22,18 @@
   transition: 0.35s;
 }
 .location-card.locked .shape-art {
-  filter: grayscale(1) sepia(0.25);
-  opacity: 0.65;
+  filter: grayscale(0.85) blur(2px);
+  opacity: 0.55;
+}
+.location-card.locked .location-image {
+  background: #d9dde3;
+}
+.locked-action:disabled {
+  border-color: var(--border);
+  color: var(--stone);
+  background: var(--paper);
+  cursor: not-allowed;
+  opacity: 1;
 }
 .badge {
   position: absolute;

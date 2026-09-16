@@ -1,4 +1,5 @@
-import { Award, Check, Plus, Send } from 'lucide-react'
+import { Award, Check, LockKeyhole, Plus, Send } from 'lucide-react'
+import { useUnlockedLocations } from '../../state/heritageProgress.js'
 
 const items = [
   [
@@ -138,7 +139,22 @@ const items = [
   image: `/images/heritage/${file}`,
 }))
 
-function Detail({ item }) {
+function Detail({ item, unlocked }) {
+  if (!unlocked) {
+    return (
+      <section className="screen" id={item.id}>
+        <div className="locked-detail">
+          <LockKeyhole size={44} aria-hidden="true" />
+          <h1>{item.title}</h1>
+          <p>Câu chuyện của địa điểm này chưa được mở khóa.</p>
+          <a className="btn btn-primary" href="#all-locations">
+            Quay lại các công trình
+          </a>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="screen" id={item.id}>
       <div className="interpret-layout">
@@ -239,5 +255,12 @@ function Detail({ item }) {
 }
 
 export default function LocationDetailPage() {
-  return items.map((item) => <Detail item={item} key={item.id} />)
+  const unlockedLocations = useUnlockedLocations()
+  return items.map((item) => (
+    <Detail
+      item={item}
+      unlocked={item.type === 'Danh nhân' || unlockedLocations.has(item.id)}
+      key={item.id}
+    />
+  ))
 }

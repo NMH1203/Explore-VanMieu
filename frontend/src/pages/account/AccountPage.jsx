@@ -1,4 +1,8 @@
+import { useUnlockedLocations } from '../../state/heritageProgress.js'
+
 function AccountPage() {
+  const unlockedCount = useUnlockedLocations().size
+
   return (
     <section className="screen" id="account">
       <div className="profile-hero">
@@ -15,11 +19,11 @@ function AccountPage() {
       <div className="container passport-page">
         <div className="account-grid section">
           <div className="stat-card">
-            <strong>1</strong>
+            <strong>{unlockedCount}</strong>
             <span>Địa điểm / 10</span>
           </div>
           <div className="stat-card">
-            <strong>1</strong>
+            <strong>{unlockedCount}</strong>
             <span>Dấu ấn / 10</span>
           </div>
           <div className="stat-card">
