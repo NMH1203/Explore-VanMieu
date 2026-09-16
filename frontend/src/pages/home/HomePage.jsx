@@ -1,6 +1,27 @@
-import { Award, MapPin, Plus, ScanLine, Send, Sparkles, UserRound } from 'lucide-react'
+import { Award, LockKeyhole, MapPin, Plus, ScanLine, Send, Sparkles, UserRound } from 'lucide-react'
+import { useUnlockedLocations } from '../../state/heritageProgress.js'
 
 function HomePage() {
+  const unlockedLocations = useUnlockedLocations()
+  const daiTrungUnlocked = unlockedLocations.has('location-dai-trung-gate')
+  const thaiHocUnlocked = unlockedLocations.has('location-thai-hoc-house')
+  const journeyLocations = [
+    ['interpret', 'Khuê Văn Các'],
+    ['location-dai-trung-gate', 'Cổng Đại Trung'],
+    ['location-dien-dai-thanh', 'Điện Đại Thành'],
+    ['location-thai-hoc-house', 'Nhà Thái Học'],
+    ['location-phuong-dinh', 'Phương Đình'],
+  ]
+  const journeyCount = journeyLocations.filter(([id]) => unlockedLocations.has(id)).length
+  const passportPreview = [
+    ['interpret', 'khue-van-cac.jpg', 'Khuê Văn Các'],
+    ['location-van-mieu-gate', 'cong-van-mieu.jpg', 'Cổng Văn Miếu'],
+    ['location-dai-trung-gate', 'cong-dai-trung.jpg', 'Cổng Đại Trung'],
+    ['location-dai-thanh-gate', 'cong-dai-thanh.jpg', 'Cổng Đại Thành'],
+    ['location-dien-dai-thanh', 'dien-dai-thanh.jpg', 'Điện Đại Thành'],
+    ['location-thai-hoc-gate', 'cong-thai-hoc.jpg', 'Cổng Thái Học'],
+  ]
+
   return (
     <section className="screen" id="explore">
       <div className="hero">
@@ -188,10 +209,10 @@ function HomePage() {
               </p>
               <div className="progress-label">
                 <span>Tiến trình khám phá</span>
-                <strong>1/5 địa điểm</strong>
+                <strong>{journeyCount}/5 địa điểm</strong>
               </div>
               <div className="progress">
-                <i></i>
+                <i style={{ width: `${journeyCount * 20}%` }}></i>
               </div>
               <br />
               <a className="btn btn-gold" href="#map">
@@ -199,21 +220,12 @@ function HomePage() {
               </a>
             </div>
             <div className="journey-list">
-              <div className="journey-stop">
-                <span className="stop-no">✓</span>Khuê Văn Các
-              </div>
-              <div className="journey-stop">
-                <span className="stop-no">2</span>Cổng Đại Trung
-              </div>
-              <div className="journey-stop">
-                <span className="stop-no">3</span>Điện Đại Thành
-              </div>
-              <div className="journey-stop">
-                <span className="stop-no">4</span>Nhà Thái Học
-              </div>
-              <div className="journey-stop">
-                <span className="stop-no">5</span>Phương Đình
-              </div>
+              {journeyLocations.map(([id, name], index) => (
+                <div className="journey-stop" key={id}>
+                  <span className="stop-no">{unlockedLocations.has(id) ? '✓' : index + 1}</span>
+                  {name}
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -234,13 +246,19 @@ function HomePage() {
             <div className="map-marker jade" style={{ left: '35%', top: '40%' }}>
               <span>✓</span>
             </div>
-            <div className="map-marker" style={{ left: '55%', top: '27%' }}>
+            <div
+              className={`map-marker${daiTrungUnlocked ? ' jade' : ' locked'}`}
+              style={{ left: '55%', top: '27%' }}
+            >
               <span>2</span>
             </div>
             <div className="map-marker locked" style={{ left: '71%', top: '57%' }}>
               <span>3</span>
             </div>
-            <div className="map-marker" style={{ left: '48%', top: '68%' }}>
+            <div
+              className={`map-marker${thaiHocUnlocked ? ' jade' : ' locked'}`}
+              style={{ left: '48%', top: '68%' }}
+            >
               <span>4</span>
             </div>
             <div className="map-card">
@@ -284,7 +302,7 @@ function HomePage() {
                 </a>
               </div>
             </article>
-            <article className="location-card">
+            <article className={`location-card${daiTrungUnlocked ? '' : ' locked'}`}>
               <div className="location-image">
                 <img
                   className="shape-art heritage-photo"
@@ -292,21 +310,29 @@ function HomePage() {
                   alt="Cổng Đại Trung tại Văn Miếu – Quốc Tử Giám"
                   loading="lazy"
                 />
-                <span className="badge near">⌖ Đang ở gần</span>
+                <span className={`badge${daiTrungUnlocked ? ' done' : ''}`}>
+                  {daiTrungUnlocked ? '✓ Đã mở khóa' : 'Chưa mở khóa'}
+                </span>
               </div>
               <div className="location-body">
                 <h3>Cổng Đại Trung</h3>
                 <p>Cánh cổng dẫn vào không gian trung tâm của quần thể Văn Miếu.</p>
                 <div className="meta">
                   <span>⌖ 46 m</span>
-                  <span>◎ Cần xác minh</span>
                 </div>
-                <a className="btn btn-primary btn-block" href="#location-dai-trung-gate">
-                  Xem câu chuyện
-                </a>
+                {daiTrungUnlocked ? (
+                  <a className="btn btn-outline btn-block" href="#location-dai-trung-gate">
+                    Xem câu chuyện
+                  </a>
+                ) : (
+                  <button className="btn btn-outline btn-block locked-action" type="button" disabled>
+                    <LockKeyhole size={16} aria-hidden="true" />
+                    Chưa mở khóa
+                  </button>
+                )}
               </div>
             </article>
-            <article className="location-card locked">
+            <article className={`location-card${thaiHocUnlocked ? '' : ' locked'}`}>
               <div className="location-image">
                 <img
                   className="shape-art art-c heritage-photo"
@@ -314,18 +340,26 @@ function HomePage() {
                   alt="Toàn cảnh công trình Nhà Thái Học tại Văn Miếu – Quốc Tử Giám"
                   loading="lazy"
                 />
-                <span className="badge">◉ Chưa đến gần</span>
+                <span className={`badge${thaiHocUnlocked ? ' done' : ''}`}>
+                  {thaiHocUnlocked ? '✓ Đã mở khóa' : 'Chưa mở khóa'}
+                </span>
               </div>
               <div className="location-body">
                 <h3>Nhà Thái Học</h3>
-                <p>Nội dung lịch sử đang ngủ. Hãy đến gần để mở khóa câu chuyện.</p>
+                <p>Nội dung câu chuyện sẽ hiển thị sau khi công trình được mở khóa.</p>
                 <div className="meta">
                   <span>⌖ 210 m</span>
-                  <span>◇ GPS chưa xác nhận</span>
                 </div>
-                <a className="btn btn-outline btn-block" href="#location-thai-hoc-house">
-                  Xem câu chuyện
-                </a>
+                {thaiHocUnlocked ? (
+                  <a className="btn btn-outline btn-block" href="#location-thai-hoc-house">
+                    Xem câu chuyện
+                  </a>
+                ) : (
+                  <button className="btn btn-outline btn-block locked-action" type="button" disabled>
+                    <LockKeyhole size={16} aria-hidden="true" />
+                    Chưa mở khóa
+                  </button>
+                )}
               </div>
             </article>
           </div>
@@ -404,26 +438,36 @@ function HomePage() {
           <div className="passport-teaser">
             <div className="passport-cover">
               <div>
-                <div className="star">★</div>
+                <img
+                  className="passport-cover-stamp"
+                  src="/images/passport/khue-van-cac.jpg"
+                  alt="Dấu ấn Khuê Văn Các đã thu thập"
+                  loading="lazy"
+                />
                 <div className="eyebrow">Digital Heritage Passport</div>
                 <h2>Hộ chiếu Di sản</h2>
-                <p>1 trong 10 dấu ấn đã thu thập</p>
+                <p>{unlockedLocations.size} trong 10 dấu ấn đã thu thập</p>
                 <a className="btn btn-gold" href="#passport">
                   Mở hộ chiếu
                 </a>
               </div>
             </div>
             <div className="passport-stamps">
-              <div className="stamp collected">★</div>
-              <div className="stamp">○</div>
-              <div className="stamp">○</div>
-              <div className="stamp">○</div>
-              <div className="stamp">○</div>
-              <div className="stamp">○</div>
-              <div className="stamp">○</div>
-              <div className="stamp">○</div>
-              <div className="stamp">○</div>
-              <div className="stamp">○</div>
+              {passportPreview.map(([id, image, name]) => {
+                const unlocked = unlockedLocations.has(id)
+                return (
+                  <div className={`stamp${unlocked ? ' collected' : ''}`} key={id}>
+                    <img
+                      src={`/images/passport/${image}`}
+                      alt={`${name} ${unlocked ? 'đã mở khóa' : 'chưa mở khóa'}`}
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              })}
+              <a className="passport-stamps-link" href="#passport">
+                Xem đủ 10 dấu ấn →
+              </a>
             </div>
           </div>
         </section>

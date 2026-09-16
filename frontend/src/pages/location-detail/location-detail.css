@@ -337,3 +337,21 @@ body:has(#heritage-awakened:checked) .achievement-gate {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
 }
+.locked-detail {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px;
+  color: var(--lacquer);
+  text-align: center;
+}
+.locked-detail h1,
+.locked-detail p {
+  margin: 0;
+}
+.locked-detail p {
+  color: var(--stone);
+}

@@ -22,6 +22,10 @@
   flex: none;
   border-radius: 10px;
 }
+.mini-location.locked .mini-shape {
+  opacity: 0.55;
+  filter: grayscale(0.85) blur(1px);
+}
 .mini-location h3 {
   margin: 4px 0;
   color: var(--lacquer);
