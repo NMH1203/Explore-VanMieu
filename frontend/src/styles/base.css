@@ -74,18 +74,8 @@ img {
 }
 
 .screen {
-  display: none;
   min-height: 100vh;
   padding-left: var(--sidebar);
-}
-#explore {
-  display: block;
-}
-body:has(.screen:target) #explore:not(:target) {
-  display: none;
-}
-.screen:target {
-  display: block;
 }
 
 .sidebar {

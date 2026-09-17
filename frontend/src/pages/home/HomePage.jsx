@@ -1,18 +1,11 @@
 import { Award, LockKeyhole, MapPin, Plus, ScanLine, Send, Sparkles, UserRound } from 'lucide-react'
+import JourneyCard from '../../components/JourneyCard.jsx'
 import { useUnlockedLocations } from '../../state/heritageProgress.js'
 
 function HomePage() {
   const unlockedLocations = useUnlockedLocations()
   const daiTrungUnlocked = unlockedLocations.has('location-dai-trung-gate')
   const thaiHocUnlocked = unlockedLocations.has('location-thai-hoc-house')
-  const journeyLocations = [
-    ['interpret', 'Khuê Văn Các'],
-    ['location-dai-trung-gate', 'Cổng Đại Trung'],
-    ['location-dien-dai-thanh', 'Điện Đại Thành'],
-    ['location-thai-hoc-house', 'Nhà Thái Học'],
-    ['location-phuong-dinh', 'Phương Đình'],
-  ]
-  const journeyCount = journeyLocations.filter(([id]) => unlockedLocations.has(id)).length
   const passportPreview = [
     ['interpret', 'khue-van-cac.jpg', 'Khuê Văn Các'],
     ['location-van-mieu-gate', 'cong-van-mieu.jpg', 'Cổng Văn Miếu'],
@@ -31,11 +24,11 @@ function HomePage() {
           alt="Cổng Văn Miếu – Quốc Tử Giám tại Hà Nội"
         />
         <header className="hero-header">
-          <a className="hero-logo" href="#explore">
+          <a className="hero-logo" href="/Explore">
             <img src="/images/brand-khue-van-cac.jpg" alt="" />
             Explore Van Mieu
           </a>
-          <a className="avatar" href="#account" aria-label="Tài khoản">
+          <a className="avatar" href="/Explore/Tai-Khoan" aria-label="Tài khoản">
             <UserRound size={23} strokeWidth={2} aria-hidden="true" />
           </a>
         </header>
@@ -189,7 +182,7 @@ function HomePage() {
             </article>
           </div>
           <div className="how-action">
-            <a className="btn btn-primary" href="#map">
+            <a className="btn btn-primary" href="/Explore/Ban-Do">
               Bắt đầu từ bản đồ →
             </a>
             <span>Không cần tải ứng dụng</span>
@@ -199,35 +192,7 @@ function HomePage() {
 
       <div className="container">
         <section className="section" id="journey">
-          <div className="journey-card">
-            <div className="journey-copy">
-              <span className="eyebrow">Hành trình của bạn hôm nay</span>
-              <h2>Năm điểm chạm, một mạch ký ức</h2>
-              <p>
-                Hệ thống đã chọn 5 địa điểm không trùng lặp. Hoàn thành xác minh GPS và camera để
-                đánh thức từng lớp di sản.
-              </p>
-              <div className="progress-label">
-                <span>Tiến trình khám phá</span>
-                <strong>{journeyCount}/5 địa điểm</strong>
-              </div>
-              <div className="progress">
-                <i style={{ width: `${journeyCount * 20}%` }}></i>
-              </div>
-              <br />
-              <a className="btn btn-gold" href="#map">
-                Tiếp tục hành trình
-              </a>
-            </div>
-            <div className="journey-list">
-              {journeyLocations.map(([id, name], index) => (
-                <div className="journey-stop" key={id}>
-                  <span className="stop-no">{unlockedLocations.has(id) ? '✓' : index + 1}</span>
-                  {name}
-                </div>
-              ))}
-            </div>
-          </div>
+          <JourneyCard />
         </section>
 
         <section className="section">
@@ -237,7 +202,7 @@ function HomePage() {
               <h2>Di sản quanh bạn</h2>
               <p>Tìm công trình gần nhất và theo dõi phần không gian đã được đánh thức.</p>
             </div>
-            <a className="btn btn-outline" href="#map">
+            <a className="btn btn-outline" href="/Explore/Ban-Do">
               Mở bản đồ lớn
             </a>
           </div>
@@ -264,7 +229,7 @@ function HomePage() {
             <div className="map-card">
               <strong>Khuê Văn Các · Đã xác minh</strong>
               <p>Cách bạn 32 m · Dấu ấn đầu tiên trong hành trình hôm nay.</p>
-              <a className="btn btn-primary" href="#interpret">
+              <a className="btn btn-primary" href="/Explore/Khue-Van-Cac">
                 Xem câu chuyện
               </a>
             </div>
@@ -297,7 +262,7 @@ function HomePage() {
                   <span>⌖ 32 m</span>
                   <span>✓ Camera xác minh</span>
                 </div>
-                <a className="btn btn-outline btn-block" href="#interpret">
+                <a className="btn btn-outline btn-block" href="/Explore/Khue-Van-Cac">
                   Xem câu chuyện
                 </a>
               </div>
@@ -321,7 +286,7 @@ function HomePage() {
                   <span>⌖ 46 m</span>
                 </div>
                 {daiTrungUnlocked ? (
-                  <a className="btn btn-outline btn-block" href="#location-dai-trung-gate">
+                  <a className="btn btn-outline btn-block" href="/Explore/Cong-Dai-Trung">
                     Xem câu chuyện
                   </a>
                 ) : (
@@ -351,7 +316,7 @@ function HomePage() {
                   <span>⌖ 210 m</span>
                 </div>
                 {thaiHocUnlocked ? (
-                  <a className="btn btn-outline btn-block" href="#location-thai-hoc-house">
+                  <a className="btn btn-outline btn-block" href="/Explore/Nha-Thai-Hoc">
                     Xem câu chuyện
                   </a>
                 ) : (
@@ -364,7 +329,7 @@ function HomePage() {
             </article>
           </div>
           <div className="more-row">
-            <a className="btn btn-outline" href="#all-locations">
+            <a className="btn btn-outline" href="/Explore/Cong-Trinh">
               Xem thêm tất cả công trình →
             </a>
           </div>
@@ -389,7 +354,7 @@ function HomePage() {
                 <h3>Chu Văn An</h3>
                 <small>Người thầy mẫu mực</small>
                 <p>Gắn với lịch sử Quốc Tử Giám và truyền thống tôn sư trọng đạo.</p>
-                <a className="text-link" href="#figure-chu-van-an">
+                <a className="text-link" href="/Explore/Danh-Nhan/Chu-Van-An">
                   Nghe câu chuyện →
                 </a>
               </div>
@@ -405,7 +370,7 @@ function HomePage() {
                 <h3>Lý Thánh Tông</h3>
                 <small>1023–1072</small>
                 <p>Vị vua cho dựng Văn Miếu vào năm 1070.</p>
-                <a className="text-link" href="#figure-ly-thanh-tong">
+                <a className="text-link" href="/Explore/Danh-Nhan/Ly-Thanh-Tong">
                   Hỏi AI →
                 </a>
               </div>
@@ -421,14 +386,14 @@ function HomePage() {
                 <h3>Khổng Tử</h3>
                 <small>Bậc vạn thế sư biểu</small>
                 <p>Nhân vật trung tâm trong không gian thờ tự của Văn Miếu.</p>
-                <a className="text-link" href="#figure-confucius">
+                <a className="text-link" href="/Explore/Danh-Nhan/Khong-Tu">
                   Nghe câu chuyện →
                 </a>
               </div>
             </article>
           </div>
           <div className="more-row">
-            <a className="btn btn-outline" href="#all-figures">
+            <a className="btn btn-outline" href="/Explore/Danh-Nhan">
               Xem thêm tất cả danh nhân →
             </a>
           </div>
@@ -447,7 +412,7 @@ function HomePage() {
                 <div className="eyebrow">Digital Heritage Passport</div>
                 <h2>Hộ chiếu Di sản</h2>
                 <p>{unlockedLocations.size} trong 10 dấu ấn đã thu thập</p>
-                <a className="btn btn-gold" href="#passport">
+                <a className="btn btn-gold" href="/Explore/Ho-Chieu">
                   Mở hộ chiếu
                 </a>
               </div>
@@ -465,7 +430,7 @@ function HomePage() {
                   </div>
                 )
               })}
-              <a className="passport-stamps-link" href="#passport">
+              <a className="passport-stamps-link" href="/Explore/Ho-Chieu">
                 Xem đủ 10 dấu ấn →
               </a>
             </div>

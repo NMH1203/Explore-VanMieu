@@ -58,7 +58,7 @@ function MapPage() {
                 {unlockedLocations.has('location-dai-trung-gate') ? 'đã mở khóa' : 'chưa mở khóa'}
                 {' '}· cách bạn 46 m.
               </p>
-              <a className="btn btn-primary" href="#camera">
+              <a className="btn btn-primary" href="/Explore/Camera">
                 Mở xác minh
               </a>
             </div>

@@ -1,4 +1,5 @@
 import { useUnlockedLocations } from '../../state/heritageProgress.js'
+import JourneyCard from '../../components/JourneyCard.jsx'
 
 const stamps = [
   ['interpret', 'Khuê Văn Các', 'khue-van-cac.jpg'],
@@ -49,6 +50,9 @@ function PassportPage() {
             })}
           </div>
         </section>
+        <section className="section" aria-label="Hành trình của bạn hôm nay">
+          <JourneyCard />
+        </section>
         <section className="section">
           <h2>Cột mốc</h2>
           <br />
@@ -83,7 +87,7 @@ function PassportPage() {
             </article>
           </div>
         </section>
-        <a className="btn btn-primary btn-block" href="#explore">
+        <a className="btn btn-primary btn-block" href="/Explore">
           Tiếp tục khám phá
         </a>
       </div>
