@@ -40,6 +40,8 @@ body:has(#heritage-awakened:checked) {
   box-sizing: border-box;
 }
 html {
+  /* Màu lộ ra khi vuốt quá mép trang bằng touchpad hoặc cảm ứng. */
+  background-color: #242729;
   scroll-behavior: smooth;
 }
 body {
@@ -72,18 +74,8 @@ img {
 }
 
 .screen {
-  display: none;
   min-height: 100vh;
   padding-left: var(--sidebar);
-}
-#explore {
-  display: block;
-}
-body:has(.screen:target) #explore:not(:target) {
-  display: none;
-}
-.screen:target {
-  display: block;
 }
 
 .sidebar {

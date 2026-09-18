@@ -9,7 +9,7 @@ function CameraPage() {
         ></div>
         <div className="camera-ui">
           <div className="camera-top">
-            <a className="round-btn" href="#map">
+            <a className="round-btn" href="/Explore/Ban-Do">
               ←
             </a>
             <div className="camera-progress">
@@ -60,7 +60,7 @@ function CameraPage() {
                 Cách công trình 12 m · GPS và hình ảnh đã trùng khớp.
               </p>
               <div className="result-actions">
-                <a className="btn btn-gold" href="#interpret">
+                <a className="btn btn-gold" href="/Explore/Khue-Van-Cac">
                   Xem thông tin di sản →
                 </a>
                 <label className="scan-again" htmlFor="scan-complete">

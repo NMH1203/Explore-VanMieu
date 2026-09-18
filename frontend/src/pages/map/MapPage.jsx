@@ -1,4 +1,8 @@
+import { useUnlockedLocations } from '../../state/heritageProgress.js'
+
 function MapPage() {
+  const unlockedLocations = useUnlockedLocations()
+
   return (
     <section className="screen" id="map">
       <header className="topbar">
@@ -17,31 +21,44 @@ function MapPage() {
                 <i className="dot jade"></i>Đã mở khóa
               </span>
               <span>
-                <i className="dot"></i>Trong hành trình
-              </span>
-              <span>
-                <i className="dot stone"></i>Đang khóa
+                <i className="dot stone"></i>Chưa mở khóa
               </span>
             </div>
             <div className="map-marker jade" style={{ left: '25%', top: '36%' }}>
               <span>✓</span>
             </div>
-            <div className="map-marker" style={{ left: '46%', top: '22%' }}>
+            <div
+              className={`map-marker${unlockedLocations.has('location-dai-trung-gate') ? ' jade' : ' locked'}`}
+              style={{ left: '46%', top: '22%' }}
+            >
               <span>2</span>
             </div>
-            <div className="map-marker" style={{ left: '67%', top: '39%' }}>
+            <div
+              className={`map-marker${unlockedLocations.has('location-dien-dai-thanh') ? ' jade' : ' locked'}`}
+              style={{ left: '67%', top: '39%' }}
+            >
               <span>3</span>
             </div>
-            <div className="map-marker locked" style={{ left: '79%', top: '69%' }}>
+            <div
+              className={`map-marker${unlockedLocations.has('location-thai-hoc-house') ? ' jade' : ' locked'}`}
+              style={{ left: '79%', top: '69%' }}
+            >
               <span>4</span>
             </div>
-            <div className="map-marker locked" style={{ left: '39%', top: '72%' }}>
+            <div
+              className={`map-marker${unlockedLocations.has('location-phuong-dinh') ? ' jade' : ' locked'}`}
+              style={{ left: '39%', top: '72%' }}
+            >
               <span>5</span>
             </div>
             <div className="map-card">
               <strong>Vị trí của bạn</strong>
-              <p>Gần Cổng Đại Trung · còn 46 m để xác nhận GPS.</p>
-              <a className="btn btn-primary" href="#camera">
+              <p>
+                Cổng Đại Trung{' '}
+                {unlockedLocations.has('location-dai-trung-gate') ? 'đã mở khóa' : 'chưa mở khóa'}
+                {' '}· cách bạn 46 m.
+              </p>
+              <a className="btn btn-primary" href="/Explore/Camera">
                 Mở xác minh
               </a>
             </div>
@@ -51,10 +68,12 @@ function MapPage() {
               <div className="mini-shape" role="img" aria-label="Khối hình học Khuê Văn Các"></div>
               <div>
                 <h3>Khuê Văn Các</h3>
-                <p>✓ Đã hoàn tất · 32 m</p>
+                <p>✓ Đã mở khóa · 32 m</p>
               </div>
             </article>
-            <article className="mini-location">
+            <article
+              className={`mini-location${unlockedLocations.has('location-dai-trung-gate') ? '' : ' locked'}`}
+            >
               <div
                 className="mini-shape art-b"
                 role="img"
@@ -62,10 +81,15 @@ function MapPage() {
               ></div>
               <div>
                 <h3>Cổng Đại Trung</h3>
-                <p>⌖ Đang ở gần · 46 m</p>
+                <p>
+                  {unlockedLocations.has('location-dai-trung-gate') ? 'Đã mở khóa' : 'Chưa mở khóa'}
+                  {' '}· 46 m
+                </p>
               </div>
             </article>
-            <article className="mini-location">
+            <article
+              className={`mini-location${unlockedLocations.has('location-dien-dai-thanh') ? '' : ' locked'}`}
+            >
               <div
                 className="mini-shape art-c"
                 role="img"
@@ -73,10 +97,15 @@ function MapPage() {
               ></div>
               <div>
                 <h3>Điện Đại Thành</h3>
-                <p>◇ Trong hành trình · 120 m</p>
+                <p>
+                  {unlockedLocations.has('location-dien-dai-thanh') ? 'Đã mở khóa' : 'Chưa mở khóa'}
+                  {' '}· 120 m
+                </p>
               </div>
             </article>
-            <article className="mini-location">
+            <article
+              className={`mini-location${unlockedLocations.has('location-thai-hoc-house') ? '' : ' locked'}`}
+            >
               <div
                 className="mini-shape art-a"
                 role="img"
@@ -84,7 +113,10 @@ function MapPage() {
               ></div>
               <div>
                 <h3>Nhà Thái Học</h3>
-                <p>◉ Chưa đến gần · 210 m</p>
+                <p>
+                  {unlockedLocations.has('location-thai-hoc-house') ? 'Đã mở khóa' : 'Chưa mở khóa'}
+                  {' '}· 210 m
+                </p>
               </div>
             </article>
           </aside>
