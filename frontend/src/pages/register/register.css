@@ -126,6 +126,20 @@
   transform: translateY(-1px);
 }
 
+.account-auth__back {
+  display: block;
+  width: fit-content;
+  margin: 18px auto 0;
+  color: var(--lacquer);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.account-auth__back:hover {
+  text-decoration: underline;
+}
+
 .account-auth__notice {
   display: flex;
   gap: 8px;

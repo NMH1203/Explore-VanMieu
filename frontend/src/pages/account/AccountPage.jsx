@@ -1,6 +1,6 @@
 import { useUnlockedLocations } from '../../state/heritageProgress.js'
 
-function AccountPage() {
+function AccountPage({ onLogout }) {
   const unlockedCount = useUnlockedLocations().size
 
   return (
@@ -67,9 +67,9 @@ function AccountPage() {
             <span>Sáng ›</span>
           </div>
         </section>
-        <a className="btn btn-outline btn-block" href="/Explore">
+        <button className="btn btn-outline btn-block" type="button" onClick={onLogout}>
           Đăng xuất
-        </a>
+        </button>
       </div>
     </section>
   )
