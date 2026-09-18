@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.routes import locations, checkin, auth
 # Import cấu hình database và model để kích hoạt tạo bảng
 from src.config.database import engine, Base, SessionLocal
-from src.models import user,heritage
 from src.config.seed import seed_heritage_data
+from src.models import user, heritage, passport, figure
+from src.routes import locations, checkin, auth, passport,figures
 
 # Lệnh quét tất cả các Models và tạo bảng trong Database thật nếu chưa tồn tại
 Base.metadata.create_all(bind=engine)
@@ -33,7 +33,8 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(locations.router, prefix="/api/v1")
 app.include_router(checkin.router, prefix="/api/v1")
-
+app.include_router(passport.router, prefix="/api/v1")
+app.include_router(figures.router, prefix="/api/v1")
 @app.get("/")
 def read_root():
     return {"message": "Chào mừng đến với hệ thống Explore Van Mieu API!"}
