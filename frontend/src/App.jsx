@@ -8,6 +8,7 @@ import LocationDetailPage from './pages/location-detail/LocationDetailPage.jsx'
 import LocationsPage from './pages/locations/LocationsPage.jsx'
 import MapPage from './pages/map/MapPage.jsx'
 import PassportPage from './pages/passport/PassportPage.jsx'
+import RegisterPage from './pages/register/RegisterPage.jsx'
 import { getRoute, normalizeInitialUrl, paths } from './routes.js'
 
 normalizeInitialUrl()
@@ -70,6 +71,9 @@ function App() {
     case 'account':
       page = <AccountPage />
       break
+    case 'register':
+      page = <RegisterPage />
+      break
     case 'detail':
       page = <LocationDetailPage id={route.id} />
       break
@@ -96,8 +100,8 @@ function App() {
         id="scan-complete"
         aria-label="Trạng thái nhận diện công trình"
       />
-      <Navigation />
-      <main>{page}</main>
+      {route.page !== 'register' && <Navigation />}
+      {route.page === 'register' ? page : <main>{page}</main>}
     </div>
   )
 }
