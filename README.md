@@ -218,3 +218,5 @@ Nhóm Frontend phụ trách giao diện người dùng, bản đồ, camera, h�
 | Lê Bá Ninh | Backend Developer |
 
 Nhóm Backend phụ trách API, xác thực người dùng, xử lý vị trí, check-in, dữ liệu hiện vật, hộ chiếu, phần thưởng và kết nối với các dịch vụ AI.
+
+
