@@ -1,74 +1,146 @@
+import { useState } from 'react'
+import { ArrowLeft, Sun, SunMedium, Camera as CameraIcon } from 'lucide-react'
+import { unlockLocation } from '../../state/heritageProgress.js'
+import { useCameraStream } from './hooks/useCameraStream.js'
+import { useLiveLocation } from './hooks/useLiveLocation.js'
+import CameraViewfinder from './components/CameraViewfinder.jsx'
+import LocationBanner from './components/LocationBanner.jsx'
+import ScanResultModal from './components/ScanResultModal.jsx'
+import './camera.css'
+
 function CameraPage() {
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [isScanComplete, setIsScanComplete] = useState(false)
+
+  // 1. Quản lý Camera thiết bị
+  const {
+    videoRef,
+    isStreaming,
+    hasPermission,
+    cameraError,
+    capturedImage,
+    setCapturedImage,
+    isTorchOn,
+    toggleTorch,
+    captureSnapshot,
+  } = useCameraStream()
+
+  // 2. Quản lý Tọa độ GPS & 10 điểm Văn Miếu
+  const {
+    targetLocation,
+    setTargetLocation,
+    distanceMeters,
+    gpsAccuracy,
+    isNearEnough,
+  } = useLiveLocation()
+
+  // 3. Xử lý quét nhận diện
+  const handleStartScan = () => {
+    if (isAnalyzing) return
+
+    // Chụp lại khung hình hiện tại từ camera
+    captureSnapshot()
+    setIsAnalyzing(true)
+
+    // Mô phỏng AI đối chiếu kiến trúc và vị trí (1.2s)
+    setTimeout(() => {
+      // Tự động trao con dấu vào Hộ chiếu số
+      if (targetLocation?.id) {
+        unlockLocation(targetLocation.id)
+      }
+      setIsAnalyzing(false)
+      setIsScanComplete(true)
+    }, 1300)
+  }
+
+  // Quét lại
+  const handleResetScan = () => {
+    setCapturedImage(null)
+    setIsScanComplete(false)
+    setIsAnalyzing(false)
+  }
+
   return (
     <section className="screen" id="camera">
       <div className="camera-screen">
-        <div
-          className="camera-art"
-          role="img"
-          aria-label="Khối hình học mô phỏng góc nhìn camera"
-        ></div>
         <div className="camera-ui">
+          {/* Thanh điều khiển trên cùng */}
           <div className="camera-top">
-            <a className="round-btn" href="/Explore/Ban-Do">
-              ←
+            <a className="round-btn" href="/Explore/Ban-Do" title="Quay lại Bản đồ">
+              <ArrowLeft size={18} />
             </a>
+
             <div className="camera-progress">
-              <span className="active">1 · Quét</span>
+              <span className={!isScanComplete && !isAnalyzing ? 'active' : 'completed'}>
+                1 · Quét
+              </span>
               <i></i>
-              <span>2 · Xác định vị trí</span>
+              <span className={isAnalyzing ? 'active' : isScanComplete ? 'completed' : ''}>
+                2 · Nhận diện AI
+              </span>
               <i></i>
-              <span>3 · Khám phá</span>
+              <span className={isScanComplete ? 'active' : ''}>
+                3 · Khám phá
+              </span>
             </div>
-            <button className="round-btn" aria-label="Bật đèn">
-              ☼
+
+            <button
+              type="button"
+              className={`round-btn ${isTorchOn ? 'torch-active' : ''}`}
+              onClick={toggleTorch}
+              title="Bật/tắt đèn chiếu sáng"
+              aria-label="Bật đèn"
+            >
+              {isTorchOn ? <SunMedium size={18} /> : <Sun size={18} />}
             </button>
           </div>
-          <div className="camera-location">
-            <span className="location-dot">●</span>
-            <div>
-              <small>Vị trí hiện tại</small>
-              <strong>Sân Khuê Văn Các</strong>
-              <span>Văn Miếu – Quốc Tử Giám · Chính xác ±8 m</span>
-            </div>
-          </div>
-          <div className="viewfinder">
-            <span className="corner tl"></span>
-            <span className="corner tr"></span>
-            <span className="corner bl"></span>
-            <span className="corner br"></span>
-            <div className="scan-line"></div>
-            <div className="scan-hint">Giữ công trình nằm trọn trong khung</div>
-          </div>
-          <div className="camera-bottom scan-ready">
-            <span className="camera-kicker">Nhận diện công trình</span>
-            <h2>Hướng camera về phía Khuê Văn Các</h2>
-            <p>
-              AI sẽ đối chiếu kiến trúc và GPS để tìm đúng câu chuyện di sản tại vị trí của bạn.
-            </p>
-            <label className="scan-button" htmlFor="scan-complete">
-              <span>◎</span> Bắt đầu quét
-            </label>
-          </div>
-          <div className="camera-bottom scan-result">
-            <div className="result-check">✓</div>
-            <div className="result-copy">
-              <span className="camera-kicker">Đã nhận diện · độ tin cậy 98%</span>
-              <h2>Khuê Văn Các</h2>
+
+          {/* Banner vị trí GPS thời gian thực */}
+          <LocationBanner
+            targetLocation={targetLocation}
+            setTargetLocation={setTargetLocation}
+            distanceMeters={distanceMeters}
+            gpsAccuracy={gpsAccuracy}
+            isNearEnough={isNearEnough}
+          />
+
+          {/* Khung ngắm Camera thật & Kính ngắm di sản */}
+          <CameraViewfinder
+            videoRef={videoRef}
+            isStreaming={isStreaming}
+            hasPermission={hasPermission}
+            cameraError={cameraError}
+            isAnalyzing={isAnalyzing}
+            capturedImage={capturedImage}
+            targetLocation={targetLocation}
+          />
+
+          {/* Bảng điều khiển nút bấm phía dưới */}
+          {!isScanComplete ? (
+            <div className="camera-bottom scan-ready">
+              <span className="camera-kicker">Nhận diện công trình & Hiện vật</span>
+              <h2>Hướng camera về phía {targetLocation?.name || 'Khuê Văn Các'}</h2>
               <p>
-                <b>⌖ Bạn đang ở Sân Khuê Văn Các</b>
-                <br />
-                Cách công trình 12 m · GPS và hình ảnh đã trùng khớp.
+                Hệ thống AI sẽ đối chiếu đặc trưng kiến trúc và GPS để xác nhận lượt tham quan và trao con dấu di sản.
               </p>
-              <div className="result-actions">
-                <a className="btn btn-gold" href="/Explore/Khue-Van-Cac">
-                  Xem thông tin di sản →
-                </a>
-                <label className="scan-again" htmlFor="scan-complete">
-                  Quét lại
-                </label>
-              </div>
+
+              <button
+                type="button"
+                className={`scan-button ${isAnalyzing ? 'scanning' : ''}`}
+                onClick={handleStartScan}
+                disabled={isAnalyzing}
+              >
+                <CameraIcon size={16} />
+                <span>{isAnalyzing ? 'Đang phân tích hình ảnh...' : 'Bắt đầu quét'}</span>
+              </button>
             </div>
-          </div>
+          ) : (
+            <ScanResultModal
+              location={targetLocation}
+              distanceMeters={distanceMeters}
+              onResetScan={handleResetScan}
+            />
+          )}
         </div>
       </div>
     </section>
