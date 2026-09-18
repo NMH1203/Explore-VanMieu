@@ -1,7 +1,16 @@
+import { useState } from 'react'
 import { useUnlockedLocations } from '../../state/heritageProgress.js'
+import { MAP_LOCATIONS } from './mapData.js'
+import InteractiveMap from './components/InteractiveMap.jsx'
+import LocationSidebar from './components/LocationSidebar.jsx'
+import './map.css'
 
 function MapPage() {
   const unlockedLocations = useUnlockedLocations()
+  // Mặc định chọn địa điểm đầu tiên hoặc Khuê Văn Các
+  const [selectedLocation, setSelectedLocation] = useState(MAP_LOCATIONS[0])
+
+  const unlockedCount = MAP_LOCATIONS.filter((loc) => unlockedLocations.has(loc.id)).length
 
   return (
     <section className="screen" id="map">
@@ -9,117 +18,67 @@ function MapPage() {
         <div className="inner">
           <div className="eyebrow">All locations</div>
           <h1>Bản đồ Văn Miếu</h1>
-          <p>Theo dõi vị trí hiện tại, các điểm trong hành trình và trạng thái mở khóa.</p>
+          <p>
+            Theo dõi 10 công trình trọng điểm theo trục không gian di sản · Đã mở khóa {unlockedCount}/10 điểm
+          </p>
         </div>
       </header>
+
       <div className="container">
-        <div className="map-layout">
-          <div className="map-full">
-            <div className="map-art"></div>
-            <div className="map-legend">
-              <span>
-                <i className="dot jade"></i>Đã mở khóa
-              </span>
-              <span>
-                <i className="dot stone"></i>Chưa mở khóa
-              </span>
-            </div>
-            <div className="map-marker jade" style={{ left: '25%', top: '36%' }}>
-              <span>✓</span>
-            </div>
-            <div
-              className={`map-marker${unlockedLocations.has('location-dai-trung-gate') ? ' jade' : ' locked'}`}
-              style={{ left: '46%', top: '22%' }}
-            >
-              <span>2</span>
-            </div>
-            <div
-              className={`map-marker${unlockedLocations.has('location-dien-dai-thanh') ? ' jade' : ' locked'}`}
-              style={{ left: '67%', top: '39%' }}
-            >
-              <span>3</span>
-            </div>
-            <div
-              className={`map-marker${unlockedLocations.has('location-thai-hoc-house') ? ' jade' : ' locked'}`}
-              style={{ left: '79%', top: '69%' }}
-            >
-              <span>4</span>
-            </div>
-            <div
-              className={`map-marker${unlockedLocations.has('location-phuong-dinh') ? ' jade' : ' locked'}`}
-              style={{ left: '39%', top: '72%' }}
-            >
-              <span>5</span>
-            </div>
-            <div className="map-card">
-              <strong>Vị trí của bạn</strong>
-              <p>
-                Cổng Đại Trung{' '}
-                {unlockedLocations.has('location-dai-trung-gate') ? 'đã mở khóa' : 'chưa mở khóa'}
-                {' '}· cách bạn 46 m.
-              </p>
-              <a className="btn btn-primary" href="/Explore/Camera">
-                Mở xác minh
-              </a>
-            </div>
+        <div className="map-page-grid">
+          {/* Cột Bản đồ tương tác */}
+          <div className="map-main-column">
+            <InteractiveMap
+              locations={MAP_LOCATIONS}
+              unlockedLocations={unlockedLocations}
+              selectedLocation={selectedLocation}
+              onSelectLocation={setSelectedLocation}
+            />
+
+            {/* Card thông tin nhanh địa điểm đang chọn */}
+            {selectedLocation && (
+              <div className="map-selected-card">
+                <img
+                  src={selectedLocation.image}
+                  alt={selectedLocation.name}
+                  className="selected-card-thumb"
+                />
+                <div className="selected-card-body">
+                  <div className="selected-card-header">
+                    <span className="selected-badge">
+                      #{selectedLocation.order} · {unlockedLocations.has(selectedLocation.id) ? '✓ Đã mở khóa' : 'Chưa mở khóa'}
+                    </span>
+                    <span className="selected-coords">
+                      {selectedLocation.lat.toFixed(5)}°B, {selectedLocation.lng.toFixed(5)}°Đ
+                    </span>
+                  </div>
+                  <h3>{selectedLocation.name}</h3>
+                  <p>{selectedLocation.description}</p>
+                  <div className="selected-card-actions">
+                    {unlockedLocations.has(selectedLocation.id) ? (
+                      <a className="btn btn-gold" href={selectedLocation.detailPath}>
+                        Xem chi tiết di sản →
+                      </a>
+                    ) : (
+                      <a className="btn btn-primary" href="/Explore/Camera">
+                        Mở camera xác minh (Cách {selectedLocation.distanceEst})
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-          <aside className="map-side">
-            <article className="mini-location">
-              <div className="mini-shape" role="img" aria-label="Khối hình học Khuê Văn Các"></div>
-              <div>
-                <h3>Khuê Văn Các</h3>
-                <p>✓ Đã mở khóa · 32 m</p>
-              </div>
-            </article>
-            <article
-              className={`mini-location${unlockedLocations.has('location-dai-trung-gate') ? '' : ' locked'}`}
-            >
-              <div
-                className="mini-shape art-b"
-                role="img"
-                aria-label="Khối hình học Cổng Đại Trung"
-              ></div>
-              <div>
-                <h3>Cổng Đại Trung</h3>
-                <p>
-                  {unlockedLocations.has('location-dai-trung-gate') ? 'Đã mở khóa' : 'Chưa mở khóa'}
-                  {' '}· 46 m
-                </p>
-              </div>
-            </article>
-            <article
-              className={`mini-location${unlockedLocations.has('location-dien-dai-thanh') ? '' : ' locked'}`}
-            >
-              <div
-                className="mini-shape art-c"
-                role="img"
-                aria-label="Khối hình học Điện Đại Thành"
-              ></div>
-              <div>
-                <h3>Điện Đại Thành</h3>
-                <p>
-                  {unlockedLocations.has('location-dien-dai-thanh') ? 'Đã mở khóa' : 'Chưa mở khóa'}
-                  {' '}· 120 m
-                </p>
-              </div>
-            </article>
-            <article
-              className={`mini-location${unlockedLocations.has('location-thai-hoc-house') ? '' : ' locked'}`}
-            >
-              <div
-                className="mini-shape art-a"
-                role="img"
-                aria-label="Khối hình học Nhà Thái Học"
-              ></div>
-              <div>
-                <h3>Nhà Thái Học</h3>
-                <p>
-                  {unlockedLocations.has('location-thai-hoc-house') ? 'Đã mở khóa' : 'Chưa mở khóa'}
-                  {' '}· 210 m
-                </p>
-              </div>
-            </article>
-          </aside>
+
+          {/* Cột Danh sách 10 địa danh đồng bộ tương tác */}
+          <div className="map-sidebar-column">
+            <LocationSidebar
+              locations={MAP_LOCATIONS}
+              unlockedLocations={unlockedLocations}
+              selectedLocation={selectedLocation}
+              onSelectLocation={setSelectedLocation}
+            />
+          </div>
         </div>
       </div>
     </section>

@@ -1,8 +1,7 @@
-.scan-toggle {
-  position: fixed;
-  opacity: 0;
-  pointer-events: none;
-}
+/* ==========================================================================
+   CAMERA & SCAN RECOGNITION MODULE (VAN MIEU CHECK-IN 2 LAYERS)
+   ========================================================================== */
+
 .camera-screen {
   position: relative;
   min-height: 100vh;
@@ -10,253 +9,600 @@
   background: #07101c;
   color: white;
 }
-.camera-screen > .camera-art {
+
+/* Lớp video camera trực tiếp hoặc fallback giả lập */
+.camera-viewfinder-container {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.62;
-  transform: scale(1.04);
-  transition: 0.6s ease;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.camera-screen::after {
-  content: '';
+
+.camera-live-video {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 16%, #020811c2 100%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.3s ease;
 }
+
+.camera-live-video.blur {
+  filter: brightness(0.7) blur(2px);
+}
+
+.camera-art-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.55;
+  filter: brightness(0.65);
+}
+
+.fallback-badge {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
+  font-size: 11px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.captured-preview-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  animation: freezeFlash 0.4s ease-out;
+}
+
+@keyframes freezeFlash {
+  0% { opacity: 0.2; filter: brightness(2); }
+  100% { opacity: 1; filter: brightness(1); }
+}
+
+/* --------------------------------------------------------------------------
+   Lớp UI điều khiển nổi bên trên Camera
+   -------------------------------------------------------------------------- */
 .camera-ui {
   position: relative;
-  z-index: 2;
+  z-index: 5;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 20px;
-  padding: 28px 5vw 42px;
+  gap: 16px;
+  padding: 24px 5vw 36px;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(4, 9, 18, 0.82) 100%);
 }
+
 .camera-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .round-btn {
   width: 42px;
   height: 42px;
   display: grid;
   place-items: center;
-  border: 1px solid #ffffff45;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   color: white;
-  background: #0005;
+  background: rgba(6, 19, 33, 0.65);
+  backdrop-filter: blur(10px);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
+
+.round-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.round-btn.torch-active {
+  background: #eab308;
+  color: #0f172a;
+  border-color: #fde047;
+  box-shadow: 0 0 16px rgba(234, 179, 8, 0.8);
+}
+
 .camera-progress {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  padding: 10px 16px;
-  border: 1px solid #ffffff17;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 999px;
-  background: #061321bf;
+  background: rgba(6, 19, 33, 0.75);
   backdrop-filter: blur(12px);
 }
+
 .camera-progress span {
-  color: #ffffff68;
-  font-size: 9px;
-  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 11px;
+  font-weight: 600;
+  transition: color 0.3s ease;
 }
+
 .camera-progress span.active {
   color: #f0c27b;
+  font-weight: 700;
 }
+
+.camera-progress span.completed {
+  color: #10b981;
+}
+
 .camera-progress i {
-  width: 28px;
+  width: 20px;
   height: 1px;
-  background: #ffffff24;
+  background: rgba(255, 255, 255, 0.2);
 }
-.camera-location {
+
+/* --------------------------------------------------------------------------
+   Banner Vị trí GPS & Menu Dropdown
+   -------------------------------------------------------------------------- */
+.camera-location-wrap {
+  position: relative;
   align-self: flex-start;
+  z-index: 20;
+}
+
+.camera-location {
   display: flex;
   gap: 12px;
   align-items: center;
-  padding: 12px 16px;
-  border: 1px solid #ffffff20;
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 14px;
-  background: #061321c9;
-  backdrop-filter: blur(12px);
+  background: rgba(6, 19, 33, 0.85);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
+
 .location-dot {
-  color: #6bd5a9;
-  text-shadow: 0 0 12px #6bd5a9;
+  font-size: 14px;
+  line-height: 1;
 }
-.camera-location small,
-.camera-location span {
-  display: block;
-  color: #ffffff78;
-  font-size: 8px;
+
+.location-dot.valid {
+  color: #10b981;
+  text-shadow: 0 0 10px #10b981;
 }
-.camera-location strong {
+
+.location-dot.warning {
+  color: #f59e0b;
+  text-shadow: 0 0 10px #f59e0b;
+}
+
+.location-info small {
   display: block;
-  margin: 2px 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 10px;
+}
+
+.location-name-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  margin: 1px 0;
+}
+
+.location-info strong {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.location-selector-trigger {
+  display: inline-flex;
+  color: #f0c27b;
+  opacity: 0.8;
+}
+
+.location-info span {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 11px;
 }
+
+.distance-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.distance-pill.green {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.distance-pill.amber {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+/* Dropdown chọn 10 điểm Văn Miếu */
+.location-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 290px;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 50;
+  animation: fadeIn 0.2s ease;
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px 8px;
+  font-size: 11px;
+  color: #94a3b8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-header button {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-item.selected {
+  background: rgba(240, 194, 123, 0.15);
+  border: 1px solid rgba(240, 194, 123, 0.3);
+}
+
+.item-thumb {
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.item-desc {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.item-check {
+  color: #10b981;
+}
+
+/* --------------------------------------------------------------------------
+   Kính ngắm Di sản (Viewfinder)
+   -------------------------------------------------------------------------- */
 .viewfinder {
   position: relative;
   align-self: center;
-  width: min(560px, 78vw);
-  aspect-ratio: 1.55;
+  width: min(560px, 80vw);
+  aspect-ratio: 1.45;
+  z-index: 10;
+  pointer-events: none;
 }
+
 .corner {
   position: absolute;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-color: #efbd74;
   border-style: solid;
-  filter: drop-shadow(0 0 7px #efbd7488);
+  filter: drop-shadow(0 0 6px rgba(239, 189, 116, 0.6));
 }
+
 .corner.tl {
   left: 0;
   top: 0;
   border-width: 3px 0 0 3px;
-  border-radius: 18px 0 0;
+  border-radius: 16px 0 0;
 }
+
 .corner.tr {
   right: 0;
   top: 0;
   border-width: 3px 3px 0 0;
-  border-radius: 0 18px 0 0;
+  border-radius: 0 16px 0 0;
 }
+
 .corner.bl {
   left: 0;
   bottom: 0;
   border-width: 0 0 3px 3px;
-  border-radius: 0 0 0 18px;
+  border-radius: 0 0 0 16px;
 }
+
 .corner.br {
   right: 0;
   bottom: 0;
   border-width: 0 3px 3px 0;
-  border-radius: 0 0 18px;
+  border-radius: 0 0 16px;
 }
+
 .scan-line {
   position: absolute;
-  left: 7%;
-  right: 7%;
+  left: 6%;
+  right: 6%;
   top: 50%;
   height: 2px;
   background: linear-gradient(90deg, transparent, #efbd74, transparent);
-  box-shadow: 0 0 12px #efbd74;
-  animation: scan 2.4s ease-in-out infinite;
+  box-shadow: 0 0 14px #efbd74;
+  animation: scan 2.6s ease-in-out infinite;
 }
+
+.scan-line.fast-scan {
+  background: linear-gradient(90deg, transparent, #10b981, transparent);
+  box-shadow: 0 0 18px #10b981;
+  animation: scan 0.8s ease-in-out infinite;
+}
+
 .scan-hint {
   position: absolute;
   left: 50%;
-  bottom: 18px;
+  bottom: 16px;
   transform: translateX(-50%);
   width: max-content;
-  padding: 7px 10px;
+  max-width: 90%;
+  padding: 6px 14px;
   border-radius: 999px;
-  color: #ffffffa0;
-  background: #061321b8;
-  font-size: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(6, 19, 33, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
 }
+
 @keyframes scan {
-  0%,
-  100% {
-    top: 16%;
-    opacity: 0.45;
+  0%, 100% {
+    top: 14%;
+    opacity: 0.4;
   }
   50% {
-    top: 82%;
+    top: 86%;
     opacity: 1;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Bảng điều khiển nút bấm & Kết quả quét
+   -------------------------------------------------------------------------- */
 .camera-bottom {
   width: min(650px, 100%);
   align-self: center;
-  padding: 22px 26px;
-  border: 1px solid #ffffff16;
+  padding: 20px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 20px;
-  background: #06101ddc;
-  backdrop-filter: blur(14px);
+  background: rgba(6, 16, 29, 0.92);
+  backdrop-filter: blur(16px);
   text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 15;
 }
+
+.camera-kicker {
+  display: block;
+  margin-bottom: 4px;
+  color: #efbd74;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
 .camera-bottom h2 {
   margin: 0 0 6px;
   color: white;
-  font-size: 17px;
+  font-size: 18px;
 }
+
 .camera-bottom p {
-  margin: 0 0 15px;
-  color: #ffffff99;
-  font-size: 10px;
+  margin: 0 0 16px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  line-height: 1.5;
 }
-.camera-kicker {
-  display: block;
-  margin-bottom: 6px;
-  color: #efbd74;
-  font-size: 8px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.13em;
-}
+
 .scan-button {
   display: inline-flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
-  padding: 12px 20px;
-  border-radius: 11px;
+  justify-content: center;
+  padding: 12px 28px;
+  border-radius: 12px;
   color: #142238;
-  background: #e1ad6e;
-  font-size: 10px;
+  background: linear-gradient(135deg, #f0c27b 0%, #e1ad6e 100%);
+  font-size: 13px;
   font-weight: 800;
+  border: none;
   cursor: pointer;
+  box-shadow: 0 4px 15px rgba(225, 173, 110, 0.4);
+  transition: all 0.2s ease;
 }
-.scan-result {
-  display: none;
+
+.scan-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(225, 173, 110, 0.6);
+}
+
+.scan-button.scanning {
+  background: #334155;
+  color: #94a3b8;
+  cursor: wait;
+  box-shadow: none;
+}
+
+/* Modal Kết quả nhận diện thành công */
+.scan-result-modal {
+  display: grid;
   grid-template-columns: 56px 1fr;
   gap: 18px;
   text-align: left;
+  animation: slideUp 0.35s ease-out;
 }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .result-check {
   width: 56px;
   height: 56px;
   display: grid;
   place-items: center;
-  border: 1px solid #68d0a5;
+  border: 1px solid #10b981;
   border-radius: 50%;
-  color: #09291c;
-  background: #68d0a5;
-  font-size: 24px;
-  box-shadow: 0 0 28px #68d0a544;
+  color: #ffffff;
+  background: #10b981;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.5);
+  flex-shrink: 0;
 }
+
 .result-actions {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
   align-items: center;
+  margin-top: 14px;
 }
-.scan-again {
-  padding: 10px;
-  color: #ffffff9b;
-  font-size: 9px;
+
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e1ad6e;
+  color: #0f172a;
+  font-size: 12px;
   font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.btn-outline-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.scan-again-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 10px;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
-body:has(#scan-complete:checked) .scan-ready {
-  display: none;
+
+.scan-again-btn:hover {
+  color: #ffffff;
 }
-body:has(#scan-complete:checked) .scan-result {
-  display: grid;
-}
-body:has(#scan-complete:checked) .camera-progress span:nth-of-type(1) {
-  color: #68d0a5;
-}
-body:has(#scan-complete:checked) .camera-progress span:nth-of-type(2),
-body:has(#scan-complete:checked) .camera-progress span:nth-of-type(3) {
-  color: #f0c27b;
-}
-body:has(#scan-complete:checked) .viewfinder {
-  opacity: 0.55;
-}
-body:has(#scan-complete:checked) .camera-screen > .camera-art {
-  transform: scale(1);
+
+/* --------------------------------------------------------------------------
+   Responsive Mobile
+   -------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  .camera-ui {
+    padding: 16px 4vw 24px;
+  }
+
+  .scan-result-modal {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .result-check {
+    margin: 0 auto 6px;
+  }
+
+  .result-actions {
+    justify-content: center;
+  }
 }
