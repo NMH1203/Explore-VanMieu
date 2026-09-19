@@ -1,5 +1,4 @@
 import { Award, Check, LockKeyhole, Plus, Send } from 'lucide-react'
-import { useUnlockedLocations } from '../../state/heritageProgress.js'
 import { paths } from '../../routes.js'
 
 const items = [
@@ -255,8 +254,7 @@ function Detail({ item, unlocked }) {
   )
 }
 
-export default function LocationDetailPage({ id }) {
-  const unlockedLocations = useUnlockedLocations()
+export default function LocationDetailPage({ id, unlockedLocations }) {
   const item = items.find((candidate) => candidate.id === id)
   if (!item) return null
 

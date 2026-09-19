@@ -1,5 +1,4 @@
 import { LockKeyhole } from 'lucide-react'
-import { useUnlockedLocations } from '../../state/heritageProgress.js'
 import { detailPaths, paths } from '../../routes.js'
 
 const locations = [
@@ -112,8 +111,7 @@ function LocationCard({ location, unlocked }) {
   )
 }
 
-function LocationsPage() {
-  const unlockedLocations = useUnlockedLocations()
+function LocationsPage({ unlockedLocations }) {
   const unlockedCount = locations.filter((location) => unlockedLocations.has(location.id)).length
 
   return (

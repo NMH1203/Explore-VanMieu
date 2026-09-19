@@ -1,4 +1,3 @@
-import { useUnlockedLocations } from '../../state/heritageProgress.js'
 import JourneyCard from '../../components/JourneyCard.jsx'
 
 const stamps = [
@@ -14,8 +13,7 @@ const stamps = [
   ['location-phuong-dinh', 'Phương Đình', 'phuong-dinh.jpg'],
 ]
 
-function PassportPage() {
-  const unlockedLocations = useUnlockedLocations()
+function PassportPage({ unlockedLocations }) {
   const unlockedCount = stamps.filter(([id]) => unlockedLocations.has(id)).length
 
   return (
@@ -51,7 +49,7 @@ function PassportPage() {
           </div>
         </section>
         <section className="section" aria-label="Hành trình của bạn hôm nay">
-          <JourneyCard />
+          <JourneyCard unlockedLocations={unlockedLocations} />
         </section>
         <section className="section">
           <h2>Cột mốc</h2>

@@ -1,7 +1,5 @@
-import { useUnlockedLocations } from '../../state/heritageProgress.js'
-
-function AccountPage({ onLogout }) {
-  const unlockedCount = useUnlockedLocations().size
+function AccountPage({ onLogout, unlockedLocations }) {
+  const unlockedCount = unlockedLocations.size
 
   return (
     <section className="screen" id="account">
