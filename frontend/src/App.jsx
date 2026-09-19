@@ -10,10 +10,11 @@ import MapPage from './pages/map/MapPage.jsx'
 import PassportPage from './pages/passport/PassportPage.jsx'
 import RegisterPage from './pages/register/RegisterPage.jsx'
 import { getRoute, normalizeInitialUrl, paths } from './routes.js'
+import { getCurrentUser, logout } from './services/auth.js'
 
 normalizeInitialUrl()
 
-const authStorageKey = 'explore-van-mieu:is-authenticated'
+
 const protectedPages = new Set(['account', 'camera'])
 // Backend will replace this with the authenticated user's unlocked location IDs.
 // Until that API is connected, every location must remain locked.
@@ -21,10 +22,14 @@ const noUnlockedLocations = new Set()
 
 function App() {
   const [pathname, setPathname] = useState(window.location.pathname)
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    () => window.localStorage.getItem(authStorageKey) === 'true',
-  )
+  const [user, setUser] = useState(undefined)
+  const isAuthenticated = Boolean(user)
   const route = getRoute(pathname)
+  useEffect(() => {
+    getCurrentUser()
+      .then((account) => setUser(account))
+      .catch(() => setUser(null))
+  }, [])
 
   useEffect(() => {
     function handlePopState() {
@@ -43,11 +48,13 @@ function App() {
   }
 
   useEffect(() => {
+    if (user === undefined) return
+
     const currentPath = window.location.pathname
     if (!isAuthenticated && protectedPages.has(route.page) && currentPath !== paths.register) {
       navigate(`${paths.register}?next=${encodeURIComponent(currentPath)}`, { replace: true })
     }
-  }, [isAuthenticated, route.page])
+  }, [user, isAuthenticated, route.page])
 
   function handleNavigation(event) {
     const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null
@@ -77,18 +84,21 @@ function App() {
     navigate(destination.pathname + destination.search + destination.hash)
   }
 
-  function handleAuthenticate() {
-    window.localStorage.setItem(authStorageKey, 'true')
-    setIsAuthenticated(true)
+  function handleAuthenticate(account) {
+    setUser(account)
 
     const nextPath = new URLSearchParams(window.location.search).get('next')
     navigate(nextPath?.startsWith('/Explore') ? nextPath : paths.account, { replace: true })
   }
 
-  function handleLogout() {
-    window.localStorage.removeItem(authStorageKey)
-    setIsAuthenticated(false)
-    navigate(paths.explore, { replace: true })
+  async function handleLogout() {
+    try {
+      await logout()
+      setUser(null)
+      navigate(paths.explore, { replace: true })
+    } catch (error) {
+      alert(error.message)
+    }
   }
 
   let page
@@ -112,7 +122,13 @@ function App() {
       page = <PassportPage unlockedLocations={noUnlockedLocations} />
       break
     case 'account':
-      page = <AccountPage onLogout={handleLogout} unlockedLocations={noUnlockedLocations} />
+      page = (
+        <AccountPage
+          user={user}
+          onLogout={handleLogout}
+          unlockedLocations={noUnlockedLocations}
+        />
+      )
       break
     case 'register':
       page = <RegisterPage onAuthenticate={handleAuthenticate} />
