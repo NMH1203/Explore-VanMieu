@@ -354,8 +354,8 @@ function HomePage() {
                 <h3>Chu Văn An</h3>
                 <small>Người thầy mẫu mực</small>
                 <p>Gắn với lịch sử Quốc Tử Giám và truyền thống tôn sư trọng đạo.</p>
-                <a className="text-link" href="/Explore/Danh-Nhan/Chu-Van-An">
-                  Nghe câu chuyện →
+                <a className="btn btn-outline btn-block figure-story-btn" href="/Explore/Danh-Nhan/Chu-Van-An">
+                  Xem câu chuyện
                 </a>
               </div>
             </article>
@@ -370,8 +370,8 @@ function HomePage() {
                 <h3>Lý Thánh Tông</h3>
                 <small>1023–1072</small>
                 <p>Vị vua cho dựng Văn Miếu vào năm 1070.</p>
-                <a className="text-link" href="/Explore/Danh-Nhan/Ly-Thanh-Tong">
-                  Hỏi AI →
+                <a className="btn btn-outline btn-block figure-story-btn" href="/Explore/Danh-Nhan/Ly-Thanh-Tong">
+                  Xem câu chuyện
                 </a>
               </div>
             </article>
@@ -386,8 +386,8 @@ function HomePage() {
                 <h3>Khổng Tử</h3>
                 <small>Bậc vạn thế sư biểu</small>
                 <p>Nhân vật trung tâm trong không gian thờ tự của Văn Miếu.</p>
-                <a className="text-link" href="/Explore/Danh-Nhan/Khong-Tu">
-                  Nghe câu chuyện →
+                <a className="btn btn-outline btn-block figure-story-btn" href="/Explore/Danh-Nhan/Khong-Tu">
+                  Xem câu chuyện
                 </a>
               </div>
             </article>
