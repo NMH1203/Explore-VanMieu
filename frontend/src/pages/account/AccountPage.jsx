@@ -1,16 +1,18 @@
 import { useUnlockedLocations } from '../../state/heritageProgress.js'
 
-function AccountPage({ onLogout }) {
+function AccountPage({ user, onLogout }) {
   const unlockedCount = useUnlockedLocations().size
+  const displayName = user?.username || user?.email || 'Đang tải...'
+  const avatarText = displayName[0].toUpperCase()
 
   return (
     <section className="screen" id="account">
       <div className="profile-hero">
         <div className="profile">
-          <div className="avatar">N</div>
+          <div className="avatar">{avatarText}</div>
           <div>
-            <h1>Nguyễn Văn An</h1>
-            <p>nguyen.van.an@email.com</p>
+            <h1>{displayName}</h1>
+            <p>{user?.email || ''}</p>
             <br />
             <span className="btn btn-gold">★ Explore Van Mieu</span>
           </div>

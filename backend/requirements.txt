@@ -1,0 +1,6 @@
+fastapi[standard]==0.141.1
+sqlmodel==0.0.42
+pwdlib[argon2]==0.3.1
+PyJWT
+python-dotenv
+email-validator
