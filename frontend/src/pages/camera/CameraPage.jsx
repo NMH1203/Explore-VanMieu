@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { ArrowLeft, Sun, SunMedium, Camera as CameraIcon } from 'lucide-react'
-import { unlockLocation } from '../../state/heritageProgress.js'
 import { useCameraStream } from './hooks/useCameraStream.js'
 import { useLiveLocation } from './hooks/useLiveLocation.js'
 import CameraViewfinder from './components/CameraViewfinder.jsx'
@@ -44,10 +43,6 @@ function CameraPage() {
 
     // Mô phỏng AI đối chiếu kiến trúc và vị trí (1.2s)
     setTimeout(() => {
-      // Tự động trao con dấu vào Hộ chiếu số
-      if (targetLocation?.id) {
-        unlockLocation(targetLocation.id)
-      }
       setIsAnalyzing(false)
       setIsScanComplete(true)
     }, 1300)
