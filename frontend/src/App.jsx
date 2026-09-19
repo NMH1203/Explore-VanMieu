@@ -8,12 +8,19 @@ import LocationDetailPage from './pages/location-detail/LocationDetailPage.jsx'
 import LocationsPage from './pages/locations/LocationsPage.jsx'
 import MapPage from './pages/map/MapPage.jsx'
 import PassportPage from './pages/passport/PassportPage.jsx'
+import RegisterPage from './pages/register/RegisterPage.jsx'
 import { getRoute, normalizeInitialUrl, paths } from './routes.js'
 
 normalizeInitialUrl()
 
+const authStorageKey = 'explore-van-mieu:is-authenticated'
+const protectedPages = new Set(['account', 'camera'])
+
 function App() {
   const [pathname, setPathname] = useState(window.location.pathname)
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => window.localStorage.getItem(authStorageKey) === 'true',
+  )
   const route = getRoute(pathname)
 
   useEffect(() => {
@@ -24,6 +31,20 @@ function App() {
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
+
+  function navigate(destination, { replace = false } = {}) {
+    const url = new URL(destination, window.location.origin)
+    window.history[replace ? 'replaceState' : 'pushState'](null, '', url.pathname + url.search + url.hash)
+    setPathname(url.pathname)
+    window.scrollTo(0, 0)
+  }
+
+  useEffect(() => {
+    const currentPath = window.location.pathname
+    if (!isAuthenticated && protectedPages.has(route.page) && currentPath !== paths.register) {
+      navigate(`${paths.register}?next=${encodeURIComponent(currentPath)}`, { replace: true })
+    }
+  }, [isAuthenticated, route.page])
 
   function handleNavigation(event) {
     const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null
@@ -42,9 +63,29 @@ function App() {
     if (destination.pathname === window.location.pathname && destination.hash) return
 
     event.preventDefault()
-    window.history.pushState(null, '', destination.pathname + destination.search + destination.hash)
-    setPathname(destination.pathname)
-    window.scrollTo(0, 0)
+    const destinationRoute = getRoute(destination.pathname)
+    const requiresAuthentication = protectedPages.has(destinationRoute.page)
+
+    if (!isAuthenticated && requiresAuthentication) {
+      navigate(`${paths.register}?next=${encodeURIComponent(destination.pathname)}`)
+      return
+    }
+
+    navigate(destination.pathname + destination.search + destination.hash)
+  }
+
+  function handleAuthenticate() {
+    window.localStorage.setItem(authStorageKey, 'true')
+    setIsAuthenticated(true)
+
+    const nextPath = new URLSearchParams(window.location.search).get('next')
+    navigate(nextPath?.startsWith('/Explore') ? nextPath : paths.account, { replace: true })
+  }
+
+  function handleLogout() {
+    window.localStorage.removeItem(authStorageKey)
+    setIsAuthenticated(false)
+    navigate(paths.explore, { replace: true })
   }
 
   let page
@@ -68,7 +109,10 @@ function App() {
       page = <PassportPage />
       break
     case 'account':
-      page = <AccountPage />
+      page = <AccountPage onLogout={handleLogout} />
+      break
+    case 'register':
+      page = <RegisterPage onAuthenticate={handleAuthenticate} />
       break
     case 'detail':
       page = <LocationDetailPage id={route.id} />

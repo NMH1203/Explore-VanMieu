@@ -4,6 +4,7 @@ export const paths = {
   camera: '/Explore/Camera',
   passport: '/Explore/Ho-Chieu',
   account: '/Explore/Tai-Khoan',
+  register: '/Explore/Dang-Nhap',
   locations: '/Explore/Cong-Trinh',
   figures: '/Explore/Danh-Nhan',
 }
@@ -64,6 +65,7 @@ export function getRoute(pathname) {
   if (pathname === paths.camera) return { page: 'camera' }
   if (pathname === paths.passport) return { page: 'passport' }
   if (pathname === paths.account) return { page: 'account' }
+  if (pathname === paths.register) return { page: 'register' }
   if (pathname === paths.locations) return { page: 'locations' }
   if (pathname === paths.figures) return { page: 'figures' }
   if (pathToDetailId[pathname]) return { page: 'detail', id: pathToDetailId[pathname] }
