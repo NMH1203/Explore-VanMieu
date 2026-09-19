@@ -5,11 +5,13 @@ import { useLiveLocation } from './hooks/useLiveLocation.js'
 import CameraViewfinder from './components/CameraViewfinder.jsx'
 import LocationBanner from './components/LocationBanner.jsx'
 import ScanResultModal from './components/ScanResultModal.jsx'
+import { unlockLocation } from '../../services/api.js'
 import './camera.css'
 
-function CameraPage() {
+function CameraPage({ onLocationUnlocked }) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isScanComplete, setIsScanComplete] = useState(false)
+  const [scanError, setScanError] = useState('')
 
   // 1. Quản lý Camera thiết bị
   const {
@@ -40,11 +42,19 @@ function CameraPage() {
     // Chụp lại khung hình hiện tại từ camera
     captureSnapshot()
     setIsAnalyzing(true)
+    setScanError('')
 
     // Mô phỏng AI đối chiếu kiến trúc và vị trí (1.2s)
-    setTimeout(() => {
-      setIsAnalyzing(false)
-      setIsScanComplete(true)
+    setTimeout(async () => {
+      try {
+        await unlockLocation(targetLocation.id)
+        onLocationUnlocked(targetLocation.id)
+        setIsScanComplete(true)
+      } catch (error) {
+        setScanError(error.message)
+      } finally {
+        setIsAnalyzing(false)
+      }
     }, 1300)
   }
 
@@ -128,6 +138,7 @@ function CameraPage() {
                 <CameraIcon size={16} />
                 <span>{isAnalyzing ? 'Đang phân tích hình ảnh...' : 'Bắt đầu quét'}</span>
               </button>
+              {scanError && <p role="alert">{scanError}</p>}
             </div>
           ) : (
             <ScanResultModal

@@ -10,20 +10,25 @@ import MapPage from './pages/map/MapPage.jsx'
 import PassportPage from './pages/passport/PassportPage.jsx'
 import RegisterPage from './pages/register/RegisterPage.jsx'
 import { getRoute, normalizeInitialUrl, paths } from './routes.js'
+import {
+  authenticate,
+  clearAccessToken,
+  getAccessToken,
+  getAccountStatus,
+  getLocationStatuses,
+} from './services/api.js'
 
 normalizeInitialUrl()
 
-const authStorageKey = 'explore-van-mieu:is-authenticated'
 const protectedPages = new Set(['account', 'camera'])
-// Backend will replace this with the authenticated user's unlocked location IDs.
-// Until that API is connected, every location must remain locked.
 const noUnlockedLocations = new Set()
 
 function App() {
   const [pathname, setPathname] = useState(window.location.pathname)
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    () => window.localStorage.getItem(authStorageKey) === 'true',
-  )
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [authReady, setAuthReady] = useState(!getAccessToken())
+  const [account, setAccount] = useState(null)
+  const [unlockedLocations, setUnlockedLocations] = useState(noUnlockedLocations)
   const route = getRoute(pathname)
 
   useEffect(() => {
@@ -35,6 +40,33 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
+  useEffect(() => {
+    if (!getAccessToken()) return
+    getAccountStatus()
+      .then((status) => {
+        setIsAuthenticated(status.authenticated)
+        setAccount(status.authenticated ? status : null)
+        if (!status.authenticated) clearAccessToken()
+      })
+      .catch(() => {
+        clearAccessToken()
+        setIsAuthenticated(false)
+      })
+      .finally(() => setAuthReady(true))
+  }, [])
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setUnlockedLocations(noUnlockedLocations)
+      return
+    }
+    getLocationStatuses()
+      .then((locations) => {
+        setUnlockedLocations(new Set(locations.filter((item) => item.unlocked).map((item) => item.id)))
+      })
+      .catch(() => setUnlockedLocations(noUnlockedLocations))
+  }, [isAuthenticated])
+
   function navigate(destination, { replace = false } = {}) {
     const url = new URL(destination, window.location.origin)
     window.history[replace ? 'replaceState' : 'pushState'](null, '', url.pathname + url.search + url.hash)
@@ -44,10 +76,10 @@ function App() {
 
   useEffect(() => {
     const currentPath = window.location.pathname
-    if (!isAuthenticated && protectedPages.has(route.page) && currentPath !== paths.register) {
+    if (authReady && !isAuthenticated && protectedPages.has(route.page) && currentPath !== paths.register) {
       navigate(`${paths.register}?next=${encodeURIComponent(currentPath)}`, { replace: true })
     }
-  }, [isAuthenticated, route.page])
+  }, [authReady, isAuthenticated, route.page])
 
   function handleNavigation(event) {
     const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null
@@ -77,8 +109,9 @@ function App() {
     navigate(destination.pathname + destination.search + destination.hash)
   }
 
-  function handleAuthenticate() {
-    window.localStorage.setItem(authStorageKey, 'true')
+  async function handleAuthenticate(mode, credentials) {
+    const authenticatedAccount = await authenticate(mode, credentials)
+    setAccount(authenticatedAccount)
     setIsAuthenticated(true)
 
     const nextPath = new URLSearchParams(window.location.search).get('next')
@@ -86,39 +119,45 @@ function App() {
   }
 
   function handleLogout() {
-    window.localStorage.removeItem(authStorageKey)
+    clearAccessToken()
+    setAccount(null)
     setIsAuthenticated(false)
+    setUnlockedLocations(noUnlockedLocations)
     navigate(paths.explore, { replace: true })
+  }
+
+  function handleLocationUnlocked(locationId) {
+    setUnlockedLocations((current) => new Set([...current, locationId]))
   }
 
   let page
   switch (route.page) {
     case 'explore':
-      page = <HomePage unlockedLocations={noUnlockedLocations} />
+      page = <HomePage unlockedLocations={unlockedLocations} />
       break
     case 'map':
-      page = <MapPage unlockedLocations={noUnlockedLocations} />
+      page = <MapPage unlockedLocations={unlockedLocations} />
       break
     case 'locations':
-      page = <LocationsPage unlockedLocations={noUnlockedLocations} />
+      page = <LocationsPage unlockedLocations={unlockedLocations} />
       break
     case 'figures':
       page = <FiguresPage />
       break
     case 'camera':
-      page = <CameraPage />
+      page = <CameraPage onLocationUnlocked={handleLocationUnlocked} />
       break
     case 'passport':
-      page = <PassportPage unlockedLocations={noUnlockedLocations} />
+      page = <PassportPage unlockedLocations={unlockedLocations} />
       break
     case 'account':
-      page = <AccountPage onLogout={handleLogout} unlockedLocations={noUnlockedLocations} />
+      page = <AccountPage account={account} onLogout={handleLogout} unlockedLocations={unlockedLocations} />
       break
     case 'register':
       page = <RegisterPage onAuthenticate={handleAuthenticate} />
       break
     case 'detail':
-      page = <LocationDetailPage id={route.id} unlockedLocations={noUnlockedLocations} />
+      page = <LocationDetailPage id={route.id} unlockedLocations={unlockedLocations} />
       break
     default:
       page = (

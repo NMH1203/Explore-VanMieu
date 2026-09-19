@@ -1,14 +1,14 @@
-function AccountPage({ onLogout, unlockedLocations }) {
+function AccountPage({ account, onLogout, unlockedLocations }) {
   const unlockedCount = unlockedLocations.size
 
   return (
     <section className="screen" id="account">
       <div className="profile-hero">
         <div className="profile">
-          <div className="avatar">N</div>
+          <div className="avatar">{account?.name?.charAt(0).toUpperCase() || 'N'}</div>
           <div>
-            <h1>Nguyễn Văn An</h1>
-            <p>nguyen.van.an@email.com</p>
+            <h1>{account?.name || 'Tài khoản Explore Van Mieu'}</h1>
+            <p>{account?.email || ''}</p>
             <br />
             <span className="btn btn-gold">★ Explore Van Mieu</span>
           </div>

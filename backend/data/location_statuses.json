@@ -1,7 +1,7 @@
 [
   { "id": "location-van-mieu-gate", "unlocked": false },
   { "id": "location-dai-trung-gate", "unlocked": false },
-  { "id": "interpret", "unlocked": true },
+  { "id": "interpret", "unlocked": false },
   { "id": "location-dai-thanh-gate", "unlocked": false },
   { "id": "location-dien-dai-thanh", "unlocked": false },
   { "id": "location-thai-hoc-gate", "unlocked": false },

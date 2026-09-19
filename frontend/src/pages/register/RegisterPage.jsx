@@ -4,11 +4,26 @@ import './register.css'
 
 function RegisterPage({ onAuthenticate }) {
   const [mode, setMode] = useState('login')
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
   const signup = mode === 'signup'
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
-    onAuthenticate()
+    setError('')
+    setSubmitting(true)
+    const form = new FormData(event.currentTarget)
+    const credentials = {
+      email: form.get('email'),
+      password: form.get('password'),
+      ...(signup ? { name: form.get('name') } : {}),
+    }
+    try {
+      await onAuthenticate(mode, credentials)
+    } catch (authenticationError) {
+      setError(authenticationError.message)
+      setSubmitting(false)
+    }
   }
   return <section className="screen register" id="regiter">
     <header className="topbar">
@@ -27,10 +42,13 @@ function RegisterPage({ onAuthenticate }) {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {signup && <input aria-label="Họ và tên" type="text" placeholder="Họ và tên" autoComplete="name" required />}
-          <input aria-label="Email" type="email" placeholder="Email" autoComplete="email" required />
-          <input aria-label="Mật khẩu" type="password" placeholder="Mật khẩu" autoComplete={signup ? 'new-password' : 'current-password'} minLength={signup ? 8 : undefined} required />
-          <button className="register__submit" type="submit">{signup ? 'Đăng ký' : 'Đăng nhập'}</button>
+          {signup && <input name="name" aria-label="Họ và tên" type="text" placeholder="Họ và tên" autoComplete="name" required />}
+          <input name="email" aria-label="Email" type="email" placeholder="Email" autoComplete="email" required />
+          <input name="password" aria-label="Mật khẩu" type="password" placeholder="Mật khẩu" autoComplete={signup ? 'new-password' : 'current-password'} minLength={8} required />
+          {error && <p role="alert">{error}</p>}
+          <button className="register__submit" type="submit" disabled={submitting}>
+            {submitting ? 'Đang xử lý...' : signup ? 'Đăng ký' : 'Đăng nhập'}
+          </button>
         </form>
         <a className="register__back" href="/Explore">← Tiếp tục khám phá với tư cách khách</a>
 
