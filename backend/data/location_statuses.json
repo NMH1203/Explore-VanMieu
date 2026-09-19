@@ -1,0 +1,12 @@
+[
+  { "id": "location-van-mieu-gate", "unlocked": false },
+  { "id": "location-dai-trung-gate", "unlocked": false },
+  { "id": "interpret", "unlocked": true },
+  { "id": "location-dai-thanh-gate", "unlocked": false },
+  { "id": "location-dien-dai-thanh", "unlocked": false },
+  { "id": "location-thai-hoc-gate", "unlocked": false },
+  { "id": "location-thai-hoc-house", "unlocked": false },
+  { "id": "location-bell-drum-tower", "unlocked": false },
+  { "id": "location-octagonal-house", "unlocked": false },
+  { "id": "location-phuong-dinh", "unlocked": false }
+]
