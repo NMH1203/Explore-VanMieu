@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import { useUnlockedLocations } from '../../state/heritageProgress.js'
 import { MAP_LOCATIONS } from './mapData.js'
 import InteractiveMap from './components/InteractiveMap.jsx'
 import LocationSidebar from './components/LocationSidebar.jsx'
 import './map.css'
 
-function MapPage() {
-  const unlockedLocations = useUnlockedLocations()
+function MapPage({ unlockedLocations }) {
   // Mặc định chọn địa điểm đầu tiên hoặc Khuê Văn Các
   const [selectedLocation, setSelectedLocation] = useState(MAP_LOCATIONS[0])
 

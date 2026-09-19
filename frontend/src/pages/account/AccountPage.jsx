@@ -1,7 +1,5 @@
-import { useUnlockedLocations } from '../../state/heritageProgress.js'
-
-function AccountPage({ user, onLogout }) {
-  const unlockedCount = useUnlockedLocations().size
+function AccountPage({ user, onLogout, unlockedLocations }) {
+  const unlockedCount = unlockedLocations.size
   const displayName = user?.username || user?.email || 'Đang tải...'
   const avatarText = displayName[0].toUpperCase()
 

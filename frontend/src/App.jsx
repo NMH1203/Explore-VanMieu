@@ -16,6 +16,9 @@ normalizeInitialUrl()
 
 
 const protectedPages = new Set(['account', 'camera'])
+// Backend will replace this with the authenticated user's unlocked location IDs.
+// Until that API is connected, every location must remain locked.
+const noUnlockedLocations = new Set()
 
 function App() {
   const [pathname, setPathname] = useState(window.location.pathname)
@@ -101,13 +104,13 @@ function App() {
   let page
   switch (route.page) {
     case 'explore':
-      page = <HomePage />
+      page = <HomePage unlockedLocations={noUnlockedLocations} />
       break
     case 'map':
-      page = <MapPage />
+      page = <MapPage unlockedLocations={noUnlockedLocations} />
       break
     case 'locations':
-      page = <LocationsPage />
+      page = <LocationsPage unlockedLocations={noUnlockedLocations} />
       break
     case 'figures':
       page = <FiguresPage />
@@ -116,16 +119,22 @@ function App() {
       page = <CameraPage />
       break
     case 'passport':
-      page = <PassportPage />
+      page = <PassportPage unlockedLocations={noUnlockedLocations} />
       break
     case 'account':
-      page = <AccountPage user={user} onLogout={handleLogout} />
+      page = (
+        <AccountPage
+          user={user}
+          onLogout={handleLogout}
+          unlockedLocations={noUnlockedLocations}
+        />
+      )
       break
     case 'register':
       page = <RegisterPage onAuthenticate={handleAuthenticate} />
       break
     case 'detail':
-      page = <LocationDetailPage id={route.id} />
+      page = <LocationDetailPage id={route.id} unlockedLocations={noUnlockedLocations} />
       break
     default:
       page = (

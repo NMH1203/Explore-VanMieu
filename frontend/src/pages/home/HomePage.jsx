@@ -1,9 +1,8 @@
 import { Award, LockKeyhole, MapPin, Plus, ScanLine, Send, Sparkles, UserRound } from 'lucide-react'
 import JourneyCard from '../../components/JourneyCard.jsx'
-import { useUnlockedLocations } from '../../state/heritageProgress.js'
 
-function HomePage() {
-  const unlockedLocations = useUnlockedLocations()
+function HomePage({ unlockedLocations }) {
+  const khueVanCacUnlocked = unlockedLocations.has('interpret')
   const daiTrungUnlocked = unlockedLocations.has('location-dai-trung-gate')
   const thaiHocUnlocked = unlockedLocations.has('location-thai-hoc-house')
   const passportPreview = [
@@ -192,7 +191,7 @@ function HomePage() {
 
       <div className="container">
         <section className="section" id="journey">
-          <JourneyCard />
+          <JourneyCard unlockedLocations={unlockedLocations} />
         </section>
 
         <section className="section">
@@ -208,8 +207,11 @@ function HomePage() {
           </div>
           <div className="map-preview">
             <div className="map-art"></div>
-            <div className="map-marker jade" style={{ left: '35%', top: '40%' }}>
-              <span>✓</span>
+            <div
+              className={`map-marker${khueVanCacUnlocked ? ' jade' : ' locked'}`}
+              style={{ left: '35%', top: '40%' }}
+            >
+              <span>{khueVanCacUnlocked ? '✓' : '1'}</span>
             </div>
             <div
               className={`map-marker${daiTrungUnlocked ? ' jade' : ' locked'}`}
@@ -227,11 +229,17 @@ function HomePage() {
               <span>4</span>
             </div>
             <div className="map-card">
-              <strong>Khuê Văn Các · Đã xác minh</strong>
-              <p>Cách bạn 32 m · Dấu ấn đầu tiên trong hành trình hôm nay.</p>
-              <a className="btn btn-primary" href="/Explore/Khue-Van-Cac">
-                Xem câu chuyện
-              </a>
+              <strong>Khuê Văn Các · {khueVanCacUnlocked ? 'Đã xác minh' : 'Chưa mở khóa'}</strong>
+              <p>Cách bạn 32 m · Xác minh GPS và camera để mở khóa nội dung.</p>
+              {khueVanCacUnlocked ? (
+                <a className="btn btn-primary" href="/Explore/Khue-Van-Cac">
+                  Xem câu chuyện
+                </a>
+              ) : (
+                <a className="btn btn-primary" href="/Explore/Camera">
+                  Mở camera xác minh
+                </a>
+              )}
             </div>
           </div>
         </section>
@@ -245,7 +253,7 @@ function HomePage() {
             </div>
           </div>
           <div className="cards">
-            <article className="location-card">
+            <article className={`location-card${khueVanCacUnlocked ? '' : ' locked'}`}>
               <div className="location-image">
                 <img
                   className="shape-art heritage-photo"
@@ -253,18 +261,27 @@ function HomePage() {
                   alt="Khuê Văn Các tại Văn Miếu – Quốc Tử Giám"
                   loading="lazy"
                 />
-                <span className="badge done">✓ Đã mở khóa</span>
+                <span className={`badge${khueVanCacUnlocked ? ' done' : ''}`}>
+                  {khueVanCacUnlocked ? '✓ Đã mở khóa' : 'Chưa mở khóa'}
+                </span>
               </div>
               <div className="location-body">
                 <h3>Khuê Văn Các</h3>
                 <p>Biểu tượng văn chương và trí tuệ, được xây dựng dưới triều Nguyễn.</p>
                 <div className="meta">
                   <span>⌖ 32 m</span>
-                  <span>✓ Camera xác minh</span>
+                  {khueVanCacUnlocked && <span>✓ Camera xác minh</span>}
                 </div>
-                <a className="btn btn-outline btn-block" href="/Explore/Khue-Van-Cac">
-                  Xem câu chuyện
-                </a>
+                {khueVanCacUnlocked ? (
+                  <a className="btn btn-outline btn-block" href="/Explore/Khue-Van-Cac">
+                    Xem câu chuyện
+                  </a>
+                ) : (
+                  <button className="btn btn-outline btn-block locked-action" type="button" disabled>
+                    <LockKeyhole size={16} aria-hidden="true" />
+                    Chưa mở khóa
+                  </button>
+                )}
               </div>
             </article>
             <article className={`location-card${daiTrungUnlocked ? '' : ' locked'}`}>
@@ -354,8 +371,8 @@ function HomePage() {
                 <h3>Chu Văn An</h3>
                 <small>Người thầy mẫu mực</small>
                 <p>Gắn với lịch sử Quốc Tử Giám và truyền thống tôn sư trọng đạo.</p>
-                <a className="text-link" href="/Explore/Danh-Nhan/Chu-Van-An">
-                  Nghe câu chuyện →
+                <a className="btn btn-outline btn-block figure-story-btn" href="/Explore/Danh-Nhan/Chu-Van-An">
+                  Xem câu chuyện
                 </a>
               </div>
             </article>
@@ -370,8 +387,8 @@ function HomePage() {
                 <h3>Lý Thánh Tông</h3>
                 <small>1023–1072</small>
                 <p>Vị vua cho dựng Văn Miếu vào năm 1070.</p>
-                <a className="text-link" href="/Explore/Danh-Nhan/Ly-Thanh-Tong">
-                  Hỏi AI →
+                <a className="btn btn-outline btn-block figure-story-btn" href="/Explore/Danh-Nhan/Ly-Thanh-Tong">
+                  Xem câu chuyện
                 </a>
               </div>
             </article>
@@ -386,8 +403,8 @@ function HomePage() {
                 <h3>Khổng Tử</h3>
                 <small>Bậc vạn thế sư biểu</small>
                 <p>Nhân vật trung tâm trong không gian thờ tự của Văn Miếu.</p>
-                <a className="text-link" href="/Explore/Danh-Nhan/Khong-Tu">
-                  Nghe câu chuyện →
+                <a className="btn btn-outline btn-block figure-story-btn" href="/Explore/Danh-Nhan/Khong-Tu">
+                  Xem câu chuyện
                 </a>
               </div>
             </article>

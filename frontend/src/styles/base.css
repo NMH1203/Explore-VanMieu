@@ -43,6 +43,10 @@ html {
   /* Màu lộ ra khi vuốt quá mép trang bằng touchpad hoặc cảm ứng. */
   background-color: #242729;
   scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+  display: none;
 }
 body {
   margin: 0;
@@ -53,7 +57,17 @@ body {
     color 0.55s ease,
     background-color 0.55s ease;
 }
-.theme-toggle {
+#root,
+.heritage-app,
+main {
+  margin: 0;
+  min-height: 100%;
+}
+.heritage-app {
+  overflow-x: clip;
+}
+.theme-toggle,
+.scan-toggle {
   position: fixed;
   width: 1px;
   height: 1px;

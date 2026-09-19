@@ -1,5 +1,4 @@
 import { paths } from '../routes.js'
-import { useUnlockedLocations } from '../state/heritageProgress.js'
 
 const journeyLocations = [
   ['interpret', 'Khuê Văn Các'],
@@ -9,8 +8,7 @@ const journeyLocations = [
   ['location-phuong-dinh', 'Phương Đình'],
 ]
 
-function JourneyCard() {
-  const unlockedLocations = useUnlockedLocations()
+function JourneyCard({ unlockedLocations }) {
   const journeyCount = journeyLocations.filter(([id]) => unlockedLocations.has(id)).length
 
   return (
