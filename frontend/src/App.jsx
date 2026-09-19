@@ -10,26 +10,24 @@ import MapPage from './pages/map/MapPage.jsx'
 import PassportPage from './pages/passport/PassportPage.jsx'
 import RegisterPage from './pages/register/RegisterPage.jsx'
 import { getRoute, normalizeInitialUrl, paths } from './routes.js'
-import {
-  authenticate,
-  clearAccessToken,
-  getAccessToken,
-  getAccountStatus,
-  getLocationStatuses,
-} from './services/api.js'
+import { getCurrentUser, logout } from './services/auth.js'
+import { getLocationStatuses } from './services/api.js'
 
 normalizeInitialUrl()
-
 const protectedPages = new Set(['account', 'camera'])
 const noUnlockedLocations = new Set()
 
 function App() {
   const [pathname, setPathname] = useState(window.location.pathname)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [authReady, setAuthReady] = useState(!getAccessToken())
-  const [account, setAccount] = useState(null)
+  const [user, setUser] = useState(undefined)
+  const isAuthenticated = Boolean(user)
   const [unlockedLocations, setUnlockedLocations] = useState(noUnlockedLocations)
   const route = getRoute(pathname)
+  useEffect(() => {
+    getCurrentUser()
+      .then((account) => setUser(account))
+      .catch(() => setUser(null))
+  }, [])
 
   useEffect(() => {
     function handlePopState() {
@@ -38,21 +36,6 @@ function App() {
 
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
-  }, [])
-
-  useEffect(() => {
-    if (!getAccessToken()) return
-    getAccountStatus()
-      .then((status) => {
-        setIsAuthenticated(status.authenticated)
-        setAccount(status.authenticated ? status : null)
-        if (!status.authenticated) clearAccessToken()
-      })
-      .catch(() => {
-        clearAccessToken()
-        setIsAuthenticated(false)
-      })
-      .finally(() => setAuthReady(true))
   }, [])
 
   useEffect(() => {
@@ -75,11 +58,13 @@ function App() {
   }
 
   useEffect(() => {
+    if (user === undefined) return
+
     const currentPath = window.location.pathname
-    if (authReady && !isAuthenticated && protectedPages.has(route.page) && currentPath !== paths.register) {
+    if (!isAuthenticated && protectedPages.has(route.page) && currentPath !== paths.register) {
       navigate(`${paths.register}?next=${encodeURIComponent(currentPath)}`, { replace: true })
     }
-  }, [authReady, isAuthenticated, route.page])
+  }, [user, isAuthenticated, route.page])
 
   function handleNavigation(event) {
     const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null
@@ -109,21 +94,22 @@ function App() {
     navigate(destination.pathname + destination.search + destination.hash)
   }
 
-  async function handleAuthenticate(mode, credentials) {
-    const authenticatedAccount = await authenticate(mode, credentials)
-    setAccount(authenticatedAccount)
-    setIsAuthenticated(true)
+  function handleAuthenticate(account) {
+    setUser(account)
 
     const nextPath = new URLSearchParams(window.location.search).get('next')
     navigate(nextPath?.startsWith('/Explore') ? nextPath : paths.account, { replace: true })
   }
 
-  function handleLogout() {
-    clearAccessToken()
-    setAccount(null)
-    setIsAuthenticated(false)
-    setUnlockedLocations(noUnlockedLocations)
-    navigate(paths.explore, { replace: true })
+  async function handleLogout() {
+    try {
+      await logout()
+      setUser(null)
+      setUnlockedLocations(noUnlockedLocations)
+      navigate(paths.explore, { replace: true })
+    } catch (error) {
+      alert(error.message)
+    }
   }
 
   function handleLocationUnlocked(locationId) {
@@ -151,7 +137,13 @@ function App() {
       page = <PassportPage unlockedLocations={unlockedLocations} />
       break
     case 'account':
-      page = <AccountPage account={account} onLogout={handleLogout} unlockedLocations={unlockedLocations} />
+      page = (
+        <AccountPage
+          user={user}
+          onLogout={handleLogout}
+          unlockedLocations={unlockedLocations}
+        />
+      )
       break
     case 'register':
       page = <RegisterPage onAuthenticate={handleAuthenticate} />

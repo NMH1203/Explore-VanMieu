@@ -1,31 +1,41 @@
 import { useState } from 'react'
-import { CircleHelp, UserRound } from 'lucide-react'
+import { CircleHelp } from 'lucide-react'
 import './register.css'
+import { login, register } from '../../services/auth.js'
 
 function RegisterPage({ onAuthenticate }) {
-  const [mode, setMode] = useState('login')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const [submitting, setSubmitting] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [mode, setMode] = useState('login')
   const signup = mode === 'signup'
+  const [username, setUsername] = useState('')
 
   async function handleSubmit(event) {
     event.preventDefault()
+
     setError('')
-    setSubmitting(true)
-    const form = new FormData(event.currentTarget)
-    const credentials = {
-      email: form.get('email'),
-      password: form.get('password'),
-      ...(signup ? { name: form.get('name') } : {}),
-    }
+    setBusy(true)
+
     try {
-      await onAuthenticate(mode, credentials)
-    } catch (authenticationError) {
-      setError(authenticationError.message)
-      setSubmitting(false)
+      if (signup) {
+        await register(email, password, username)
+        setMode('login')
+        setPassword('')
+        return
+      }
+
+      const user = await login(email, password)
+      onAuthenticate(user)
+    } catch (caught) {
+      setError(caught.message)
+    } finally {
+      setBusy(false)
     }
   }
-  return <section className="screen register" id="regiter">
+
+  return <section className="screen register" id="register">
     <header className="topbar">
       <div className="inner">
         <div className="eyebrow">Khám phá hành trình của riêng bạn</div>
@@ -42,13 +52,44 @@ function RegisterPage({ onAuthenticate }) {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {signup && <input name="name" aria-label="Họ và tên" type="text" placeholder="Họ và tên" autoComplete="name" required />}
-          <input name="email" aria-label="Email" type="email" placeholder="Email" autoComplete="email" required />
-          <input name="password" aria-label="Mật khẩu" type="password" placeholder="Mật khẩu" autoComplete={signup ? 'new-password' : 'current-password'} minLength={8} required />
-          {error && <p role="alert">{error}</p>}
-          <button className="register__submit" type="submit" disabled={submitting}>
-            {submitting ? 'Đang xử lý...' : signup ? 'Đăng ký' : 'Đăng nhập'}
+          {signup && (
+            <input
+              aria-label="Họ và tên"
+              type="text"
+              placeholder="Họ và tên"
+              autoComplete="name"
+              required
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+            />
+          )}
+          <input
+            aria-label="Email"
+            type="email"
+            placeholder="Email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <input
+            aria-label="Mật khẩu"
+            type="password"
+            placeholder="Mật khẩu"
+            autoComplete={signup ? 'new-password' : 'current-password'}
+            minLength={signup ? 8 : undefined}
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <button
+            className="register__submit"
+            type="submit"
+            disabled={busy}
+          >
+            {busy ? 'Đang đăng nhập...' : signup ? 'Đăng ký' : 'Đăng nhập'}
           </button>
+          {error && <p role="alert">{error}</p>}
         </form>
         <a className="register__back" href="/Explore">← Tiếp tục khám phá với tư cách khách</a>
 
