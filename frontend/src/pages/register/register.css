@@ -1,22 +1,20 @@
-/* Uses the tokens and Be Vietnam Pro font declared in styles/base.css. */
-.account-auth {
+.register {
   min-height: 100vh;
   color: var(--wood);
   background: var(--paper);
 }
 
-.account-auth__header {
+.register__header {
   display: flex;
   align-items: center;
   gap: 16px;
-  min-height: 140px;
-  padding: 28px clamp(26px, 7vw, 68px);
+  padding: 28px 5vw 22px;
   color: var(--white);
   border-bottom: 1px solid var(--border);
   background: var(--lacquer);
 }
 
-.account-auth__header > svg {
+.register__header > svg {
   width: 28px;
   height: 28px;
   flex: 0 0 auto;
@@ -25,37 +23,38 @@
   stroke-width: 2.5;
 }
 
-.account-auth__header h1 {
+.register__header h1 {
   margin: 0;
-  font-size: clamp(28px, 3.5vw, 40px);
-  line-height: 1.1;
-  letter-spacing: -0.035em;
+  font-size: clamp(25px, 3vw, 38px);
+  line-height: 1.2;
 }
 
-.account-auth__header p {
+.register__header p {
   margin: 8px 0 0;
-  color: var(--gold-pale);
-  font-size: 16px;
+  max-width: 680px;
+  color: #ffffffa8;
+  font-size: 13px;
+  line-height: 1.7;
 }
 
-.account-auth__content {
-  display: grid;
-  min-height: calc(100vh - 140px);
-  place-items: start center;
-  padding: 60px 20px;
+.register__content {
+  width: min(880px, calc(100% - 40px));
+  min-height: calc(100vh - 120px);
+  margin: auto;
+  padding: 44px 0 70px;
   background: var(--paper);
 }
 
-.account-auth__card {
-  width: min(100%, 500px);
-  padding: 30px;
+.register__card {
+  width: min(100%, 560px);
+  margin: auto;
+  padding: 24px;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 18px;
   background: var(--warm);
-  box-shadow: var(--shadow);
 }
 
-.account-auth__tabs {
+.register__tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px;
@@ -66,7 +65,7 @@
   background: var(--paper);
 }
 
-.account-auth__tabs button {
+.register__tabs button {
   min-height: 42px;
   border: 0;
   border-radius: 8px;
@@ -76,18 +75,17 @@
   font-size: 14px;
   font-weight: 700;
 }
-
-.account-auth__tabs button.active {
+.register__tabs button.active {
   color: var(--white);
   background: var(--lacquer);
 }
 
-.account-auth form {
+.register form {
   display: grid;
   gap: 15px;
 }
 
-.account-auth input {
+.register input {
   width: 100%;
   min-height: 52px;
   padding: 0 16px;
@@ -99,16 +97,16 @@
   font-size: 16px;
 }
 
-.account-auth input::placeholder {
+.register input::placeholder {
   color: var(--stone);
 }
 
-.account-auth input:focus {
+.register input:focus {
   border-color: var(--gold);
   box-shadow: 0 0 0 3px #d4a37340;
 }
 
-.account-auth__submit {
+.register__submit {
   min-height: 52px;
   margin-top: 1px;
   border: 0;
@@ -121,12 +119,12 @@
   transition: 0.2s;
 }
 
-.account-auth__submit:hover {
+.register__submit:hover {
   background: var(--red);
   transform: translateY(-1px);
 }
 
-.account-auth__back {
+.register__back {
   display: block;
   width: fit-content;
   margin: 18px auto 0;
@@ -136,11 +134,11 @@
   text-decoration: none;
 }
 
-.account-auth__back:hover {
+.register__back:hover {
   text-decoration: underline;
 }
 
-.account-auth__notice {
+.register__notice {
   display: flex;
   gap: 8px;
   margin: 19px 0 0;
@@ -152,7 +150,7 @@
   text-align: center;
 }
 
-.account-auth__notice svg {
+.register__notice svg {
   width: 15px;
   height: 15px;
   flex: 0 0 auto;
@@ -161,28 +159,28 @@
 }
 
 @media (max-width: 560px) {
-  .account-auth__header {
-    min-height: 122px;
+  .register__header {
     padding: 24px;
     gap: 12px;
   }
 
-  .account-auth__header > svg {
+  .register__header > svg {
     width: 24px;
     height: 24px;
   }
 
-  .account-auth__header p {
+  .register__header p {
     font-size: 13px;
     line-height: 1.5;
   }
 
-  .account-auth__content {
-    min-height: calc(100vh - 122px);
-    padding: 36px 16px;
+  .register__content {
+    width: min(100% - 32px, 880px);
+    min-height: calc(100vh - 116px);
+    padding: 36px 0 48px;
   }
 
-  .account-auth__card {
+  .register__card {
     padding: 20px;
   }
 }

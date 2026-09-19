@@ -10,33 +10,33 @@ function RegisterPage({ onAuthenticate }) {
     event.preventDefault()
     onAuthenticate()
   }
-  return <section className="account-auth">
-    <header className="account-auth__header">
-      <UserRound aria-hidden="true" />
-      <div>
-        <h1>Your Account</h1>
-        <p>Log in to scan QR codes and collect heritage stamps</p>
+  return <section className="screen register" id="regiter">
+    <header className="topbar">
+      <div className="inner">
+        <div className="eyebrow">Khám phá hành trình của riêng bạn</div>
+        <h1>Đăng nhập</h1>
+        <p>Trở thành người đồng hành cùng Văn Miếu</p>
       </div>
     </header>
 
-    <div className="account-auth__content">
-      <div className="account-auth__card">
-        <div className="account-auth__tabs" role="tablist">
-          <button className={!signup ? 'active' : ''} type="button" onClick={() => setMode('login')}>Log in</button>
-          <button className={signup ? 'active' : ''} type="button" onClick={() => setMode('signup')}>Sign up</button>
+    <div className="register__content">
+      <div className="register__card">
+        <div className="register__tabs" role="tablist">
+          <button className={!signup ? 'active' : ''} type="button" onClick={() => setMode('login')}>Đăng nhập</button>
+          <button className={signup ? 'active' : ''} type="button" onClick={() => setMode('signup')}>Đăng ký</button>
         </div>
 
         <form onSubmit={handleSubmit}>
-          {signup && <input aria-label="Full name" type="text" placeholder="Full name" autoComplete="name" required />}
+          {signup && <input aria-label="Họ và tên" type="text" placeholder="Họ và tên" autoComplete="name" required />}
           <input aria-label="Email" type="email" placeholder="Email" autoComplete="email" required />
-          <input aria-label="Password" type="password" placeholder="Password" autoComplete={signup ? 'new-password' : 'current-password'} minLength={signup ? 8 : undefined} required />
-          <button className="account-auth__submit" type="submit">{signup ? 'Sign up' : 'Log in'}</button>
+          <input aria-label="Mật khẩu" type="password" placeholder="Mật khẩu" autoComplete={signup ? 'new-password' : 'current-password'} minLength={signup ? 8 : undefined} required />
+          <button className="register__submit" type="submit">{signup ? 'Đăng ký' : 'Đăng nhập'}</button>
         </form>
-        <a className="account-auth__back" href="/Explore">← Continue exploring as a guest</a>
+        <a className="register__back" href="/Explore">← Tiếp tục khám phá với tư cách khách</a>
 
-        <p className="account-auth__notice">
+        <p className="register__notice">
           <CircleHelp aria-hidden="true" />
-          Browsing the Gallery, Categories and Digital Experience is always free — you only need an account to scan QR codes and collect heritage stamps.
+          Duyệt Thư viện, Danh mục và Trải nghiệm số miễn phí — bạn chỉ cần tài khoản để quét mã QR và thu thập dấu ấn di sản.
         </p>
       </div>
     </div>

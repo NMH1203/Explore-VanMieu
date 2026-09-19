@@ -140,8 +140,8 @@ function App() {
         id="scan-complete"
         aria-label="Trạng thái nhận diện công trình"
       />
-      {route.page !== 'register' && <Navigation />}
-      {route.page === 'register' ? page : <main>{page}</main>}
+      <Navigation />
+      <main>{page}</main>
     </div>
   )
 }
