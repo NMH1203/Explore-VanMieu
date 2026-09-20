@@ -1,4 +1,4 @@
-"""Application entry point for the Explore Van Mieu API."""
+"""Data models received from and returned by authentication APIs."""
 
 import logging
 from pathlib import Path
@@ -113,7 +113,7 @@ def create_app(data_path: Path = DEFAULT_DATA_PATH) -> FastAPI:
                 httponly=True,
                 secure=False,
                 samesite="lax",
-                max_age=1800,
+                max_age=24*60*60,
                 path="/",
             )
             return user
