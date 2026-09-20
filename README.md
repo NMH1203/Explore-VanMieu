@@ -54,7 +54,8 @@ Các công nghệ backend dự kiến gồm:
 - Alembic
 - Pytest
 
-Backend Python hiện chưa được cài đặt trong dự án.
+Backend hiện đã có API quản lý tiến độ địa điểm và xác thực người dùng bằng
+FastAPI, SQLModel, SQLite, Argon2 và JWT lưu trong cookie `HttpOnly`.
 
 ### AI
 
@@ -156,25 +157,105 @@ Explore VanMieu/
 | `docs` | Chứa tài liệu API, cơ sở dữ liệu, sơ đồ và yêu cầu dự án. |
 | `deployment` | Chứa cấu hình Docker, Nginx và các script triển khai. |
 
-## 4. Cài đặt và chạy frontend
+## 4. Cài đặt và chạy dự án
 
-### Yêu cầu
+Các lệnh bên dưới được chạy từ thư mục gốc của repository, nơi có các thư mục
+`backend`, `database` và `frontend`.
+
+### 4.1 Yêu cầu
 
 - Node.js phiên bản 18 trở lên.
 - npm.
+- Python phiên bản 3.12 trở lên.
+- Git.
 
-### Cài đặt thư viện
+Kiểm tra các công cụ đã được cài:
 
-Từ thư mục gốc của dự án, chạy:
+```powershell
+git --version
+node --version
+npm --version
+python --version
+```
 
-```bash
+### 4.2 Lấy mã nguồn
+
+```powershell
+git clone https://github.com/NMH1203/Explore-VanMieu.git
+cd Explore-VanMieu
+```
+
+Nếu đã clone dự án từ trước:
+
+```powershell
+git switch main
+git pull origin main
+```
+
+### 4.3 Cài đặt backend
+
+Tạo môi trường Python riêng và cài thư viện:
+
+```powershell
+python -m venv backend\.venv
+backend\.venv\Scripts\python.exe -m pip install -r backend\requirements.txt
+```
+
+Tạo file cấu hình cá nhân từ file mẫu:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Mở `.env` và thay giá trị mẫu bằng một chuỗi bí mật riêng:
+
+```env
+JWT_SECRET_KEY=chuoi_bi_mat_ngau_nhien_cua_ban
+```
+
+Có thể tạo một chuỗi ngẫu nhiên bằng lệnh:
+
+```powershell
+backend\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_urlsafe(64))"
+```
+
+Không commit file `.env`. File này đã được khai báo trong `.gitignore`.
+
+Tạo database SQLite và bảng `users`:
+
+```powershell
+backend\.venv\Scripts\python.exe -m database.init_db
+```
+
+Khởi động backend:
+
+```powershell
+backend\.venv\Scripts\python.exe -m uvicorn backend.src.app.main:app --reload --port 8000
+```
+
+Khi terminal hiện `Application startup complete`, mở tài liệu API tại:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Giữ terminal backend đang chạy trong khi sử dụng website.
+
+> Các lệnh backend phải chạy từ thư mục gốc. Nếu đang đứng trong thư mục
+> `backend`, hãy chạy `cd ..` trước.
+
+### 4.4 Cài đặt frontend
+
+Mở terminal thứ hai và chạy:
+
+```powershell
 cd frontend
 npm install
 ```
 
-### Chạy môi trường phát triển
+### 4.5 Chạy môi trường phát triển
 
-```bash
+```powershell
 npm run dev
 ```
 
@@ -184,17 +265,77 @@ Vite sẽ hiển thị địa chỉ truy cập trong terminal. Địa chỉ mặ
 http://localhost:5173
 ```
 
-### Tạo bản build production
+Trang đăng nhập/đăng ký:
 
-```bash
-npm run build
+```text
+http://localhost:5173/Explore/Dang-Nhap
 ```
 
-### Xem thử bản build production
+Frontend gọi các đường dẫn `/api/...`; Vite sẽ chuyển tiếp yêu cầu đến backend
+đang chạy tại `http://127.0.0.1:8000`.
 
-```bash
+### 4.6 Kiểm tra dự án
+
+Chạy test backend từ thư mục gốc:
+
+```powershell
+backend\.venv\Scripts\python.exe -m unittest discover -s backend/tests
+```
+
+Kiểm tra frontend có build thành công:
+
+```powershell
+cd frontend
+npm run build
+cd ..
+```
+
+### 4.7 Thử luồng đăng nhập
+
+1. Mở trang đăng nhập và chọn **Đăng ký**.
+2. Nhập họ tên, email và mật khẩu có ít nhất 8 ký tự.
+3. Đăng nhập bằng tài khoản vừa tạo.
+4. Tải lại trang để kiểm tra phiên đăng nhập được giữ bằng cookie.
+5. Bấm **Đăng xuất** và tải lại trang để kiểm tra phiên đã bị xóa.
+
+SQLite được dùng cho môi trường phát triển. Mỗi máy có file
+`database/explore_van_mieu.db` riêng, nên tài khoản không tự đồng bộ giữa các
+thành viên.
+
+### 4.8 Tạo và xem bản build production
+
+```powershell
+cd frontend
+npm run build
 npm run preview
 ```
+
+### 4.9 Lỗi thường gặp
+
+#### `No module named backend`
+
+Bạn đang chạy lệnh trong sai thư mục. Quay về thư mục gốc:
+
+```powershell
+cd ..
+```
+
+#### `JWT_SECRET_KEY` bị thiếu
+
+Tạo file `.env` từ `.env.example` và điền khóa bí mật như phần 4.3.
+
+#### `'vite' is not recognized`
+
+Cài thư viện frontend trước:
+
+```powershell
+cd frontend
+npm install
+```
+
+#### Không mở được `http://127.0.0.1:8000/docs`
+
+Kiểm tra terminal backend còn chạy và đã hiện `Application startup complete`.
 
 ## 5. Thành viên
 
