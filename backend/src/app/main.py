@@ -15,6 +15,7 @@ from backend.src.models.auth import LoginRequest, RegisterRequest, UserResponse
 from backend.src.models.user import User
 from backend.src.repositories.location_repository import LocationRepository
 from backend.src.routes.locations import create_location_router
+from backend.src.routes.chat import router as chat_router
 from backend.src.routes.checkins import router as checkins_router
 from backend.src.routes.progress import router as progress_router
 from backend.src.services.passwords import hash_password, verify_password
@@ -54,6 +55,7 @@ def create_app(data_path: Path = DEFAULT_DATA_PATH) -> FastAPI:
     )
     application.include_router(progress_router)
     application.include_router(checkins_router)
+    application.include_router(chat_router)
 
     @application.post(
         "/api/auth/register",
