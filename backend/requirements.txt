@@ -5,3 +5,4 @@ pwdlib[argon2]==0.3.1
 PyJWT
 python-dotenv
 email-validator
+httpx>=0.28,<1
