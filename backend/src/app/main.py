@@ -1,21 +1,24 @@
-"""Data models received from and returned by authentication APIs."""
+"""Application entry point for the Explore Van Mieu API."""
 
 import logging
 from pathlib import Path
 
-from fastapi import Cookie, FastAPI, HTTPException, Request, Response, status
+from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 
 from backend.src.config.db import engine
+from backend.src.dependencies.auth import get_current_user
 from backend.src.models.auth import LoginRequest, RegisterRequest, UserResponse
 from backend.src.models.user import User
 from backend.src.repositories.location_repository import LocationRepository
 from backend.src.routes.locations import create_location_router
+from backend.src.routes.checkins import router as checkins_router
+from backend.src.routes.progress import router as progress_router
 from backend.src.services.passwords import hash_password, verify_password
-from backend.src.services.tokens import create_access_token, get_user_id_from_token
+from backend.src.services.tokens import create_access_token
 
 DEFAULT_DATA_PATH = (
     Path(__file__).resolve().parents[2]
@@ -49,9 +52,11 @@ def create_app(data_path: Path = DEFAULT_DATA_PATH) -> FastAPI:
     application.include_router(
         create_location_router(LocationRepository(data_path))
     )
+    application.include_router(progress_router)
+    application.include_router(checkins_router)
 
     @application.post(
-        "/auth/register",
+        "/api/auth/register",
         response_model=UserResponse,
         status_code=status.HTTP_201_CREATED,
     )
@@ -88,7 +93,7 @@ def create_app(data_path: Path = DEFAULT_DATA_PATH) -> FastAPI:
             session.refresh(user)
             return user
 
-    @application.post("/auth/login", response_model=UserResponse)
+    @application.post("/api/auth/login", response_model=UserResponse)
     def login(data: LoginRequest, response: Response):
         email = str(data.email).strip().lower()
 
@@ -118,37 +123,11 @@ def create_app(data_path: Path = DEFAULT_DATA_PATH) -> FastAPI:
             )
             return user
 
-    @application.get("/auth/me", response_model=UserResponse)
-    def read_me(
-        session_token: str | None = Cookie(
-            default=None,
-            alias="session",
-        ),
-    ):
-        user_id = (
-            get_user_id_from_token(session_token)
-            if session_token
-            else None
-        )
+    @application.get("/api/auth/me", response_model=UserResponse)
+    def read_me(current_user: User = Depends(get_current_user)):
+        return current_user
 
-        if user_id is None:
-            raise HTTPException(
-                status_code=401,
-                detail="Token không hợp lệ hoặc đã hết hạn",
-            )
-
-        with Session(engine) as session:
-            user = session.get(User, user_id)
-
-            if user is None:
-                raise HTTPException(
-                    status_code=401,
-                    detail="Tài khoản không tồn tại",
-                )
-
-            return user
-
-    @application.post("/auth/logout")
+    @application.post("/api/auth/logout")
     def logout(response: Response):
         response.delete_cookie(key="session", path="/")
         return {"message": "Đã đăng xuất"}

@@ -11,18 +11,18 @@ import PassportPage from './pages/passport/PassportPage.jsx'
 import RegisterPage from './pages/register/RegisterPage.jsx'
 import { getRoute, normalizeInitialUrl, paths } from './routes.js'
 import { getCurrentUser, logout } from './services/auth.js'
+import { getProgress } from './services/progress.js'
+import { verifyCheckin } from './services/checkins.js'
 
 normalizeInitialUrl()
 
 
 const protectedPages = new Set(['account', 'camera'])
-// Backend will replace this with the authenticated user's unlocked location IDs.
-// Until that API is connected, every location must remain locked.
-const noUnlockedLocations = new Set()
 
 function App() {
   const [pathname, setPathname] = useState(window.location.pathname)
   const [user, setUser] = useState(undefined)
+  const [unlockedLocations, setUnlockedLocations] = useState(new Set())
   const isAuthenticated = Boolean(user)
   const route = getRoute(pathname)
   useEffect(() => {
@@ -31,6 +31,32 @@ function App() {
       .catch(() => setUser(null))
   }, [])
 
+  useEffect(() => {
+    let ignoreResult = false
+
+    if (!user) {
+      setUnlockedLocations(new Set())
+      return undefined
+    }
+
+    getProgress()
+      .then((progress) => {
+        if (ignoreResult) return
+        setUnlockedLocations(new Set(
+          progress
+            .filter((item) => item.status)
+            .map((item) => item.location_id),
+        ))
+      })
+      .catch((error) => {
+        console.error('Không thể tải tiến độ:', error)
+        if (!ignoreResult) setUnlockedLocations(new Set())
+      })
+
+    return () => {
+      ignoreResult = true
+    }
+  }, [user])
   useEffect(() => {
     function handlePopState() {
       setPathname(window.location.pathname)
@@ -91,10 +117,19 @@ function App() {
     navigate(nextPath?.startsWith('/Explore') ? nextPath : paths.account, { replace: true })
   }
 
+  async function handleVerifyCheckin(checkinData) {
+    const result = await verifyCheckin(checkinData)
+    if (result.verified) {
+      setUnlockedLocations((current) => new Set(current).add(result.location_id))
+    }
+    return result
+  }
+
   async function handleLogout() {
     try {
       await logout()
       setUser(null)
+      setUnlockedLocations(new Set())
       navigate(paths.explore, { replace: true })
     } catch (error) {
       alert(error.message)
@@ -104,29 +139,29 @@ function App() {
   let page
   switch (route.page) {
     case 'explore':
-      page = <HomePage unlockedLocations={noUnlockedLocations} />
+      page = <HomePage unlockedLocations={unlockedLocations} />
       break
     case 'map':
-      page = <MapPage unlockedLocations={noUnlockedLocations} />
+      page = <MapPage unlockedLocations={unlockedLocations} />
       break
     case 'locations':
-      page = <LocationsPage unlockedLocations={noUnlockedLocations} />
+      page = <LocationsPage unlockedLocations={unlockedLocations} />
       break
     case 'figures':
       page = <FiguresPage />
       break
     case 'camera':
-      page = <CameraPage />
+      page = <CameraPage onVerifyCheckin={handleVerifyCheckin} />
       break
     case 'passport':
-      page = <PassportPage unlockedLocations={noUnlockedLocations} />
+      page = <PassportPage unlockedLocations={unlockedLocations} />
       break
     case 'account':
       page = (
         <AccountPage
           user={user}
           onLogout={handleLogout}
-          unlockedLocations={noUnlockedLocations}
+          unlockedLocations={unlockedLocations}
         />
       )
       break
@@ -134,7 +169,7 @@ function App() {
       page = <RegisterPage onAuthenticate={handleAuthenticate} />
       break
     case 'detail':
-      page = <LocationDetailPage id={route.id} unlockedLocations={noUnlockedLocations} />
+      page = <LocationDetailPage id={route.id} unlockedLocations={unlockedLocations} />
       break
     default:
       page = (

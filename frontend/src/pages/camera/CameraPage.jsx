@@ -7,9 +7,10 @@ import LocationBanner from './components/LocationBanner.jsx'
 import ScanResultModal from './components/ScanResultModal.jsx'
 import './camera.css'
 
-function CameraPage() {
+function CameraPage({ onVerifyCheckin }) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isScanComplete, setIsScanComplete] = useState(false)
+  const [scanError, setScanError] = useState('')
 
   // 1. Quản lý Camera thiết bị
   const {
@@ -26,6 +27,7 @@ function CameraPage() {
 
   // 2. Quản lý Tọa độ GPS & 10 điểm Văn Miếu
   const {
+    userCoords,
     targetLocation,
     setTargetLocation,
     distanceMeters,
@@ -34,18 +36,38 @@ function CameraPage() {
   } = useLiveLocation()
 
   // 3. Xử lý quét nhận diện
-  const handleStartScan = () => {
+  const handleStartScan = async () => {
     if (isAnalyzing) return
 
-    // Chụp lại khung hình hiện tại từ camera
-    captureSnapshot()
-    setIsAnalyzing(true)
+    setScanError('')
+    const imageDataUrl = captureSnapshot()
+    if (!imageDataUrl) {
+      setScanError('Chưa chụp được ảnh. Hãy cấp quyền camera rồi thử lại.')
+      return
+    }
+    if (!userCoords) {
+      setScanError('Chưa lấy được vị trí GPS. Hãy cấp quyền vị trí rồi thử lại.')
+      return
+    }
 
-    // Mô phỏng AI đối chiếu kiến trúc và vị trí (1.2s)
-    setTimeout(() => {
+    setIsAnalyzing(true)
+    try {
+      const result = await onVerifyCheckin({
+        imageDataUrl,
+        locationId: targetLocation.id,
+        latitude: userCoords.lat,
+        longitude: userCoords.lng,
+      })
+      if (result.verified) {
+        setIsScanComplete(true)
+      } else {
+        setScanError(result.message)
+      }
+    } catch (error) {
+      setScanError(error.message)
+    } finally {
       setIsAnalyzing(false)
-      setIsScanComplete(true)
-    }, 1300)
+    }
   }
 
   // Quét lại
@@ -53,6 +75,7 @@ function CameraPage() {
     setCapturedImage(null)
     setIsScanComplete(false)
     setIsAnalyzing(false)
+    setScanError('')
   }
 
   return (
@@ -128,6 +151,7 @@ function CameraPage() {
                 <CameraIcon size={16} />
                 <span>{isAnalyzing ? 'Đang phân tích hình ảnh...' : 'Bắt đầu quét'}</span>
               </button>
+              {scanError && <p role="alert">{scanError}</p>}
             </div>
           ) : (
             <ScanResultModal
