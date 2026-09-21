@@ -1,5 +1,6 @@
-import { Award, Check, LockKeyhole, Plus, Send } from 'lucide-react'
+import { Award, Check, LockKeyhole } from 'lucide-react'
 import { paths } from '../../routes.js'
+import HeritageMessageBox from './components/HeritageMessageBox.jsx'
 
 const items = [
   [
@@ -215,39 +216,12 @@ function Detail({ item, unlocked }) {
               </article>
             </div>
           </div>
-          <section className="ai-guide" aria-label={`Hỏi AI về ${item.title}`}>
-            <header className="ai-guide-header">
-              <div className="ai-avatar">AI</div>
-              <div>
-                <span>AI Heritage Guide</span>
-                <h2>Hỏi thêm về {item.title}</h2>
-              </div>
-              <span className="ai-status">● Đang trực tuyến</span>
-            </header>
-            <div className="ai-chat-body">
-              <div className="ai-message">
-                <div className="mini-avatar">AI</div>
-                <div>
-                  <span className="message-label">Trợ lý di sản</span>
-                  <div className="bubble ai">
-                    Bạn muốn tìm hiểu lịch sử, kiến trúc hay ý nghĩa của {item.title}?
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="ai-composer">
-              <button className="composer-tool" aria-label="Thêm">
-                <Plus size={19} />
-              </button>
-              <label>
-                <span className="sr-only">Câu hỏi</span>
-                <input placeholder={`Hỏi AI về ${item.title}...`} />
-              </label>
-              <button className="send-button" aria-label="Gửi">
-                <Send size={18} />
-              </button>
-            </div>
-          </section>
+          {!item.id.startsWith('figure-') && (
+            <HeritageMessageBox
+              locationId={item.id}
+              locationName={item.title}
+            />
+          )}
         </div>
       </div>
     </section>
