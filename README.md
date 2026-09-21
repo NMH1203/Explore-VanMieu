@@ -67,6 +67,10 @@ FastAPI, SQLModel, SQLite, Argon2 và JWT lưu trong cookie `HttpOnly`.
 
 Các thư viện AI sẽ được cài đặt sau khi nhóm thống nhất mô hình và thiết bị triển khai.
 
+Trong giai đoạn demo, backend gọi API nhận diện ảnh tương thích OpenAI của
+YEScale. Khóa API chỉ nằm trong file `.env` của backend; frontend không được
+nhận hoặc lưu khóa này. YOLO có thể thay thế lớp dịch vụ này trong giai đoạn sau.
+
 ### Cơ sở dữ liệu
 
 Cơ sở dữ liệu dự kiến lưu trữ:
@@ -211,6 +215,10 @@ Mở `.env` và thay giá trị mẫu bằng một chuỗi bí mật riêng:
 
 ```env
 JWT_SECRET_KEY=chuoi_bi_mat_ngau_nhien_cua_ban
+YESCALE_API_KEY=api_key_yescale_cua_ban
+YESCALE_BASE_URL=https://api.yescale.io/v1
+YESCALE_VISION_MODEL=gpt-4o-mini
+YESCALE_MIN_CONFIDENCE=0.70
 ```
 
 Có thể tạo một chuỗi ngẫu nhiên bằng lệnh:
@@ -221,10 +229,11 @@ backend\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_urlsafe
 
 Không commit file `.env`. File này đã được khai báo trong `.gitignore`.
 
-Tạo database SQLite và bảng `users`:
+Tạo database SQLite, toàn bộ các bảng và dữ liệu mẫu của 10 địa điểm:
 
 ```powershell
 backend\.venv\Scripts\python.exe -m database.init_db
+backend\.venv\Scripts\python.exe -m database.seed_locations
 ```
 
 Khởi động backend:
@@ -298,11 +307,26 @@ cd ..
 4. Tải lại trang để kiểm tra phiên đăng nhập được giữ bằng cookie.
 5. Bấm **Đăng xuất** và tải lại trang để kiểm tra phiên đã bị xóa.
 
+### 4.8 Thử check-in bằng GPS và AI
+
+1. Điền `YESCALE_API_KEY` trong `.env`, rồi khởi động lại backend.
+2. Đăng nhập và mở trang **Camera** bằng điện thoại hoặc trình duyệt có camera.
+3. Cho phép trang web truy cập camera và vị trí GPS.
+4. Chọn địa điểm gần nhất, hướng camera vào công trình rồi bấm **Bắt đầu quét**.
+5. Backend kiểm tra khoảng cách trước để tránh gọi AI tốn phí khi người dùng ở xa.
+6. Nếu GPS nằm trong bán kính và nhãn ảnh khớp với địa điểm, backend ghi
+   `checkin_logs`, cập nhật `user_history` và frontend hiển thị con dấu.
+
+Ảnh được gửi thẳng đến YEScale để phân tích và hiện chưa được lưu xuống ổ đĩa.
+Giá trị `YESCALE_VISION_MODEL` phải là model có khả năng nhận ảnh đang được tài
+khoản YEScale hỗ trợ. Nếu dashboard không có `gpt-4o-mini`, hãy thay bằng tên
+model vision hiển thị trên dashboard.
+
 SQLite được dùng cho môi trường phát triển. Mỗi máy có file
 `database/explore_van_mieu.db` riêng, nên tài khoản không tự đồng bộ giữa các
 thành viên.
 
-### 4.8 Tạo và xem bản build production
+### 4.9 Tạo và xem bản build production
 
 ```powershell
 cd frontend
@@ -310,7 +334,7 @@ npm run build
 npm run preview
 ```
 
-### 4.9 Lỗi thường gặp
+### 4.10 Lỗi thường gặp
 
 #### `No module named backend`
 
@@ -323,6 +347,10 @@ cd ..
 #### `JWT_SECRET_KEY` bị thiếu
 
 Tạo file `.env` từ `.env.example` và điền khóa bí mật như phần 4.3.
+
+#### `Thiếu YESCALE_API_KEY trong file .env`
+
+Điền khóa YEScale vào `.env` ở thư mục gốc rồi dừng và chạy lại backend.
 
 #### `'vite' is not recognized`
 

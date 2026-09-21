@@ -5,10 +5,9 @@ import { useLiveLocation } from './hooks/useLiveLocation.js'
 import CameraViewfinder from './components/CameraViewfinder.jsx'
 import LocationBanner from './components/LocationBanner.jsx'
 import ScanResultModal from './components/ScanResultModal.jsx'
-import { unlockLocation } from '../../services/api.js'
 import './camera.css'
 
-function CameraPage({ onLocationUnlocked }) {
+function CameraPage({ onVerifyCheckin }) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isScanComplete, setIsScanComplete] = useState(false)
   const [scanError, setScanError] = useState('')
@@ -28,6 +27,7 @@ function CameraPage({ onLocationUnlocked }) {
 
   // 2. Quản lý Tọa độ GPS & 10 điểm Văn Miếu
   const {
+    userCoords,
     targetLocation,
     setTargetLocation,
     distanceMeters,
@@ -36,26 +36,38 @@ function CameraPage({ onLocationUnlocked }) {
   } = useLiveLocation()
 
   // 3. Xử lý quét nhận diện
-  const handleStartScan = () => {
+  const handleStartScan = async () => {
     if (isAnalyzing) return
 
-    // Chụp lại khung hình hiện tại từ camera
-    captureSnapshot()
-    setIsAnalyzing(true)
     setScanError('')
+    const imageDataUrl = captureSnapshot()
+    if (!imageDataUrl) {
+      setScanError('Chưa chụp được ảnh. Hãy cấp quyền camera rồi thử lại.')
+      return
+    }
+    if (!userCoords) {
+      setScanError('Chưa lấy được vị trí GPS. Hãy cấp quyền vị trí rồi thử lại.')
+      return
+    }
 
-    // Mô phỏng AI đối chiếu kiến trúc và vị trí (1.2s)
-    setTimeout(async () => {
-      try {
-        await unlockLocation(targetLocation.id)
-        onLocationUnlocked(targetLocation.id)
+    setIsAnalyzing(true)
+    try {
+      const result = await onVerifyCheckin({
+        imageDataUrl,
+        locationId: targetLocation.id,
+        latitude: userCoords.lat,
+        longitude: userCoords.lng,
+      })
+      if (result.verified) {
         setIsScanComplete(true)
-      } catch (error) {
-        setScanError(error.message)
-      } finally {
-        setIsAnalyzing(false)
+      } else {
+        setScanError(result.message)
       }
-    }, 1300)
+    } catch (error) {
+      setScanError(error.message)
+    } finally {
+      setIsAnalyzing(false)
+    }
   }
 
   // Quét lại
@@ -63,6 +75,7 @@ function CameraPage({ onLocationUnlocked }) {
     setCapturedImage(null)
     setIsScanComplete(false)
     setIsAnalyzing(false)
+    setScanError('')
   }
 
   return (

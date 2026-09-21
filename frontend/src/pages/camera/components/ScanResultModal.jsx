@@ -19,7 +19,7 @@ export default function ScanResultModal({
         <p>
           <b>⌖ Vị trí hợp lệ:</b> Cách công trình {distanceMeters} m.
           <br />
-          Tọa độ GPS và hình ảnh kiến trúc đã trùng khớp. Con dấu đã được lưu vào tài khoản của bạn.
+          Tọa độ GPS và hình ảnh kiến trúc đã trùng khớp. Dấu ấn đã được lưu vào hộ chiếu của bạn.
         </p>
 
         <div className="result-actions">
