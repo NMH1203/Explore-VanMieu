@@ -39,8 +39,7 @@ function HomePage({ unlockedLocations }) {
             {t("home.hero.title")} <span>{t("home.hero.subtitle")}</span>
           </h1>
           <p>
-            Mỗi bước chân mở ra một công trình, một nhân vật và một câu chuyện đã góp phần tạo nên
-            di sản tri thức Việt Nam.
+            {t("home.hero.description")}
           </p>
           <div className="hero-actions">
             <a className="btn btn-gold" href="#journey">
@@ -90,8 +89,7 @@ function HomePage({ unlockedLocations }) {
               <h2 id="how-title">{t("home.how.title")}</h2>
             </div>
             <p>
-              Chỉ cần điện thoại và vài phút tại mỗi điểm đến, bạn có thể mở từng lớp câu chuyện của
-              di sản.
+              {t("home.how.description")}
             </p>
           </div>
           <div className="use-flow">
@@ -177,7 +175,7 @@ function HomePage({ unlockedLocations }) {
               <div className="flow-copy">
                 <span>{t("home.how.stepFour")}</span>
                 <h3>{t("home.how.stamp")}</h3>
-                <p>Nhận con dấu vào {t("home.passport.title")} và tiếp tục điểm đến mới.</p>
+                <p>{t("home.how.stampDescription")}</p>
               </div>
             </article>
           </div>
@@ -230,7 +228,7 @@ function HomePage({ unlockedLocations }) {
               <span>4</span>
             </div>
             <div className="map-card">
-              <strong>Khuê Văn Các · {khueVanCacUnlocked ? t("home.map.verifiedState") : t("home.map.unverifiedState")}</strong>
+              <strong>{t("locations.names.khueVanCac")} · {khueVanCacUnlocked ? t("home.map.verifiedState") : t("home.map.unverifiedState")}</strong>
               <p>{t("home.map.distance")}</p>
               {khueVanCacUnlocked ? (
                 <a className="btn btn-primary" href="/Explore/Khue-Van-Cac">
@@ -471,8 +469,7 @@ function HomePage({ unlockedLocations }) {
                 <div>
                   <span className="message-label">{t("home.ai.assistant")}</span>
                   <div className="bubble ai">
-                    Xin chào! Bạn đang đứng trước Khuê Văn Các. Tôi có thể kể về kiến trúc, ý nghĩa
-                    biểu tượng hoặc lịch sử của công trình này.
+                    {t("home.ai.greeting")}
                   </div>
                 </div>
               </div>
@@ -511,7 +508,6 @@ function HomePage({ unlockedLocations }) {
       </div>
       <footer className="footer">
         <strong>Explore Van Mieu</strong>{t("home.footer")}
-        Việt Nam.
       </footer>
     </section>
   )

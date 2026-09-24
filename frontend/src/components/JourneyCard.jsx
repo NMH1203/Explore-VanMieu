@@ -19,8 +19,7 @@ function JourneyCard({ unlockedLocations }) {
         <span className="eyebrow">{t("passport.today")}</span>
         <h2>{t("journey.title")}</h2>
         <p>
-          Hệ thống đã chọn 5 địa điểm không trùng lặp. Hoàn thành xác minh GPS và camera để đánh
-          thức từng lớp di sản.
+          {t("journey.description")}
         </p>
         <div className="progress-label">
           <span>{t("journey.progress")}</span>

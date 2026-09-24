@@ -393,7 +393,7 @@
   },
   "journey": {
     "title": "Five stops, one journey through memory",
-    "description": "Five unique sites have been selected. Verify your location and camera image to uncover each layer of heritage.",
+    "description": "Five unique sites have been selected for your journey. Verify each stop with GPS and camera to uncover another layer of heritage.",
     "progress": "Exploration progress",
     "count": {
       "one": "{{count}} site",
