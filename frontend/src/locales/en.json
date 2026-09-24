@@ -1,0 +1,404 @@
+{
+  "common": {
+    "language": "Language",
+    "back": "Back",
+    "readStory": "Read the story",
+    "unlocked": "Unlocked",
+    "locked": "Locked",
+    "loading": "Loading...",
+    "logout": "Log out",
+    "explore": "Explore",
+    "map": "Map",
+    "camera": "Camera",
+    "passport": "Passport",
+    "account": "Account",
+    "notFound": "Page not found",
+    "backToExplore": "Back to Explore"
+  },
+  "nav": {
+    "heritage": "Vietnamese Heritage",
+    "main": "Main navigation",
+    "version": "v1.0 · Temple of Literature"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Temple of Literature",
+      "title": "Step into layers of memory",
+      "subtitle": "from a thousand years of learning",
+      "description": "Each step reveals a site, a historical figure, and a story that helped shape Vietnam's intellectual heritage.",
+      "start": "Start exploring →",
+      "today": "View today's journey",
+      "scroll": "Scroll to begin ↓",
+      "imageAlt": "The gate of the Temple of Literature in Hanoi"
+    },
+    "intro": {
+      "kicker": "A heritage of knowledge",
+      "title": "Where Vietnam's scholarly tradition has been preserved for centuries",
+      "description": "More than an architectural complex, the Temple of Literature preserves memories of education, examinations, and generations of Vietnam's brightest minds.",
+      "founded": "Founded",
+      "sites": "Sites",
+      "steles": "Doctoral steles"
+    },
+    "how": {
+      "kicker": "Getting started is simple",
+      "title": "Explore the Temple of Literature your way",
+      "description": "With a phone and a few minutes at each stop, uncover the heritage site one story at a time.",
+      "stepOne": "Step 1",
+      "find": "Find nearby heritage",
+      "findDescription": "Open the map to view the sites and choose one to explore.",
+      "findAlt": "Map for finding nearby heritage",
+      "stepTwo": "Step 2",
+      "scan": "Point your camera",
+      "scanDescription": "Point your camera at a site to verify its image and location.",
+      "scanAlt": "Scan a heritage site with the camera",
+      "stepThree": "Step 3",
+      "story": "Open the story",
+      "storyDescription": "Read, listen, or ask AI to learn more about the heritage before you.",
+      "storyAlt": "Discover the heritage story",
+      "stepFour": "Step 4",
+      "stamp": "Save your journey",
+      "stampDescription": "Collect a stamp in your Heritage Passport and continue to the next stop.",
+      "stampAlt": "Complete the heritage journey",
+      "startMap": "Start with the map →",
+      "noDownload": "No app download needed"
+    },
+    "map": {
+      "kicker": "Interactive map",
+      "title": "Heritage around you",
+      "description": "Find the nearest site and follow the stories waiting to be discovered.",
+      "open": "Open full map",
+      "distance": "32 m away · Verify with GPS and camera to unlock content.",
+      "verified": "✓ Camera verified",
+      "verifiedState": "Verified",
+      "unverifiedState": "Locked"
+    },
+    "featured": {
+      "nearby": "Nearby",
+      "title": "Featured sites",
+      "description": "Each status has a clear label and a next step.",
+      "viewAll": "See all sites →",
+      "library": "Knowledge library",
+      "figures": "Historical figures and sages",
+      "viewFigures": "See all figures →",
+      "unlockStory": "The story will appear once this site is unlocked."
+    },
+    "ai": {
+      "title": "Ask to learn more",
+      "online": "● Online",
+      "assistant": "Heritage guide",
+      "greeting": "Hello! You are standing before Khue Van Pavilion. I can tell you about its architecture, symbolism, or history.",
+      "sampleQuestion": "Why is Khue Van Pavilion shown on Vietnamese banknotes?",
+      "suggestions": "You could also ask",
+      "architecture": "What makes its architecture special?",
+      "shortStory": "Hear a 2-minute story",
+      "relatedFigures": "Related figures",
+      "inputLabel": "Ask AI a question",
+      "placeholder": "Ask AI about the heritage you are exploring...",
+      "send": "Send question",
+      "notice": "AI can make mistakes. Verify important historical information.",
+      "you": "You",
+      "add": "Add content"
+    },
+    "passport": {
+      "eyebrow": "Digital Heritage Passport",
+      "title": "Heritage Passport",
+      "collected": "{{count}} of 10 stamps collected",
+      "open": "Open passport",
+      "allStamps": "View all 10 stamps →",
+      "stampAlt": "Complete the heritage journey"
+    },
+    "footer": "A digital journey bringing heritage and Vietnam's scholarly tradition to life."
+  },
+  "locations": {
+    "eyebrow": "Architectural sites",
+    "title": "All locations",
+    "description": "Explore all 10 sites in the Temple of Literature complex.",
+    "total": "10 sites",
+    "unlockedCount": "{{count}} unlocked",
+    "lockedCount": "{{count}} locked",
+    "names": {
+      "vanMieuGate": "Temple of Literature Gate",
+      "daiTrungGate": "Dai Trung Gate",
+      "khueVanCac": "Khue Van Pavilion",
+      "daiThanhGate": "Dai Thanh Gate",
+      "dienDaiThanh": "Dai Thanh Hall",
+      "thaiHocGate": "Thai Hoc Gate",
+      "thaiHocHouse": "Thai Hoc Hall",
+      "bellDrum": "Bell and Drum Towers",
+      "octagonalHouse": "Octagonal Pavilion",
+      "phuongDinh": "Phuong Dinh Pavilion"
+    },
+    "descriptions": {
+      "vanMieuGate": "The first entrance opens onto the architectural axis and scholarly grounds.",
+      "daiTrungGate": "The gate leads into the heart of the complex.",
+      "khueVanCac": "A symbol of literature, wisdom, and the capital Hanoi.",
+      "daiThanhGate": "The gate marks the entrance to the solemn sanctuary.",
+      "dienDaiThanh": "A sanctuary honoring Confucius and the sages of Confucian learning.",
+      "thaiHocGate": "The passage into an area commemorating Vietnam's educational tradition.",
+      "thaiHocHouse": "A monument honoring the Imperial Academy and its notable teachers.",
+      "bellDrum": "A pair of buildings lending balance to the Thai Hoc precinct.",
+      "octagonalHouse": "An octagonal architectural space rich in symbolism.",
+      "phuongDinh": "A resting point linking the landscape to the visitor route."
+    }
+  },
+  "figures": {
+    "eyebrow": "Historical figures",
+    "title": "Historical figures and sages",
+    "description": "Six figures connected to the Temple of Literature's history, education, and cultural life.",
+    "summary": "Knowledge library",
+    "profiles": {
+      "lyThanhTongRole": "Founder of the Temple of Literature",
+      "lyThanhTongStory": "In 1070, the king founded the Temple of Literature, creating a place to honor scholarship.",
+      "lyNhanTongRole": "Founder of the Imperial Academy",
+      "lyNhanTongStory": "The king established the Imperial Academy, Vietnam's first national university.",
+      "leThanhTongRole": "A king who championed talent",
+      "leThanhTongStory": "He initiated the doctoral steles, preserving the tradition of scholarship.",
+      "chuVanAnRole": "A model teacher",
+      "chuVanAnStory": "A symbol of the teacher's character and respect for learning.",
+      "confuciusRole": "The exemplary teacher for all generations",
+      "confuciusStory": "The central figure worshipped at the Temple of Literature and a major thinker in Confucianism.",
+      "fourSagesRole": "Four sages honored alongside Confucius",
+      "fourSagesStory": "Yan Hui, Zengzi, Zisi, and Mencius continued and developed Confucian thought."
+    },
+    "count": "6 figures",
+    "unlocked": "3 unlocked",
+    "alt": {
+      "lyThanhTong": "Statue of Emperor Ly Thanh Tong",
+      "lyNhanTong": "Statue of Emperor Ly Nhan Tong",
+      "leThanhTong": "Statue of Emperor Le Thanh Tong",
+      "chuVanAn": "Statue of teacher Chu Van An",
+      "confucius": "Confucius statue at the Temple of Literature",
+      "fourSages": "Four sages: Yan Hui, Zengzi, Mencius, and Zisi"
+    }
+  },
+  "map": {
+    "eyebrow": "All locations",
+    "title": "Temple of Literature map",
+    "description": "Explore 10 landmark sites along the heritage axis · {{count}}/10 unlocked",
+    "sites": "10 heritage sites",
+    "selectHint": "Select a site to locate it on the map",
+    "overview": "Overview",
+    "overviewTitle": "View the Temple of Literature",
+    "story": "Read the heritage story",
+    "verify": "Open camera to verify ({{distance}} away)",
+    "valid": "Unlocked",
+    "locked": "Locked"
+  },
+  "passport": {
+    "eyebrow": "Heritage Passport",
+    "title": "Stamp collection",
+    "explored": "Temple of Literature · {{count}}/10 sites explored",
+    "stamps": "Heritage stamps",
+    "stampDescription": "Complete each site to earn its unique stamp.",
+    "today": "Your journey today",
+    "milestones": "Milestones",
+    "first": "First steps",
+    "firstReward": "{{count}}/1 · Explore Van Mieu badge",
+    "seeker": "Heritage seeker",
+    "seekerReward": "{{count}}/3 · Exclusive digital postcard",
+    "complete": "Journey complete",
+    "completeReward": "{{count}}/5 · Cultural Ambassador certificate",
+    "scholar": "Dedicated scholar",
+    "scholarReward": "{{count}}/10 · Heritage Scholar title",
+    "continue": "Continue exploring",
+    "stampAlt": "{{name}} stamp"
+  },
+  "account": {
+    "locations": "Sites / 10",
+    "stamps": "Stamps / 10",
+    "milestones": "Milestones / 4",
+    "quick": "Quick access",
+    "settings": "Settings",
+    "language": "🌐 Language",
+    "notifications": "🔔 Notifications",
+    "enabled": "On ›",
+    "gps": "📍 GPS",
+    "alwaysOn": "Always on ›",
+    "theme": "☀ Theme",
+    "light": "Light ›",
+    "vietnamese": "Vietnamese ›",
+    "english": "English ›"
+  },
+  "camera": {
+    "scan": "Scan",
+    "recognition": "AI recognition",
+    "discover": "Explore",
+    "torch": "Toggle light",
+    "torchOn": "Turn on light",
+    "kicker": "Site and artifact recognition",
+    "pointCamera": "Point your camera toward {{name}}",
+    "defaultSite": "Khue Van Pavilion",
+    "description": "AI will compare architectural features and GPS to verify your visit and award a heritage stamp.",
+    "start": "Start scanning",
+    "analyzing": "Analyzing image...",
+    "noImage": "No image captured. Allow camera access and try again.",
+    "noGps": "GPS location unavailable. Allow location access and try again.",
+    "simulation": "AI preview mode (camera is off)",
+    "connecting": "Connecting to device camera...",
+    "captured": "Captured image",
+    "analyzingHint": "⚡ AI is analyzing the architecture and coordinates...",
+    "frameHint": "Keep {{name}} fully inside the frame",
+    "locationLabel": "Location being verified",
+    "changeLocation": "Change location",
+    "accuracy": "Accuracy ±{{accuracy}} m · {{distance}} m from site",
+    "valid": "⌖ Location verified",
+    "distance": "Distance {{distance}}m",
+    "chooseLocation": "Choose the site you are visiting:",
+    "recognized": "Recognized · 98.4% confidence",
+    "gpsValid": "⌖ Location verified:",
+    "confirmed": "GPS coordinates and architectural imagery match. The stamp has been added to your passport.",
+    "heritageInfo": "View heritage details",
+    "openPassport": "Open Passport",
+    "scanAgain": "Scan again",
+    "temple": "Temple of Literature"
+  },
+  "detail": {
+    "locked": "This site’s story is still locked.",
+    "backToSites": "Back to sites",
+    "exploreStory": "Explore the story",
+    "unlocked": "Heritage story unlocked",
+    "materials": "Temple of Literature collection.",
+    "story": "Heritage story",
+    "featured": "Featured detail",
+    "continue": "Continue your journey",
+    "continueDescription": "Discover more layers of the site’s history and scholarly tradition.",
+    "backToJourney": "Back to your journey",
+    "yourStamp": "Your stamp",
+    "recorded": "Story recorded",
+    "added": "This story has been added to your exploration journey.",
+    "viewPassport": "View passport",
+    "aiLabel": "Ask AI about {{title}}",
+    "askMore": "Ask more about {{title}}",
+    "online": "● Online",
+    "assistant": "Heritage guide",
+    "question": "Would you like to learn about the history, architecture, or meaning of {{title}}?",
+    "add": "Add",
+    "inputLabel": "Question",
+    "placeholder": "Ask AI about {{title}}...",
+    "send": "Send",
+    "items": {
+      "location-van-mieu-gate": {
+        "title": "Temple of Literature Gate",
+        "type": "Site",
+        "heading": "Beginning of the scholarly axis",
+        "story": "The main entrance begins a journey through the complex’s five courtyards. Its three-part gate marks a solemn boundary between the city and the heritage grounds."
+      },
+      "location-dai-trung-gate": {
+        "title": "Dai Trung Gate",
+        "type": "Site",
+        "heading": "Gateway to the heart of the complex",
+        "story": "Dai Trung Gate marks the transition into the inner grounds. The smaller Thanh Duc and Dat Tai gates evoke the cultivation of virtue and talent."
+      },
+      "interpret": {
+        "title": "Khue Van Pavilion",
+        "type": "Awakened heritage",
+        "heading": "A symbol of literature and the light of knowledge",
+        "story": "Built in the early 19th century, the pavilion is known for its square tower, eight roofs, and four round windows. Its name refers to the star Khue, associated with literature."
+      },
+      "location-dai-thanh-gate": {
+        "title": "Dai Thanh Gate",
+        "type": "Site",
+        "heading": "Entrance to the sanctuary",
+        "story": "Dai Thanh Gate leads to the sanctuary of Confucius and other sages. Its name evokes great achievement in learning and virtue."
+      },
+      "location-dien-dai-thanh": {
+        "title": "Dai Thanh Hall",
+        "type": "Site",
+        "heading": "The Temple of Literature’s main sanctuary",
+        "story": "Dai Thanh Hall is the central sanctuary, honoring Confucius and Confucian sages in a solemn lacquered timber setting."
+      },
+      "location-thai-hoc-gate": {
+        "title": "Thai Hoc Gate",
+        "type": "Site",
+        "heading": "Gateway to the Imperial Academy precinct",
+        "story": "The gate links the Dai Thanh and Thai Hoc precincts. Its three bays, traditional tiled roof, and broad courtyard extend the visitor’s view along the site axis."
+      },
+      "location-thai-hoc-house": {
+        "title": "Thai Hoc Hall",
+        "type": "Site",
+        "heading": "Continuing the national education tradition",
+        "story": "Built on the grounds of the former Imperial Academy, the Thai Hoc precinct presents the history of education and commemorates those who advanced learning."
+      },
+      "location-bell-drum-tower": {
+        "title": "Bell and Drum Towers",
+        "type": "Site",
+        "heading": "A balanced pair of buildings",
+        "story": "Standing on either side of the Thai Hoc precinct, the towers create a balanced composition and recall the rhythms of ceremony and daily life at a traditional academy."
+      },
+      "location-octagonal-house": {
+        "title": "Octagonal Pavilion",
+        "type": "Site",
+        "heading": "An octagonal space rich in symbolism",
+        "story": "Its eight-sided plan and graceful roof make this pavilion a harmonious pause among the greenery and visitor paths."
+      },
+      "location-phuong-dinh": {
+        "title": "Phuong Dinh Pavilion",
+        "type": "Site",
+        "heading": "A resting place by Van Lake",
+        "story": "The square pavilion links the landscape of Van Lake with the historic complex, offering a place to rest and take in the visitor route."
+      },
+      "figure-ly-thanh-tong": {
+        "title": "Ly Thanh Tong",
+        "type": "Historical figure",
+        "heading": "The king who founded the Temple of Literature",
+        "story": "In 1070, Ly Thanh Tong founded the Temple of Literature in Thang Long, beginning a tradition of honoring learning and the sages of the past."
+      },
+      "figure-ly-nhan-tong": {
+        "title": "Ly Nhan Tong",
+        "type": "Historical figure",
+        "heading": "Founder of the Imperial Academy",
+        "story": "He held the first royal examination in 1075 and established the Imperial Academy in 1076 to educate the country’s talent."
+      },
+      "figure-le-thanh-tong": {
+        "title": "Le Thanh Tong",
+        "type": "Historical figure",
+        "heading": "A king who championed talent and examinations",
+        "story": "In 1484, the king commissioned the first doctoral steles to honor distinguished scholars and encourage learning."
+      },
+      "figure-chu-van-an": {
+        "title": "Chu Van An",
+        "type": "Historical figure",
+        "heading": "A teacher for the ages",
+        "story": "Chu Van An served as rector of the Imperial Academy. His integrity and upright character became an enduring model for teachers."
+      },
+      "figure-confucius": {
+        "title": "Confucius",
+        "type": "Historical figure",
+        "heading": "The exemplary teacher for all generations",
+        "story": "Confucius was a major Eastern thinker and teacher. The Temple of Literature honors him and stands as a symbol of learning and moral cultivation."
+      },
+      "figure-four-sages": {
+        "title": "Four Sages",
+        "type": "Historical figure",
+        "heading": "Four sages honored alongside Confucius",
+        "story": "The Four Sages are Yan Hui, Zengzi, Zisi, and Mencius, who inherited and developed Confucius’s teachings."
+      }
+    }
+  },
+  "auth": {
+    "eyebrow": "Discover your own journey",
+    "login": "Log in",
+    "signup": "Sign up",
+    "tagline": "Join the Temple of Literature journey",
+    "fullName": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "busy": "Signing in...",
+    "continueGuest": "← Continue exploring as a guest",
+    "notice": "Browse the Library, Catalog, and digital experiences for free. You only need an account to scan QR codes and collect heritage stamps."
+  },
+  "app": {
+    "themeStatus": "Lacquer red and imperial yellow theme status",
+    "scanStatus": "Site recognition status"
+  },
+  "journey": {
+    "title": "Five stops, one journey through memory",
+    "description": "Five unique sites have been selected. Verify your location and camera image to uncover each layer of heritage.",
+    "progress": "Exploration progress",
+    "count": {
+      "one": "{{count}} site",
+      "other": "{{count}} sites"
+    },
+    "continue": "Continue your journey"
+  }
+}

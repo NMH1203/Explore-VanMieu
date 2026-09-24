@@ -1,5 +1,6 @@
 import { Award, Check, LockKeyhole, Plus, Send } from 'lucide-react'
 import { paths } from '../../routes.js'
+import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
 const items = [
   [
@@ -140,15 +141,16 @@ const items = [
 }))
 
 function Detail({ item, unlocked }) {
+  const { t } = useLanguage()
   if (!unlocked) {
     return (
       <section className="screen" id={item.id}>
         <div className="locked-detail">
           <LockKeyhole size={44} aria-hidden="true" />
-          <h1>{item.title}</h1>
-          <p>Câu chuyện của địa điểm này chưa được mở khóa.</p>
+          <h1>{t("detail.items." + item.id + ".title")}</h1>
+          <p>{t("detail.locked")}</p>
           <a className="btn btn-primary" href={paths.locations}>
-            Quay lại các công trình
+            {t("detail.backToSites")}
           </a>
         </div>
       </section>
@@ -159,14 +161,14 @@ function Detail({ item, unlocked }) {
     <section className="screen" id={item.id}>
       <div className="interpret-layout">
         <div className="interpret-visual">
-          <img className="interpret-art heritage-photo" src={item.image} alt={item.title} />
+          <img className="interpret-art heritage-photo" src={item.image} alt={t("detail.items." + item.id + ".title")} />
           <div className="interpret-title">
-            <span className="eyebrow">{item.type}</span>
-            <h1>{item.title}</h1>
-            <span>Văn Miếu – Quốc Tử Giám</span>
+            <span className="eyebrow">{t("detail.items." + item.id + ".type")}</span>
+            <h1>{t("detail.items." + item.id + ".title")}</h1>
+            <span>{t("nav.version")}</span>
           </div>
           <a className="interpret-scroll" href={`#${item.id}-story`}>
-            Khám phá câu chuyện <span>↓</span>
+            {t("detail.exploreStory")} <span>↓</span>
           </a>
         </div>
         <div className="interpret-content" id={`${item.id}-story`}>
@@ -177,19 +179,19 @@ function Detail({ item, unlocked }) {
                   <Check size={20} />
                 </span>
                 <div>
-                  <b>Nội dung di sản đã được mở</b>
-                  <span>Tư liệu Văn Miếu – Quốc Tử Giám.</span>
+                  <b>{t("detail.unlocked")}</b>
+                  <span>{t("detail.materials")}</span>
                 </div>
               </div>
               <article className="article">
-                <span className="kicker">Câu chuyện di sản</span>
-                <h2>{item.heading}</h2>
-                <p>{item.story}</p>
+                <span className="kicker">{t("detail.story")}</span>
+                <h2>{t("detail.items." + item.id + ".heading")}</h2>
+                <p>{t("detail.items." + item.id + ".story")}</p>
               </article>
               <div className="fact">
-                <strong>Dấu ấn nổi bật</strong>
+                <strong>{t("detail.featured")}</strong>
                 <br />
-                {item.story}
+                {t("detail.items." + item.id + ".story")}
               </div>
             </div>
             <div>
@@ -198,52 +200,52 @@ function Detail({ item, unlocked }) {
                   <div className="achievement-icon">
                     <Award size={28} />
                   </div>
-                  <h2>Tiếp tục hành trình</h2>
-                  <p>Khám phá thêm những lớp lịch sử và truyền thống hiếu học của di tích.</p>
+                  <h2>{t("detail.continue")}</h2>
+                  <p>{t("detail.continueDescription")}</p>
                   <a className="btn btn-primary" href={paths.explore}>
-                    Quay lại hành trình
+                    {t("detail.backToJourney")}
                   </a>
                 </div>
               </div>
               <article className="article heritage-stamp">
-                <span className="kicker">Dấu ấn của bạn</span>
-                <h2>Câu chuyện đã được ghi nhận</h2>
-                <p>Nội dung này đã được thêm vào hành trình khám phá.</p>
+                <span className="kicker">{t("detail.yourStamp")}</span>
+                <h2>{t("detail.recorded")}</h2>
+                <p>{t("detail.added")}</p>
                 <a className="btn btn-outline" href={paths.passport}>
-                  Xem hộ chiếu
+                  {t("detail.viewPassport")}
                 </a>
               </article>
             </div>
           </div>
-          <section className="ai-guide" aria-label={`Hỏi AI về ${item.title}`}>
+          <section className="ai-guide" aria-label={t("detail.aiLabel", { title: t("detail.items." + item.id + ".title") })}>
             <header className="ai-guide-header">
               <div className="ai-avatar">AI</div>
               <div>
                 <span>AI Heritage Guide</span>
-                <h2>Hỏi thêm về {item.title}</h2>
+                <h2>{t("detail.askMore", { title: t("detail.items." + item.id + ".title") })}</h2>
               </div>
-              <span className="ai-status">● Đang trực tuyến</span>
+              <span className="ai-status">{t("detail.online")}</span>
             </header>
             <div className="ai-chat-body">
               <div className="ai-message">
                 <div className="mini-avatar">AI</div>
                 <div>
-                  <span className="message-label">Trợ lý di sản</span>
+                  <span className="message-label">{t("detail.assistant")}</span>
                   <div className="bubble ai">
-                    Bạn muốn tìm hiểu lịch sử, kiến trúc hay ý nghĩa của {item.title}?
+                    {t("detail.question", { title: t("detail.items." + item.id + ".title") })}
                   </div>
                 </div>
               </div>
             </div>
             <div className="ai-composer">
-              <button className="composer-tool" aria-label="Thêm">
+              <button className="composer-tool" aria-label={t("detail.add")}>
                 <Plus size={19} />
               </button>
               <label>
-                <span className="sr-only">Câu hỏi</span>
-                <input placeholder={`Hỏi AI về ${item.title}...`} />
+                <span className="sr-only">{t("detail.inputLabel")}</span>
+                <input placeholder={t("detail.placeholder", { title: t("detail.items." + item.id + ".title") })} />
               </label>
-              <button className="send-button" aria-label="Gửi">
+              <button className="send-button" aria-label={t("detail.send")}>
                 <Send size={18} />
               </button>
             </div>

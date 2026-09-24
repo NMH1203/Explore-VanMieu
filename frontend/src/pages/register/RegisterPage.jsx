@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { CircleHelp } from 'lucide-react'
 import './register.css'
 import { login, register } from '../../services/auth.js'
+import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
 function RegisterPage({ onAuthenticate }) {
+  const { t } = useLanguage()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -37,25 +39,25 @@ function RegisterPage({ onAuthenticate }) {
   return <section className="screen register" id="register">
     <header className="topbar">
       <div className="inner">
-        <div className="eyebrow">Khám phá hành trình của riêng bạn</div>
-        <h1>Đăng nhập</h1>
-        <p>Trở thành người đồng hành cùng Văn Miếu</p>
+        <div className="eyebrow">{t("auth.eyebrow")}</div>
+        <h1>{t("auth.login")}</h1>
+        <p>{t("auth.tagline")}</p>
       </div>
     </header>
 
     <div className="register__content">
       <div className="register__card">
         <div className="register__tabs" role="tablist">
-          <button className={!signup ? 'active' : ''} type="button" onClick={() => setMode('login')}>Đăng nhập</button>
-          <button className={signup ? 'active' : ''} type="button" onClick={() => setMode('signup')}>Đăng ký</button>
+          <button className={!signup ? 'active' : ''} type="button" onClick={() => setMode('login')}>{t("auth.login")}</button>
+          <button className={signup ? 'active' : ''} type="button" onClick={() => setMode('signup')}>{t("auth.signup")}</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           {signup && (
             <input
-              aria-label="Họ và tên"
+              aria-label={t("auth.fullName")}
               type="text"
-              placeholder="Họ và tên"
+              placeholder={t("auth.fullName")}
               autoComplete="name"
               required
               value={username}
@@ -63,18 +65,18 @@ function RegisterPage({ onAuthenticate }) {
             />
           )}
           <input
-            aria-label="Email"
+            aria-label={t("auth.email")}
             type="email"
-            placeholder="Email"
+            placeholder={t("auth.email")}
             autoComplete="email"
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
           <input
-            aria-label="Mật khẩu"
+            aria-label={t("auth.password")}
             type="password"
-            placeholder="Mật khẩu"
+            placeholder={t("auth.password")}
             autoComplete={signup ? 'new-password' : 'current-password'}
             minLength={signup ? 8 : undefined}
             required
@@ -86,15 +88,15 @@ function RegisterPage({ onAuthenticate }) {
             type="submit"
             disabled={busy}
           >
-            {busy ? 'Đang đăng nhập...' : signup ? 'Đăng ký' : 'Đăng nhập'}
+            {busy ? t("auth.busy") : signup ? t("auth.signup") : t("auth.login")}
           </button>
           {error && <p role="alert">{error}</p>}
         </form>
-        <a className="register__back" href="/Explore">← Tiếp tục khám phá với tư cách khách</a>
+        <a className="register__back" href="/Explore">{t("auth.continueGuest")}</a>
 
         <p className="register__notice">
           <CircleHelp aria-hidden="true" />
-          Duyệt Thư viện, Danh mục và Trải nghiệm số miễn phí — bạn chỉ cần tài khoản để quét mã QR và thu thập dấu ấn di sản.
+          {t("auth.notice")}
         </p>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { VAN_MIEU_BOUNDS } from '../mapData.js'
+import { useLanguage } from '../../../i18n/LanguageContext.jsx'
 
 export default function InteractiveMap({
   locations,
@@ -9,6 +10,7 @@ export default function InteractiveMap({
   selectedLocation,
   onSelectLocation,
 }) {
+  const { t } = useLanguage()
   const mapContainerRef = useRef(null)
   const mapInstanceRef = useRef(null)
   const markersRef = useRef({})
@@ -113,10 +115,10 @@ export default function InteractiveMap({
       {/* Bảng chú giải trạng thái */}
       <div className="map-overlay-legend">
         <span>
-          <i className="dot jade"></i> Đã mở khóa
+          <i className="dot jade"></i> {t("common.unlocked")}
         </span>
         <span>
-          <i className="dot stone"></i> Chưa mở khóa
+          <i className="dot stone"></i> {t("common.locked")}
         </span>
       </div>
 
@@ -125,10 +127,10 @@ export default function InteractiveMap({
         <button
           type="button"
           className="map-control-btn"
-          title="Xem toàn cảnh Văn Miếu"
+          title={t("map.overviewTitle")}
           onClick={handleResetView}
         >
-          ⌖ Toàn cảnh
+          ⌖ {t("map.overview")}
         </button>
       </div>
     </div>

@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useLanguage } from '../../i18n/LanguageContext.jsx'
+import { getLocationTranslationKey } from '../../i18n/locationKeys.js'
 import { ArrowLeft, Sun, SunMedium, Camera as CameraIcon } from 'lucide-react'
 import { useCameraStream } from './hooks/useCameraStream.js'
 import { useLiveLocation } from './hooks/useLiveLocation.js'
@@ -8,6 +10,7 @@ import ScanResultModal from './components/ScanResultModal.jsx'
 import './camera.css'
 
 function CameraPage({ onVerifyCheckin }) {
+  const { t } = useLanguage()
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isScanComplete, setIsScanComplete] = useState(false)
   const [scanError, setScanError] = useState('')
@@ -35,6 +38,9 @@ function CameraPage({ onVerifyCheckin }) {
     isNearEnough,
   } = useLiveLocation()
 
+  const targetLocationKey = getLocationTranslationKey(targetLocation?.id)
+  const displayedTargetLocation = targetLocation ? { ...targetLocation, name: t('locations.names.' + targetLocationKey) } : null
+
   // 3. Xử lý quét nhận diện
   const handleStartScan = async () => {
     if (isAnalyzing) return
@@ -42,11 +48,11 @@ function CameraPage({ onVerifyCheckin }) {
     setScanError('')
     const imageDataUrl = captureSnapshot()
     if (!imageDataUrl) {
-      setScanError('Chưa chụp được ảnh. Hãy cấp quyền camera rồi thử lại.')
+      setScanError(t('camera.noImage'))
       return
     }
     if (!userCoords) {
-      setScanError('Chưa lấy được vị trí GPS. Hãy cấp quyền vị trí rồi thử lại.')
+      setScanError(t('camera.noGps'))
       return
     }
 
@@ -84,21 +90,21 @@ function CameraPage({ onVerifyCheckin }) {
         <div className="camera-ui">
           {/* Thanh điều khiển trên cùng */}
           <div className="camera-top">
-            <a className="round-btn" href="/Explore/Ban-Do" title="Quay lại Bản đồ">
+            <a className="round-btn" href="/Explore/Ban-Do" title={t("common.back") + " " + t("common.map")}>
               <ArrowLeft size={18} />
             </a>
 
             <div className="camera-progress">
               <span className={!isScanComplete && !isAnalyzing ? 'active' : 'completed'}>
-                1 · Quét
+                1 · {t("camera.scan")}
               </span>
               <i></i>
               <span className={isAnalyzing ? 'active' : isScanComplete ? 'completed' : ''}>
-                2 · Nhận diện AI
+                2 · {t("camera.recognition")}
               </span>
               <i></i>
               <span className={isScanComplete ? 'active' : ''}>
-                3 · Khám phá
+                3 · {t("camera.discover")}
               </span>
             </div>
 
@@ -106,8 +112,8 @@ function CameraPage({ onVerifyCheckin }) {
               type="button"
               className={`round-btn ${isTorchOn ? 'torch-active' : ''}`}
               onClick={toggleTorch}
-              title="Bật/tắt đèn chiếu sáng"
-              aria-label="Bật đèn"
+              title={t("camera.torch")}
+              aria-label={t("camera.torchOn")}
             >
               {isTorchOn ? <SunMedium size={18} /> : <Sun size={18} />}
             </button>
@@ -115,7 +121,7 @@ function CameraPage({ onVerifyCheckin }) {
 
           {/* Banner vị trí GPS thời gian thực */}
           <LocationBanner
-            targetLocation={targetLocation}
+            targetLocation={displayedTargetLocation}
             setTargetLocation={setTargetLocation}
             distanceMeters={distanceMeters}
             gpsAccuracy={gpsAccuracy}
@@ -130,16 +136,16 @@ function CameraPage({ onVerifyCheckin }) {
             cameraError={cameraError}
             isAnalyzing={isAnalyzing}
             capturedImage={capturedImage}
-            targetLocation={targetLocation}
+            targetLocation={displayedTargetLocation}
           />
 
           {/* Bảng điều khiển nút bấm phía dưới */}
           {!isScanComplete ? (
             <div className="camera-bottom scan-ready">
-              <span className="camera-kicker">Nhận diện công trình & Hiện vật</span>
-              <h2>Hướng camera về phía {targetLocation?.name || 'Khuê Văn Các'}</h2>
+              <span className="camera-kicker">{t("camera.kicker")}</span>
+              <h2>{t("camera.pointCamera", { name: displayedTargetLocation?.name || t("camera.defaultSite") })}</h2>
               <p>
-                Hệ thống AI sẽ đối chiếu đặc trưng kiến trúc và GPS để xác nhận lượt tham quan và trao con dấu di sản.
+                {t("camera.description")}
               </p>
 
               <button
@@ -149,13 +155,13 @@ function CameraPage({ onVerifyCheckin }) {
                 disabled={isAnalyzing}
               >
                 <CameraIcon size={16} />
-                <span>{isAnalyzing ? 'Đang phân tích hình ảnh...' : 'Bắt đầu quét'}</span>
+                <span>{isAnalyzing ? t("camera.analyzing") : t("camera.start")}</span>
               </button>
               {scanError && <p role="alert">{scanError}</p>}
             </div>
           ) : (
             <ScanResultModal
-              location={targetLocation}
+              location={displayedTargetLocation}
               distanceMeters={distanceMeters}
               onResetScan={handleResetScan}
             />

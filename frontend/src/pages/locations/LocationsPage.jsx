@@ -1,5 +1,7 @@
 import { LockKeyhole } from 'lucide-react'
 import { detailPaths, paths } from '../../routes.js'
+import { useLanguage } from '../../i18n/LanguageContext.jsx'
+import { LOCATION_TRANSLATION_KEYS } from '../../i18n/locationKeys.js'
 
 const locations = [
   {
@@ -74,36 +76,36 @@ const locations = [
   },
 ]
 
-function LocationCard({ location, unlocked }) {
+function LocationCard({ location, unlocked, t }) {
   return (
     <article className={`location-card${unlocked ? '' : ' locked'}`}>
       <div className="location-image">
         <img
           className="shape-art heritage-photo"
           src={`/images/heritage/${location.image}`}
-          alt={location.name}
+          alt={t('locations.names.' + LOCATION_TRANSLATION_KEYS[location.id])}
           loading="lazy"
         />
         <span className={`badge${unlocked ? ' done' : ''}`}>
-          {unlocked ? '✓ Đã mở khóa' : 'Chưa mở khóa'}
+          {unlocked ? '✓ ' + t('common.unlocked') : t('common.locked')}
         </span>
       </div>
       <div className="location-body">
         <h3>
-          {unlocked ? <a href={detailPaths[location.id]}>{location.name}</a> : location.name}
+          {unlocked ? <a href={detailPaths[location.id]}>{t('locations.names.' + LOCATION_TRANSLATION_KEYS[location.id])}</a> : t('locations.names.' + LOCATION_TRANSLATION_KEYS[location.id])}
         </h3>
-        <p>{location.description}</p>
+        <p>{t('locations.descriptions.' + LOCATION_TRANSLATION_KEYS[location.id])}</p>
         <div className="meta">
           <span>⌖ {location.distance}</span>
         </div>
         {unlocked ? (
           <a className="btn btn-outline btn-block" href={detailPaths[location.id]}>
-            Xem câu chuyện
+            {t('common.readStory')}
           </a>
         ) : (
           <button className="btn btn-outline btn-block locked-action" type="button" disabled>
             <LockKeyhole size={16} aria-hidden="true" />
-            Chưa mở khóa
+            {t('common.locked')}
           </button>
         )}
       </div>
@@ -112,6 +114,7 @@ function LocationCard({ location, unlocked }) {
 }
 
 function LocationsPage({ unlockedLocations }) {
+  const { t } = useLanguage()
   const unlockedCount = locations.filter((location) => unlockedLocations.has(location.id)).length
 
   return (
@@ -120,19 +123,19 @@ function LocationsPage({ unlockedLocations }) {
         <div className="inner">
           <div className="catalog-back">
             <a className="btn btn-light" href={paths.explore}>
-              ← Quay lại
+              ← {t('common.back')}
             </a>
           </div>
-          <div className="eyebrow">Công trình kiến trúc</div>
-          <h1>Tất cả địa điểm</h1>
-          <p>Khám phá đầy đủ 10 công trình trong quần thể Văn Miếu – Quốc Tử Giám.</p>
+          <div className="eyebrow">{t('locations.eyebrow')}</div>
+          <h1>{t('locations.title')}</h1>
+          <p>{t('locations.description')}</p>
         </div>
       </header>
       <div className="container">
         <div className="catalog-summary">
-          <span>10 công trình</span>
-          <span>{unlockedCount} đã mở khóa</span>
-          <span>{locations.length - unlockedCount} chưa mở khóa</span>
+          <span>{t('locations.total')}</span>
+          <span>{t('locations.unlockedCount', { count: unlockedCount })}</span>
+          <span>{t('locations.lockedCount', { count: locations.length - unlockedCount })}</span>
         </div>
         <div className="cards all-cards">
           {locations.map((location) => (
@@ -140,6 +143,7 @@ function LocationsPage({ unlockedLocations }) {
               key={location.id}
               location={location}
               unlocked={unlockedLocations.has(location.id)}
+              t={t}
             />
           ))}
         </div>

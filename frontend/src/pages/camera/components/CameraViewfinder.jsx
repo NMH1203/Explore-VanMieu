@@ -1,4 +1,6 @@
 import { Camera, Image as ImageIcon, AlertCircle } from 'lucide-react'
+import { useLanguage } from '../../../i18n/LanguageContext.jsx'
+import { getLocationTranslationKey } from '../../../i18n/locationKeys.js'
 
 export default function CameraViewfinder({
   videoRef,
@@ -10,6 +12,8 @@ export default function CameraViewfinder({
   targetLocation,
   onSimulateCapture,
 }) {
+  const { t } = useLanguage()
+  const targetName = targetLocation ? t('locations.names.' + getLocationTranslationKey(targetLocation.id)) : t('camera.defaultSite')
   return (
     <div className="camera-viewfinder-container">
       {/* 1. Lớp hiển thị video thật hoặc fallback mô phỏng */}
@@ -31,11 +35,11 @@ export default function CameraViewfinder({
           <div className="fallback-badge">
             {cameraError ? (
               <span>
-                <AlertCircle size={14} /> Chế độ mô phỏng AI (Chưa bật camera)
+                <AlertCircle size={14} /> {t("camera.simulation")}
               </span>
             ) : (
               <span>
-                <Camera size={14} /> Đang kết nối camera thiết bị...
+                <Camera size={14} /> {t("camera.connecting")}
               </span>
             )}
           </div>
@@ -44,7 +48,7 @@ export default function CameraViewfinder({
 
       {/* Nếu đã chụp ảnh thì hiển thị ảnh chụp đóng băng */}
       {capturedImage && (
-        <img src={capturedImage} alt="Ảnh chụp" className="captured-preview-img" />
+        <img src={capturedImage} alt={t("camera.captured")} className="captured-preview-img" />
       )}
 
       {/* 2. Kính ngắm di sản (Viewfinder) */}
@@ -60,8 +64,8 @@ export default function CameraViewfinder({
         {/* Thông báo hướng dẫn trong kính ngắm */}
         <div className="scan-hint">
           {isAnalyzing
-            ? '⚡ AI đang phân tích kiến trúc & tọa độ...'
-            : `Giữ ${targetLocation?.name || 'công trình'} nằm trọn trong khung`}
+            ? t("camera.analyzingHint")
+            : t("camera.frameHint", { name: targetName })}
         </div>
       </div>
     </div>
