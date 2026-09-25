@@ -218,6 +218,7 @@ JWT_SECRET_KEY=chuoi_bi_mat_ngau_nhien_cua_ban
 YESCALE_API_KEY=api_key_yescale_cua_ban
 YESCALE_BASE_URL=https://api.yescale.io/v1
 YESCALE_VISION_MODEL=gpt-4o-mini
+YESCALE_CHAT_MODEL=gpt-4o-mini
 YESCALE_MIN_CONFIDENCE=0.70
 ```
 
@@ -322,11 +323,23 @@ Giá trị `YESCALE_VISION_MODEL` phải là model có khả năng nhận ảnh 
 khoản YEScale hỗ trợ. Nếu dashboard không có `gpt-4o-mini`, hãy thay bằng tên
 model vision hiển thị trên dashboard.
 
+### 4.9 Thử trợ lý hỏi đáp lịch sử
+
+1. Đăng nhập và mở một địa điểm đã được mở khóa.
+2. Nhập câu hỏi trong hộp **AI Heritage Guide** ở cuối trang chi tiết.
+3. Backend lấy tư liệu của địa điểm từ `heritage_locations`, gọi model được cấu
+   hình bằng `YESCALE_CHAT_MODEL`, rồi lưu cả câu hỏi và câu trả lời vào
+   `chat_messages`.
+4. Tải lại trang để kiểm tra lịch sử trò chuyện vẫn được giữ theo tài khoản.
+
+API tương ứng là `POST /api/chat` để gửi câu hỏi và
+`GET /api/chat/{location_id}` để tải tối đa 50 lượt trò chuyện gần nhất.
+
 SQLite được dùng cho môi trường phát triển. Mỗi máy có file
 `database/explore_van_mieu.db` riêng, nên tài khoản không tự đồng bộ giữa các
 thành viên.
 
-### 4.9 Tạo và xem bản build production
+### 4.10 Tạo và xem bản build production
 
 ```powershell
 cd frontend
@@ -334,7 +347,7 @@ npm run build
 npm run preview
 ```
 
-### 4.10 Lỗi thường gặp
+### 4.11 Lỗi thường gặp
 
 #### `No module named backend`
 

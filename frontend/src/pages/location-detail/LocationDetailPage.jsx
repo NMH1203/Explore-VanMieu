@@ -1,6 +1,7 @@
-import { Award, Check, LockKeyhole, Plus, Send } from 'lucide-react'
+import { Award, Check, LockKeyhole } from 'lucide-react'
 import { paths } from '../../routes.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
+import HeritageMessageBox from './components/HeritageMessageBox.jsx'
 
 const items = [
   [
@@ -217,39 +218,12 @@ function Detail({ item, unlocked }) {
               </article>
             </div>
           </div>
-          <section className="ai-guide" aria-label={t("detail.aiLabel", { title: t("detail.items." + item.id + ".title") })}>
-            <header className="ai-guide-header">
-              <div className="ai-avatar">AI</div>
-              <div>
-                <span>AI Heritage Guide</span>
-                <h2>{t("detail.askMore", { title: t("detail.items." + item.id + ".title") })}</h2>
-              </div>
-              <span className="ai-status">{t("detail.online")}</span>
-            </header>
-            <div className="ai-chat-body">
-              <div className="ai-message">
-                <div className="mini-avatar">AI</div>
-                <div>
-                  <span className="message-label">{t("detail.assistant")}</span>
-                  <div className="bubble ai">
-                    {t("detail.question", { title: t("detail.items." + item.id + ".title") })}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="ai-composer">
-              <button className="composer-tool" aria-label={t("detail.add")}>
-                <Plus size={19} />
-              </button>
-              <label>
-                <span className="sr-only">{t("detail.inputLabel")}</span>
-                <input placeholder={t("detail.placeholder", { title: t("detail.items." + item.id + ".title") })} />
-              </label>
-              <button className="send-button" aria-label={t("detail.send")}>
-                <Send size={18} />
-              </button>
-            </div>
-          </section>
+          {!item.id.startsWith('figure-') && (
+            <HeritageMessageBox
+              locationId={item.id}
+              locationName={t("detail.items." + item.id + ".title")}
+            />
+          )}
         </div>
       </div>
     </section>
