@@ -1,5 +1,6 @@
 import { Award, Check, LockKeyhole } from 'lucide-react'
 import { paths } from '../../routes.js'
+import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import HeritageMessageBox from './components/HeritageMessageBox.jsx'
 
 const items = [
@@ -141,15 +142,16 @@ const items = [
 }))
 
 function Detail({ item, unlocked }) {
+  const { t } = useLanguage()
   if (!unlocked) {
     return (
       <section className="screen" id={item.id}>
         <div className="locked-detail">
           <LockKeyhole size={44} aria-hidden="true" />
-          <h1>{item.title}</h1>
-          <p>Câu chuyện của địa điểm này chưa được mở khóa.</p>
+          <h1>{t("detail.items." + item.id + ".title")}</h1>
+          <p>{t("detail.locked")}</p>
           <a className="btn btn-primary" href={paths.locations}>
-            Quay lại các công trình
+            {t("detail.backToSites")}
           </a>
         </div>
       </section>
@@ -160,14 +162,14 @@ function Detail({ item, unlocked }) {
     <section className="screen" id={item.id}>
       <div className="interpret-layout">
         <div className="interpret-visual">
-          <img className="interpret-art heritage-photo" src={item.image} alt={item.title} />
+          <img className="interpret-art heritage-photo" src={item.image} alt={t("detail.items." + item.id + ".title")} />
           <div className="interpret-title">
-            <span className="eyebrow">{item.type}</span>
-            <h1>{item.title}</h1>
-            <span>Văn Miếu – Quốc Tử Giám</span>
+            <span className="eyebrow">{t("detail.items." + item.id + ".type")}</span>
+            <h1>{t("detail.items." + item.id + ".title")}</h1>
+            <span>{t("nav.version")}</span>
           </div>
           <a className="interpret-scroll" href={`#${item.id}-story`}>
-            Khám phá câu chuyện <span>↓</span>
+            {t("detail.exploreStory")} <span>↓</span>
           </a>
         </div>
         <div className="interpret-content" id={`${item.id}-story`}>
@@ -178,19 +180,19 @@ function Detail({ item, unlocked }) {
                   <Check size={20} />
                 </span>
                 <div>
-                  <b>Nội dung di sản đã được mở</b>
-                  <span>Tư liệu Văn Miếu – Quốc Tử Giám.</span>
+                  <b>{t("detail.unlocked")}</b>
+                  <span>{t("detail.materials")}</span>
                 </div>
               </div>
               <article className="article">
-                <span className="kicker">Câu chuyện di sản</span>
-                <h2>{item.heading}</h2>
-                <p>{item.story}</p>
+                <span className="kicker">{t("detail.story")}</span>
+                <h2>{t("detail.items." + item.id + ".heading")}</h2>
+                <p>{t("detail.items." + item.id + ".story")}</p>
               </article>
               <div className="fact">
-                <strong>Dấu ấn nổi bật</strong>
+                <strong>{t("detail.featured")}</strong>
                 <br />
-                {item.story}
+                {t("detail.items." + item.id + ".story")}
               </div>
             </div>
             <div>
@@ -199,19 +201,19 @@ function Detail({ item, unlocked }) {
                   <div className="achievement-icon">
                     <Award size={28} />
                   </div>
-                  <h2>Tiếp tục hành trình</h2>
-                  <p>Khám phá thêm những lớp lịch sử và truyền thống hiếu học của di tích.</p>
+                  <h2>{t("detail.continue")}</h2>
+                  <p>{t("detail.continueDescription")}</p>
                   <a className="btn btn-primary" href={paths.explore}>
-                    Quay lại hành trình
+                    {t("detail.backToJourney")}
                   </a>
                 </div>
               </div>
               <article className="article heritage-stamp">
-                <span className="kicker">Dấu ấn của bạn</span>
-                <h2>Câu chuyện đã được ghi nhận</h2>
-                <p>Nội dung này đã được thêm vào hành trình khám phá.</p>
+                <span className="kicker">{t("detail.yourStamp")}</span>
+                <h2>{t("detail.recorded")}</h2>
+                <p>{t("detail.added")}</p>
                 <a className="btn btn-outline" href={paths.passport}>
-                  Xem hộ chiếu
+                  {t("detail.viewPassport")}
                 </a>
               </article>
             </div>
@@ -219,7 +221,7 @@ function Detail({ item, unlocked }) {
           {!item.id.startsWith('figure-') && (
             <HeritageMessageBox
               locationId={item.id}
-              locationName={item.title}
+              locationName={t("detail.items." + item.id + ".title")}
             />
           )}
         </div>

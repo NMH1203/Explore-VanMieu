@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Check, LockKeyhole, ArrowRight, Camera } from 'lucide-react'
+import { useLanguage } from '../../../i18n/LanguageContext.jsx'
 
 export default function LocationSidebar({
   locations,
@@ -7,6 +8,7 @@ export default function LocationSidebar({
   selectedLocation,
   onSelectLocation,
 }) {
+  const { t } = useLanguage()
   const itemRefs = useRef({})
 
   // Tự động cuộn đến thẻ tương ứng khi người dùng click vào Marker trên bản đồ
@@ -23,8 +25,8 @@ export default function LocationSidebar({
     <aside className="map-locations-sidebar">
       <div className="sidebar-header">
         <div>
-          <h3>10 Công trình di tích</h3>
-          <p>Nhấp vào một địa điểm để định vị trên bản đồ</p>
+          <h3>{t("map.sites")}</h3>
+          <p>{t("map.selectHint")}</p>
         </div>
         <span className="unlocked-counter">
           {locations.filter((l) => unlockedLocations.has(l.id)).length}/10
@@ -70,11 +72,11 @@ export default function LocationSidebar({
                   <div className="card-actions-row" onClick={(e) => e.stopPropagation()}>
                     {isUnlocked ? (
                       <a href={loc.detailPath} className="btn-card-action primary">
-                        Xem câu chuyện di sản <ArrowRight size={14} />
+                        {t("map.story")} <ArrowRight size={14} />
                       </a>
                     ) : (
                       <a href="/Explore/Camera" className="btn-card-action gold">
-                        <Camera size={14} /> Quét để mở khóa
+                        <Camera size={14} /> {t("camera.start")}
                       </a>
                     )}
                   </div>
