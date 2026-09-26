@@ -18,6 +18,7 @@ from backend.src.routes.locations import create_location_router
 from backend.src.routes.chat import router as chat_router
 from backend.src.routes.checkins import router as checkins_router
 from backend.src.routes.progress import router as progress_router
+from backend.src.routes.journey import router as journey_router
 from backend.src.services.passwords import hash_password, verify_password
 from backend.src.services.tokens import create_access_token
 
@@ -50,6 +51,7 @@ def create_app() -> FastAPI:
     application.include_router(progress_router)
     application.include_router(checkins_router)
     application.include_router(chat_router)
+    application.include_router(journey_router)
 
     @application.post(
         "/api/auth/register",
