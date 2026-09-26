@@ -494,7 +494,7 @@ function HomePage({ unlockedLocations }) {
               </button>
               <label>
                 <span className="sr-only">{t("home.ai.inputLabel")}</span>
-                <input type="text" placeholder={t("home.ai.placeholder")} />
+                <input name="ai-message sample" type="text" placeholder={t("home.ai.placeholder")} />
               </label>
               <button className="send-button" aria-label={t("home.ai.send")}>
                 <Send size={18} aria-hidden="true" />

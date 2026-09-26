@@ -220,6 +220,23 @@ body:has(#heritage-awakened:checked) .achievement-gate {
   padding: 28px;
   background: radial-gradient(circle at 100% 0, #31588355, transparent 42%);
 }
+.chat-exchange {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+.ai-chat-state,
+.ai-chat-error {
+  margin: 14px 24px;
+  font-size: 10px;
+}
+.ai-chat-state {
+  color: #ffffff91;
+  text-align: center;
+}
+.ai-chat-error {
+  color: #ffd0ca;
+}
 .ai-message {
   display: flex;
   gap: 11px;
@@ -280,7 +297,7 @@ body:has(#heritage-awakened:checked) .achievement-gate {
 }
 .ai-composer {
   display: grid;
-  grid-template-columns: 38px 1fr 42px;
+  grid-template-columns: 1fr 42px;
   gap: 10px;
   align-items: center;
   margin: 0 24px;
@@ -308,6 +325,10 @@ body:has(#heritage-awakened:checked) .achievement-gate {
 .send-button {
   border: 0;
   cursor: pointer;
+}
+.send-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 .composer-tool {
   color: #ffffff91;

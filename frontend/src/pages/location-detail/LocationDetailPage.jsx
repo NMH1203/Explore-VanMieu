@@ -1,6 +1,7 @@
-import { Award, Check, LockKeyhole, Plus, Send } from 'lucide-react'
+import { Award, Check, LockKeyhole } from 'lucide-react'
 import { paths } from '../../routes.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
+import HeritageMessageBox from './components/HeritageMessageBox.jsx'
 
 const items = [
   [
@@ -62,7 +63,7 @@ const items = [
   [
     'location-bell-drum-tower',
     'Công trình',
-    'Lầu Chuông – Lầu Trống',
+    'Lầu Chuông - Lầu Trống',
     'bell-drum-tower.webp',
     'Cặp công trình tạo thế cân xứng',
     'Hai lầu đứng hai bên khu Thái Học, tạo bố cục đăng đối và gợi nhịp nghi lễ, sinh hoạt của không gian giáo dục truyền thống.',
@@ -250,6 +251,12 @@ function Detail({ item, unlocked }) {
               </button>
             </div>
           </section>
+          {!item.id.startsWith('figure-') && (
+            <HeritageMessageBox
+              locationId={item.id}
+              locationName={item.title}
+            />
+          )}
         </div>
       </div>
     </section>
