@@ -25,8 +25,30 @@
   background: #fffbf2;
 }
 .stamp-wrap .art-stamp.collected {
-  border-color: var(--gold);
+  border-width: 4px;
+  border-style: solid;
 }
+
+/* 1 location */
+.stamp-wrap .art-stamp.collected.bronze {
+  border-color: #cd7f32;
+}
+
+/* 3 locations */
+.stamp-wrap .art-stamp.collected.silver {
+  border-color: #c0c0c0;
+}
+
+/* 5 locations */
+.stamp-wrap .art-stamp.collected.gold {
+  border-color: #d4af37;
+}
+
+/* 10 locations */
+.stamp-wrap .art-stamp.collected.platinum {
+  border-color: #e5e4e2;
+}
+
 .art-stamp img {
   width: 100%;
   height: 100%;
@@ -37,6 +59,20 @@
   opacity: 0.52;
   filter: grayscale(0.8) blur(2px);
 }
+.art-stamp.collected img {
+  opacity: 1;
+  filter: none;
+}
+
+.art-stamp.collected {
+  box-shadow: 0 0 12px rgba(255, 215, 120, 0.35);
+  transition: all 0.3s ease;
+}
+
+.art-stamp.collected:hover {
+  transform: scale(1.04);
+}
+
 .stamp-wrap span {
   display: block;
   color: var(--lacquer-dark);
@@ -67,14 +103,50 @@
   color: white;
   background: var(--stone);
 }
-.milestone.current {
-  border-color: #d9a44180;
-  background: var(--gold-pale);
+.milestone.achieved {
+  transition: all 0.3s ease;
 }
-.milestone.current .milestone-icon {
+
+.milestone.achieved:nth-child(1) {
+  border-color: #cd7f32;
+  background: rgba(205, 127, 50, 0.08);
+}
+
+.milestone.achieved:nth-child(1) .milestone-icon {
+  color: white;
+  background: #cd7f32;
+}
+
+.milestone.achieved:nth-child(2) {
+  border-color: #c0c0c0;
+  background: rgba(192, 192, 192, 0.12);
+}
+
+.milestone.achieved:nth-child(2) .milestone-icon {
+  color: #333;
+  background: #c0c0c0;
+}
+
+.milestone.achieved:nth-child(3) {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.10);
+}
+
+.milestone.achieved:nth-child(3) .milestone-icon {
   color: var(--wood);
-  background: var(--gold);
+  background: #d4af37;
 }
+
+.milestone.achieved:nth-child(4) {
+  border-color: #e5e4e2;
+  background: rgba(229, 228, 226, 0.15);
+}
+
+.milestone.achieved:nth-child(4) .milestone-icon {
+  color: #333;
+  background: #e5e4e2;
+}
+
 .milestone h3 {
   margin: 0 0 4px;
   font-size: 12px;
