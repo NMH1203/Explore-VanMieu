@@ -17,7 +17,7 @@ def get_current_user(
     if user_id is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token không hợp lệ hoặc đã hết hạn",
+            detail="The token is invalid or has expired.",
         )
 
     with Session(engine) as session:
@@ -25,6 +25,6 @@ def get_current_user(
         if user is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Tài khoản không tồn tại",
+                detail="The user account does not exist.",
             )
         return user

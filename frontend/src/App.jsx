@@ -13,6 +13,7 @@ import { getRoute, normalizeInitialUrl, paths } from './routes.js'
 import { getCurrentUser, logout } from './services/auth.js'
 import { getProgress } from './services/progress.js'
 import { verifyCheckin } from './services/checkins.js'
+import { useLanguage } from './i18n/LanguageContext.jsx'
 
 normalizeInitialUrl()
 const protectedPages = new Set(['account', 'camera'])
@@ -21,6 +22,7 @@ function App() {
   const [pathname, setPathname] = useState(window.location.pathname)
   const [user, setUser] = useState(undefined)
   const [unlockedLocations, setUnlockedLocations] = useState(new Set())
+  const { t } = useLanguage()
   const isAuthenticated = Boolean(user)
   const route = getRoute(pathname)
   useEffect(() => {
@@ -47,7 +49,7 @@ function App() {
         ))
       })
       .catch((error) => {
-        console.error('Không thể tải tiến độ:', error)
+        console.error('Unable to load progress:', error)
         if (!ignoreResult) setUnlockedLocations(new Set())
       })
 
@@ -184,8 +186,8 @@ function App() {
     default:
       page = (
         <section className="screen locked-detail">
-          <h1>Không tìm thấy trang</h1>
-          <a className="btn btn-primary" href={paths.explore}>Quay lại Khám phá</a>
+          <h1>{t('common.notFound')}</h1>
+          <a className="btn btn-primary" href={paths.explore}>{t('common.backToExplore')}</a>
         </section>
       )
   }
@@ -196,13 +198,13 @@ function App() {
         className="theme-toggle"
         type="checkbox"
         id="heritage-awakened"
-        aria-label="Trạng thái mở khóa bảng màu Sơn son – Hoàng kỳ"
+        aria-label={t('app.themeStatus')}
       />
       <input
         className="scan-toggle"
         type="checkbox"
         id="scan-complete"
-        aria-label="Trạng thái nhận diện công trình"
+        aria-label={t('app.scanStatus')}
       />
       <Navigation />
       <main>{page}</main>

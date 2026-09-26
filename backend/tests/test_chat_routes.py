@@ -28,13 +28,13 @@ class ChatRouteTests(unittest.IsolatedAsyncioTestCase):
         location = HeritageLocation(
             location_id="interpret",
             yolo_label="khue_van_cac",
-            name="Khuê Văn Các",
+            name="Constellation of Literature Pavilion",
             sequence_order=3,
             latitude=21.02868,
             longitude=105.83592,
             geofence_radius=30,
-            story_summary="Biểu tượng của văn chương và ánh sáng tri thức.",
-            deep_history="Khuê Văn Các được xây dựng vào đầu thế kỷ XIX.",
+            story_summary="A symbol of literature and the light of knowledge.",
+            deep_history="The pavilion was built in the early nineteenth century.",
         )
         with Session(self.engine) as session:
             session.add(user)
@@ -70,20 +70,20 @@ class ChatRouteTests(unittest.IsolatedAsyncioTestCase):
     async def test_answer_is_saved_and_returned_in_history(self):
         with patch(
             "backend.src.routes.chat.answer_heritage_question",
-            new=AsyncMock(return_value="Đây là biểu tượng của văn chương."),
+            new=AsyncMock(return_value="It is a symbol of literature."),
         ):
             response = await ask_heritage_guide(
                 ChatRequest(
                     location_id="interpret",
-                    question="Công trình này có ý nghĩa gì?",
+                    question="What does this structure represent?",
                 ),
                 self.user,
             )
 
-        self.assertEqual(response.answer, "Đây là biểu tượng của văn chương.")
+        self.assertEqual(response.answer, "It is a symbol of literature.")
         history = list_chat_history("interpret", self.user)
         self.assertEqual(len(history), 1)
-        self.assertEqual(history[0].question, "Công trình này có ý nghĩa gì?")
+        self.assertEqual(history[0].question, "What does this structure represent?")
 
     async def test_history_is_isolated_between_users(self):
         with Session(self.engine) as session:
@@ -97,8 +97,8 @@ class ChatRouteTests(unittest.IsolatedAsyncioTestCase):
                 ChatMessage(
                     user_id=self.user_id,
                     location_id="interpret",
-                    user_question="Câu hỏi riêng",
-                    gemini_answer="Câu trả lời riêng",
+                    user_question="Private question",
+                    gemini_answer="Private answer",
                 )
             )
             session.commit()
@@ -115,7 +115,7 @@ class ChatRouteTests(unittest.IsolatedAsyncioTestCase):
                 await ask_heritage_guide(
                     ChatRequest(
                         location_id="missing",
-                        question="Đây là đâu?",
+                        question="What is this place?",
                     ),
                     self.user,
                 )
@@ -133,7 +133,7 @@ class ChatRouteTests(unittest.IsolatedAsyncioTestCase):
                 await ask_heritage_guide(
                     ChatRequest(
                         location_id="interpret",
-                        question="Công trình này có ý nghĩa gì?",
+                        question="What does this structure represent?",
                     ),
                     self.other_user,
                 )

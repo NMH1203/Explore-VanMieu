@@ -12,7 +12,7 @@ class ChatRequest(BaseModel):
     def normalize_question(cls, value: str) -> str:
         normalized = " ".join(value.split())
         if len(normalized) < 2:
-            raise ValueError("Câu hỏi phải có ít nhất 2 ký tự")
+            raise ValueError("The question must contain at least 2 characters.")
         return normalized
 
 

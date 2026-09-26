@@ -1,4 +1,6 @@
 import { Camera, Image as ImageIcon, AlertCircle } from 'lucide-react'
+import { useLanguage } from '../../../i18n/LanguageContext.jsx'
+import { getLocationTranslationKey } from '../../../i18n/locationKeys.js'
 
 export default function CameraViewfinder({
   videoRef,
@@ -10,18 +12,20 @@ export default function CameraViewfinder({
   targetLocation,
   onSimulateCapture,
 }) {
+  const { t } = useLanguage()
+  const targetName = targetLocation ? t('locations.names.' + getLocationTranslationKey(targetLocation.id)) : t('camera.defaultSite')
   return (
     <div className="camera-viewfinder-container">
-      {/* 1. Lớp hiển thị video thật hoặc fallback mô phỏng */}
-      {isStreaming ? (
-        <video
+      {/* 1. Live video or fallback layer */}
+      <video
           ref={videoRef}
+          style={{ display: isStreaming ? undefined : 'none' }}
           playsInline
           autoPlay
           muted
           className={`camera-live-video ${isAnalyzing ? 'blur' : ''}`}
         />
-      ) : (
+      {!isStreaming && (
         <div
           className="camera-art-fallback"
           style={{
@@ -31,37 +35,37 @@ export default function CameraViewfinder({
           <div className="fallback-badge">
             {cameraError ? (
               <span>
-                <AlertCircle size={14} /> Chế độ mô phỏng AI (Chưa bật camera)
+                <AlertCircle size={14} /> {t("camera.simulation")}
               </span>
             ) : (
               <span>
-                <Camera size={14} /> Đang kết nối camera thiết bị...
+                <Camera size={14} /> {t("camera.connecting")}
               </span>
             )}
           </div>
         </div>
       )}
 
-      {/* Nếu đã chụp ảnh thì hiển thị ảnh chụp đóng băng */}
+      {/* Display the captured frame when available */}
       {capturedImage && (
-        <img src={capturedImage} alt="Ảnh chụp" className="captured-preview-img" />
+        <img src={capturedImage} alt={t("camera.captured")} className="captured-preview-img" />
       )}
 
-      {/* 2. Kính ngắm di sản (Viewfinder) */}
+      {/* 2. Heritage viewfinder */}
       <div className={`viewfinder ${isAnalyzing ? 'analyzing' : ''}`}>
         <span className="corner tl"></span>
         <span className="corner tr"></span>
         <span className="corner bl"></span>
         <span className="corner br"></span>
 
-        {/* Đường quét tia laser */}
+        {/* Animated scan line */}
         <div className={`scan-line ${isAnalyzing ? 'fast-scan' : ''}`}></div>
 
-        {/* Thông báo hướng dẫn trong kính ngắm */}
+        {/* Viewfinder instructions */}
         <div className="scan-hint">
           {isAnalyzing
-            ? '⚡ AI đang phân tích kiến trúc & tọa độ...'
-            : `Giữ ${targetLocation?.name || 'công trình'} nằm trọn trong khung`}
+            ? t("camera.analyzingHint")
+            : t("camera.frameHint", { name: targetName })}
         </div>
       </div>
     </div>

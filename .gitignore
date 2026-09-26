@@ -3,15 +3,22 @@ backend/.venv/
 __pycache__/
 *.pyc
 
-# Bí mật cấu hình
+# Configuration secrets
 .env
 .env.*
 !.env.example
 
-# Database chạy trên máy cá nhân
+# Local self-signed HTTPS credentials shared by the development servers
+/backend-local.key
+/backend-local.crt
+
+# Local development databases
 database/*.db
 database/*.db-*
 
 # Frontend
 frontend/node_modules/
 frontend/dist/
+
+# Isolated HTTPS/load-test certificates, databases, and server logs
+.local-test/

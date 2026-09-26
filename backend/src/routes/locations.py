@@ -1,56 +1,77 @@
-"""Location progress endpoints backed by the authenticated SQL user."""
+"""Read database locations and expose only verified user unlocks.
 
-from fastapi import APIRouter, Cookie, HTTPException
-from sqlmodel import Session
+This router is registered by ``backend/src/app/main.py``. Location data comes
+from ``backend/src/models/heritage_location.py`` and user unlock state comes
+from ``backend/src/models/user_history.py``. Verified evidence is written by
+``backend/src/routes/checkins.py`` to ``backend/src/models/checkin_log.py``.
+"""
+
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import Session, select
 
 from backend.src.config.db import engine
+from backend.src.dependencies.auth import get_current_user
+from backend.src.models.checkin_log import CheckinLog
+from backend.src.models.heritage_location import HeritageLocation
 from backend.src.models.location import LocationStatus
 from backend.src.models.user import User
-from backend.src.repositories.location_repository import LocationRepository
-from backend.src.services.tokens import get_user_id_from_token
+from backend.src.models.user_history import UserHistory
 
 
-def create_location_router(repository: LocationRepository) -> APIRouter:
+def create_location_router() -> APIRouter:
+    """Build location endpoints backed by SQLite and the signed-in user's history."""
     router = APIRouter(prefix="/api/locations", tags=["Locations"])
 
-    def current_user(session_token: str | None) -> User | None:
-        user_id = get_user_id_from_token(session_token) if session_token else None
-        if user_id is None:
-            return None
-        with Session(engine) as database:
-            return database.get(User, user_id)
-
     @router.get("", response_model=list[LocationStatus])
-    def list_locations(session_token: str | None = Cookie(default=None, alias="session")):
-        """Guests see all locations locked; signed-in users receive their own progress."""
-        locations = repository.list_locations()
-        user = current_user(session_token)
-        unlocked_ids = set(user.unlocked_location_ids) if user else set()
-        return [item.model_copy(update={"unlocked": item.id in unlocked_ids}) for item in locations]
+    def list_locations(current_user: User = Depends(get_current_user)):
+        """Return the seeded locations with unlock flags from user_history."""
+        with Session(engine) as session:
+            locations = session.exec(
+                select(HeritageLocation).order_by(HeritageLocation.sequence_order)
+            ).all()
+            unlocked_ids = set(session.exec(
+                select(UserHistory.location_id).where(
+                    UserHistory.user_id == current_user.user_id,
+                    UserHistory.status.is_(True),
+                )
+            ).all())
+            return [
+                LocationStatus(id=item.location_id, unlocked=item.location_id in unlocked_ids)
+                for item in locations
+            ]
 
     @router.put("/{location_id}/unlock", response_model=LocationStatus)
     def unlock_location(
         location_id: str,
-        session_token: str | None = Cookie(default=None, alias="session"),
+        current_user: User = Depends(get_current_user),
     ):
-        """Persist an unlock for the authenticated account."""
-        user_id = get_user_id_from_token(session_token) if session_token else None
-        if user_id is None:
-            raise HTTPException(status_code=401, detail="Authentication required.")
-        locations = repository.list_locations()
-        location = next((item for item in locations if item.id == location_id), None)
-        if location is None:
-            raise HTTPException(status_code=404, detail="Location not found.")
-        with Session(engine) as database:
-            user = database.get(User, user_id)
-            if user is None:
-                raise HTTPException(status_code=401, detail="Authentication required.")
-            unlocked_ids = list(user.unlocked_location_ids or [])
-            if location_id not in unlocked_ids:
-                unlocked_ids.append(location_id)
-                user.unlocked_location_ids = unlocked_ids
-                database.add(user)
-                database.commit()
-        return location.model_copy(update={"unlocked": True})
+        """Synchronize a verified check-in into user_history; never grant by request alone."""
+        with Session(engine) as session:
+            location = session.get(HeritageLocation, location_id)
+            if location is None:
+                raise HTTPException(status_code=404, detail="Location not found.")
+
+            verified_checkin = session.exec(
+                select(CheckinLog.log_id).where(
+                    CheckinLog.user_id == current_user.user_id,
+                    CheckinLog.target_location_id == location_id,
+                    CheckinLog.verification_status == "verified",
+                ).limit(1)
+            ).first()
+            if verified_checkin is None:
+                raise HTTPException(
+                    status_code=409,
+                    detail="A verified GPS and image check-in is required to unlock this location.",
+                )
+
+            history = session.get(UserHistory, (current_user.user_id, location_id))
+            if history is None:
+                session.add(UserHistory(user_id=current_user.user_id, location_id=location_id))
+                session.commit()
+            elif not history.status:
+                history.status = True
+                session.add(history)
+                session.commit()
+            return LocationStatus(id=location_id, unlocked=True)
 
     return router

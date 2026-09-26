@@ -1,5 +1,5 @@
 /* ==========================================================================
-   BẢN ĐỒ VĂN MIẾU (INTERACTIVE MAP & 10 LOCATIONS)
+   TEMPLE OF LITERATURE MAP (TEN LOCATIONS)
    ========================================================================== */
 
 .map-page-grid {
@@ -41,7 +41,7 @@
   z-index: 1;
 }
 
-/* Chú giải trạng thái nổi trên bản đồ */
+/* Map status legend */
 .map-overlay-legend {
   position: absolute;
   top: 14px;
@@ -84,7 +84,7 @@
   box-shadow: 0 0 6px rgba(185, 28, 28, 0.5);
 }
 
-/* Nút tiện ích trên bản đồ */
+/* Map controls */
 .map-overlay-controls {
   position: absolute;
   top: 14px;
@@ -160,7 +160,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Card Thông tin Địa điểm đang chọn dưới bản đồ
+   Selected location card below the map
    -------------------------------------------------------------------------- */
 .map-selected-card {
   display: flex;
@@ -245,7 +245,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Sidebar Danh sách 10 Địa danh
+   Sidebar listing the ten heritage sites
    -------------------------------------------------------------------------- */
 .map-locations-sidebar {
   background: var(--surface, #ffffff);
@@ -303,7 +303,7 @@
   border-radius: 4px;
 }
 
-/* Thẻ đơn lẻ trong danh sách */
+/* Individual location card */
 .sidebar-location-card {
   display: flex;
   gap: 12px;

@@ -1,10 +1,4 @@
-async function parseResponse(response) {
-  const data = await response.json().catch(() => ({}))
-  if (!response.ok) {
-    throw new Error(data.detail || 'Không thể xác minh lượt check-in')
-  }
-  return data
-}
+import { handleResponse } from './response.js'
 
 export async function verifyCheckin({ imageDataUrl, locationId, latitude, longitude }) {
   const imageBlob = await fetch(imageDataUrl).then((response) => response.blob())
@@ -19,5 +13,5 @@ export async function verifyCheckin({ imageDataUrl, locationId, latitude, longit
     credentials: 'include',
     body: formData,
   })
-  return parseResponse(response)
+  return handleResponse(response, 'Unable to verify check-in')
 }

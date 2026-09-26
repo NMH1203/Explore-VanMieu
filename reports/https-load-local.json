@@ -1,0 +1,202 @@
+{
+  "tls": {
+    "certificate_verified": true,
+    "untrusted_certificate_rejected": true,
+    "secure_httponly_samesite_cookie": true,
+    "logout_verified": true,
+    "spa_deep_links": true,
+    "static_assets": true,
+    "private_files_not_exposed": true,
+    "api_cache_disabled": true,
+    "protocol": "TLSv1.3",
+    "cipher": "TLS_AES_256_GCM_SHA384"
+  },
+  "stages": [
+    {
+      "concurrent_users": 10,
+      "journey_duration_seconds": 10,
+      "requests": 750,
+      "errors": 0,
+      "elapsed_seconds": 12.18,
+      "requests_per_second": 61.56,
+      "p50_ms": 119.12,
+      "p95_ms": 251.01,
+      "p99_ms": 1078.07,
+      "max_ms": 1166.05,
+      "status_counts": {
+        "200": 740,
+        "401": 10
+      },
+      "failure_examples": [],
+      "endpoints": {
+        "POST /api/auth/login": {
+          "requests": 10,
+          "p95_ms": 1166.05
+        },
+        "GET /Explore/Ban-Do": {
+          "requests": 90,
+          "p95_ms": 171.55
+        },
+        "GET /assets/index-BnTrIqxn.js": {
+          "requests": 90,
+          "p95_ms": 241.47
+        },
+        "GET /assets/index-BJxq-HUy.css": {
+          "requests": 90,
+          "p95_ms": 175.5
+        },
+        "GET /images/heritage/khue-van-cac.webp": {
+          "requests": 90,
+          "p95_ms": 217.76
+        },
+        "GET /api/auth/me": {
+          "requests": 100,
+          "p95_ms": 144.94
+        },
+        "GET /api/progress": {
+          "requests": 90,
+          "p95_ms": 170.63
+        },
+        "GET /api/locations": {
+          "requests": 90,
+          "p95_ms": 210.44
+        },
+        "POST /api/checkins/verify": {
+          "requests": 90,
+          "p95_ms": 317.31
+        },
+        "POST /api/auth/logout": {
+          "requests": 10,
+          "p95_ms": 89.59
+        }
+      }
+    },
+    {
+      "concurrent_users": 25,
+      "journey_duration_seconds": 10,
+      "requests": 1171,
+      "errors": 0,
+      "elapsed_seconds": 13.56,
+      "requests_per_second": 86.36,
+      "p50_ms": 180.39,
+      "p95_ms": 628.95,
+      "p99_ms": 2026.47,
+      "max_ms": 3017.1,
+      "status_counts": {
+        "200": 1146,
+        "401": 25
+      },
+      "failure_examples": [],
+      "endpoints": {
+        "POST /api/auth/login": {
+          "requests": 25,
+          "p95_ms": 3009.93
+        },
+        "GET /Explore/Ban-Do": {
+          "requests": 137,
+          "p95_ms": 360.26
+        },
+        "GET /assets/index-BnTrIqxn.js": {
+          "requests": 137,
+          "p95_ms": 823.59
+        },
+        "GET /assets/index-BJxq-HUy.css": {
+          "requests": 137,
+          "p95_ms": 308.9
+        },
+        "GET /images/heritage/khue-van-cac.webp": {
+          "requests": 137,
+          "p95_ms": 432.7
+        },
+        "GET /api/auth/me": {
+          "requests": 162,
+          "p95_ms": 288.44
+        },
+        "GET /api/progress": {
+          "requests": 137,
+          "p95_ms": 447.41
+        },
+        "GET /api/locations": {
+          "requests": 137,
+          "p95_ms": 335.45
+        },
+        "POST /api/checkins/verify": {
+          "requests": 137,
+          "p95_ms": 813.19
+        },
+        "POST /api/auth/logout": {
+          "requests": 25,
+          "p95_ms": 129.66
+        }
+      }
+    },
+    {
+      "concurrent_users": 50,
+      "journey_duration_seconds": 10,
+      "requests": 1958,
+      "errors": 0,
+      "elapsed_seconds": 14.69,
+      "requests_per_second": 133.3,
+      "p50_ms": 230.51,
+      "p95_ms": 748.9,
+      "p99_ms": 3548.29,
+      "max_ms": 4293.68,
+      "status_counts": {
+        "200": 1908,
+        "401": 50
+      },
+      "failure_examples": [],
+      "endpoints": {
+        "POST /api/auth/login": {
+          "requests": 50,
+          "p95_ms": 4257.96
+        },
+        "GET /Explore/Ban-Do": {
+          "requests": 226,
+          "p95_ms": 362.16
+        },
+        "GET /assets/index-BnTrIqxn.js": {
+          "requests": 226,
+          "p95_ms": 866.83
+        },
+        "GET /assets/index-BJxq-HUy.css": {
+          "requests": 226,
+          "p95_ms": 404.7
+        },
+        "GET /images/heritage/khue-van-cac.webp": {
+          "requests": 226,
+          "p95_ms": 590.65
+        },
+        "GET /api/auth/me": {
+          "requests": 276,
+          "p95_ms": 1148.49
+        },
+        "GET /api/progress": {
+          "requests": 226,
+          "p95_ms": 384.47
+        },
+        "GET /api/locations": {
+          "requests": 226,
+          "p95_ms": 382.94
+        },
+        "POST /api/checkins/verify": {
+          "requests": 226,
+          "p95_ms": 730.69
+        },
+        "POST /api/auth/logout": {
+          "requests": 50,
+          "p95_ms": 139.41
+        }
+      }
+    }
+  ],
+  "rejected_gps_rows": 453,
+  "timestamp_utc": "2026-09-26T10:20:27.158444+00:00",
+  "environment": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "logical_cpus": 8,
+  "workers": 1,
+  "scope": "Local loopback HTTPS, production static build, real SQLite, real password verification; no AI calls or browser rendering.",
+  "load_model": "Closed-loop distinct user sessions, simultaneous login, sequential mixed requests, 100 ms think time per loop; duration starts after each login.",
+  "work_directory": ".local-test\\20260926-171938-848839"
+}

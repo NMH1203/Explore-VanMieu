@@ -1,6 +1,9 @@
+import { useLanguage } from '../../i18n/LanguageContext.jsx'
+
 function AccountPage({ user, onLogout, unlockedLocations }) {
+  const { t, lang } = useLanguage()
   const unlockedCount = unlockedLocations.size
-  const displayName = user?.username || user?.email || 'Đang tải...'
+  const displayName = user?.username || user?.email || t('common.loading')
   const avatarText = displayName[0].toUpperCase()
 
   return (
@@ -20,55 +23,55 @@ function AccountPage({ user, onLogout, unlockedLocations }) {
         <div className="account-grid section">
           <div className="stat-card">
             <strong>{unlockedCount}</strong>
-            <span>Địa điểm / 10</span>
+            <span>{t('account.locations')}</span>
           </div>
           <div className="stat-card">
             <strong>{unlockedCount}</strong>
-            <span>Dấu ấn / 10</span>
+            <span>{t('account.stamps')}</span>
           </div>
           <div className="stat-card">
             <strong>1</strong>
-            <span>Cột mốc / 4</span>
+            <span>{t('account.milestones')}</span>
           </div>
         </div>
         <section className="panel section">
-          <h2>Truy cập nhanh</h2>
+          <h2>{t('account.quick')}</h2>
           <div className="quick-grid">
             <a className="btn btn-outline" href="/Explore/Ho-Chieu">
-              Hộ chiếu
+              {t('common.passport')}
             </a>
             <a className="btn btn-outline" href="/Explore/Ban-Do">
-              Bản đồ
+              {t('common.map')}
             </a>
             <a className="btn btn-outline" href="/Explore/Camera">
-              Camera
+              {t('common.camera')}
             </a>
             <a className="btn btn-outline" href="/Explore">
-              Khám phá
+              {t('common.explore')}
             </a>
           </div>
         </section>
         <section className="panel settings section">
-          <h2>Cài đặt</h2>
+          <h2>{t('account.settings')}</h2>
           <div className="setting">
-            <span>🌐 Ngôn ngữ</span>
-            <span>Tiếng Việt ›</span>
+            <span>{t('account.language')}</span>
+            <span>{t(lang === 'en' ? 'account.english' : 'account.vietnamese')}</span>
           </div>
           <div className="setting">
-            <span>🔔 Thông báo</span>
-            <span>Đang bật ›</span>
+            <span>{t('account.notifications')}</span>
+            <span>{t('account.enabled')}</span>
           </div>
           <div className="setting">
-            <span>📍 GPS</span>
-            <span>Luôn bật ›</span>
+            <span>{t('account.gps')}</span>
+            <span>{t('account.alwaysOn')}</span>
           </div>
           <div className="setting">
-            <span>☀ Chủ đề</span>
-            <span>Sáng ›</span>
+            <span>{t('account.theme')}</span>
+            <span>{t('account.light')}</span>
           </div>
         </section>
         <button className="btn btn-outline btn-block" type="button" onClick={onLogout}>
-          Đăng xuất
+          {t('common.logout')}
         </button>
       </div>
     </section>

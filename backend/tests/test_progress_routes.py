@@ -1,4 +1,9 @@
-"""Tests for per-user progress stored in SQLite."""
+"""Test progress-route behavior using an isolated in-memory SQLite database.
+
+The route under test is ``backend/src/routes/progress.py``. Its response is
+built from the user and history models and is expected to include progress for
+all ten catalog locations while remaining isolated between users.
+"""
 
 import unittest
 from unittest.mock import patch
@@ -32,22 +37,27 @@ class ProgressRouteTests(unittest.TestCase):
             password_hash="not-used-in-this-test",
             username="Other",
         )
-        self.location_id = "van-mieu-gate"
-        location = HeritageLocation(
-            location_id=self.location_id,
-            yolo_label="van_mieu_gate",
-            name="Cổng Văn Miếu",
-            sequence_order=1,
-            latitude=21.027,
-            longitude=105.835,
-            geofence_radius=30,
-            story_summary="Test location",
-        )
+        # Seed ten distinct locations so the route is checked across the full
+        # visit sequence instead of relying on a single-location fixture.
+        self.location_ids = [f"test-location-{index}" for index in range(1, 11)]
+        locations = [
+            HeritageLocation(
+                location_id=location_id,
+                yolo_label=f"test_label_{index}",
+                name=f"Test Location {index}",
+                sequence_order=index,
+                latitude=21.027,
+                longitude=105.835,
+                geofence_radius=30,
+                story_summary=f"Test location {index}",
+            )
+            for index, location_id in enumerate(self.location_ids, start=1)
+        ]
 
         with Session(self.engine) as session:
             session.add(user)
             session.add(other_user)
-            session.add(location)
+            session.add_all(locations)
             session.commit()
             session.refresh(user)
             session.refresh(other_user)
@@ -72,19 +82,27 @@ class ProgressRouteTests(unittest.TestCase):
         self.engine_patch.start()
         self.addCleanup(self.engine_patch.stop)
 
-    def add_progress(self, user_id):
+    def add_progress(self, user_id, location_id):
         with Session(self.engine) as session:
-            session.add(UserHistory(user_id=user_id, location_id=self.location_id))
+            session.add(UserHistory(user_id=user_id, location_id=location_id))
             session.commit()
 
-    def test_saved_progress_is_returned_for_current_user(self):
-        self.add_progress(self.user_id)
+    def test_saved_progress_is_returned_for_all_ten_locations(self):
+        # Iterate over every seeded location to verify that each saved unlock
+        # is returned for the signed-in user.
+        for location_id in self.location_ids:
+            with self.subTest(location_id=location_id):
+                self.add_progress(self.user_id, location_id)
+
         progress = list_progress(self.user)
-        self.assertEqual(len(progress), 1)
-        self.assertEqual(progress[0].user_id, self.user_id)
+        self.assertEqual(len(progress), 10)
+        self.assertEqual({item.location_id for item in progress}, set(self.location_ids))
+        self.assertTrue(all(item.user_id == self.user_id for item in progress))
 
     def test_progress_is_isolated_between_users(self):
-        self.add_progress(self.user_id)
+        for location_id in self.location_ids:
+            with self.subTest(location_id=location_id):
+                self.add_progress(self.user_id, location_id)
 
         self.assertEqual(list_progress(self.other_user), [])
 

@@ -7,6 +7,9 @@ from pathlib import Path
 
 import httpx
 from dotenv import load_dotenv
+from starlette.concurrency import run_in_threadpool
+
+from backend.src.services.image_processing import prepare_vision_image
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 load_dotenv(PROJECT_ROOT / ".env")
@@ -32,12 +35,12 @@ def _extract_json(content: str) -> dict:
     start = content.find("{")
     end = content.rfind("}")
     if start == -1 or end == -1 or end < start:
-        raise VisionProviderError("AI trả về dữ liệu không đúng định dạng JSON")
+        raise VisionProviderError("The AI returned data that is not valid JSON.")
 
     try:
         return json.loads(content[start:end + 1])
     except json.JSONDecodeError as error:
-        raise VisionProviderError("Không đọc được kết quả từ AI") from error
+        raise VisionProviderError("Could not parse the AI result.") from error
 
 
 async def recognize_heritage_image(
@@ -47,24 +50,26 @@ async def recognize_heritage_image(
 ) -> VisionResult:
     api_key = os.getenv("YESCALE_API_KEY", "").strip()
     if not api_key:
-        raise VisionConfigurationError("Thiếu YESCALE_API_KEY trong file .env")
+        raise VisionConfigurationError("YESCALE_API_KEY is missing from the .env file.")
 
     base_url = os.getenv("YESCALE_BASE_URL", "https://api.yescale.io/v1").rstrip("/")
     model = os.getenv("YESCALE_VISION_MODEL", "gpt-4o-mini")
-    encoded_image = base64.b64encode(image_bytes).decode("ascii")
+    prepared = await run_in_threadpool(prepare_vision_image, image_bytes)
+    encoded_image = base64.b64encode(prepared.data).decode("ascii")
     labels_text = ", ".join(allowed_labels)
 
     prompt = (
-        "Bạn là hệ thống nhận diện địa điểm tại Văn Miếu - Quốc Tử Giám. "
-        f"Chỉ được chọn một nhãn trong danh sách sau: {labels_text}. "
-        "Nếu ảnh không đủ rõ hoặc không khớp, dùng nhãn unknown. "
-        "Chỉ trả về một JSON có dạng "
+        "You identify locations at the Temple of Literature in Hanoi. "
+        f"Choose exactly one label from this list: {labels_text}. "
+        "If the image is unclear or does not match, use the label unknown. "
+        "Return only one JSON object in this format: "
         '{"label":"...","confidence":0.0,"reason":"..."}. '
-        "confidence nằm trong khoảng 0 đến 1."
+        "confidence must be between 0 and 1."
     )
     payload = {
         "model": model,
         "temperature": 0,
+        "max_tokens": 150,
         "messages": [
             {
                 "role": "user",
@@ -73,7 +78,8 @@ async def recognize_heritage_image(
                     {
                         "type": "image_url",
                         "image_url": {
-                            "url": f"data:{mime_type};base64,{encoded_image}",
+                            "url": f"data:{prepared.mime_type};base64,{encoded_image}",
+                            "detail": "low",
                         },
                     },
                 ],
@@ -91,7 +97,7 @@ async def recognize_heritage_image(
             response.raise_for_status()
             content = response.json()["choices"][0]["message"]["content"]
     except httpx.TimeoutException as error:
-        raise VisionProviderError("YEScale xử lý ảnh quá thời gian cho phép") from error
+        raise VisionProviderError("The YEScale image request timed out.") from error
     except httpx.HTTPStatusError as error:
         logger.warning(
             "YEScale returned HTTP %s: %s",
@@ -99,10 +105,10 @@ async def recognize_heritage_image(
             error.response.text[:500],
         )
         raise VisionProviderError(
-            f"YEScale từ chối yêu cầu (HTTP {error.response.status_code})"
+            f"YEScale rejected the image request (HTTP {error.response.status_code})."
         ) from error
     except (httpx.HTTPError, KeyError, IndexError, TypeError, ValueError) as error:
-        raise VisionProviderError("Không thể nhận kết quả từ YEScale") from error
+        raise VisionProviderError("Could not retrieve a result from YEScale.") from error
 
     result = _extract_json(content)
     label = str(result.get("label", "unknown")).strip()

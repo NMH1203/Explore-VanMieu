@@ -63,6 +63,7 @@
   display: grid;
   place-items: center;
   flex: 0 0 38px;
+  margin-top: 40px;
   margin-left: auto;
   border: 2px solid #ffffffc7;
   border-radius: 50%;
