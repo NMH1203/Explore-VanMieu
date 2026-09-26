@@ -23,7 +23,7 @@
 }
 
 body:has(#heritage-awakened:checked) {
-  /* Achievement unlocked: “Sơn son – Hoàng kỳ” */
+  /* Achievement colors: lacquer red and imperial gold */
   --lacquer: #991f1f;
   --lacquer-dark: #6e1515;
   --red: #da251d;
@@ -40,9 +40,13 @@ body:has(#heritage-awakened:checked) {
   box-sizing: border-box;
 }
 html {
-  /* Màu lộ ra khi vuốt quá mép trang bằng touchpad hoặc cảm ứng. */
+  /* Background revealed when scrolling beyond the page edge. */
   background-color: #242729;
   scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+  display: none;
 }
 body {
   margin: 0;
@@ -53,7 +57,17 @@ body {
     color 0.55s ease,
     background-color 0.55s ease;
 }
-.theme-toggle {
+#root,
+.heritage-app,
+main {
+  margin: 0;
+  min-height: 100%;
+}
+.heritage-app {
+  overflow-x: clip;
+}
+.theme-toggle,
+.scan-toggle {
   position: fixed;
   width: 1px;
   height: 1px;
@@ -87,6 +101,33 @@ img {
   flex-direction: column;
   color: white;
   background: linear-gradient(175deg, var(--lacquer) 0%, var(--lacquer-dark) 100%);
+}
+.language-switch {
+  position: fixed;
+  z-index: 60;
+  top: 14px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 60px;
+  color: var(--stone);
+  background: var(--warm);
+  box-shadow: var(--shadow);
+  font-size: 12px;
+}
+.language-switch button {
+  padding: 2px;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 600;
+}
+.language-switch button[aria-pressed='true'] {
+  color: var(--lacquer);
 }
 .brand {
   display: flex;

@@ -1,110 +1,111 @@
 import { LockKeyhole } from 'lucide-react'
-import { useUnlockedLocations } from '../../state/heritageProgress.js'
 import { detailPaths, paths } from '../../routes.js'
+import { useLanguage } from '../../i18n/LanguageContext.jsx'
+import { LOCATION_TRANSLATION_KEYS } from '../../i18n/locationKeys.js'
 
 const locations = [
   {
     id: 'location-van-mieu-gate',
-    name: 'Cổng Văn Miếu',
+    name: 'Temple of Literature Gate',
     image: 'van-mieu-gate.webp',
-    description: 'Lối vào đầu tiên mở ra trục kiến trúc và không gian đạo học.',
+    description: 'The first entrance opens onto the architectural axis and scholarly grounds.',
     distance: '280 m',
   },
   {
     id: 'location-dai-trung-gate',
-    name: 'Cổng Đại Trung',
+    name: 'Dai Trung Gate',
     image: 'dai-trung-gate.webp',
-    description: 'Cánh cổng dẫn vào không gian trung tâm của quần thể.',
+    description: 'The gate leads into the heart of the complex.',
     distance: '46 m',
   },
   {
     id: 'interpret',
-    name: 'Khuê Văn Các',
+    name: 'Khue Van Pavilion',
     image: 'khue-van-cac.webp',
-    description: 'Biểu tượng của văn chương, trí tuệ và Thủ đô Hà Nội.',
+    description: 'A symbol of literature, wisdom, and the capital Hanoi.',
     distance: '32 m',
   },
   {
     id: 'location-dai-thanh-gate',
-    name: 'Cổng Đại Thành',
+    name: 'Dai Thanh Gate',
     image: 'dai-thanh-gate.webp',
-    description: 'Cánh cổng đánh dấu lối vào khu điện thờ trang nghiêm.',
+    description: 'The gate marks the entrance to the solemn sanctuary.',
     distance: '95 m',
   },
   {
     id: 'location-dien-dai-thanh',
-    name: 'Điện Đại Thành',
+    name: 'Dai Thanh Hall',
     image: 'dien-dai-thanh.webp',
-    description: 'Không gian thờ Khổng Tử và các bậc hiền triết Nho học.',
+    description: 'A sanctuary honoring Confucius and the sages of Confucian learning.',
     distance: '120 m',
   },
   {
     id: 'location-thai-hoc-gate',
-    name: 'Cổng Thái Học',
+    name: 'Thai Hoc Gate',
     image: 'thai-hoc-gate.webp',
-    description: 'Lối chuyển tiếp vào khu vực tưởng niệm truyền thống giáo dục.',
+    description: 'The passage into an area commemorating Vietnam\'s educational tradition.',
     distance: '185 m',
   },
   {
     id: 'location-thai-hoc-house',
-    name: 'Nhà Thái Học',
+    name: 'Thai Hoc Hall',
     image: 'thai-hoc-building.webp',
-    description: 'Công trình tôn vinh Quốc Tử Giám và những người thầy tiêu biểu.',
+    description: 'A monument honoring the Imperial Academy and its notable teachers.',
     distance: '210 m',
   },
   {
     id: 'location-bell-drum-tower',
-    name: 'Lầu Chuông – Lầu Trống',
+    name: 'Bell and Drum Towers',
     image: 'bell-drum-tower.webp',
-    description: 'Cặp công trình tạo nhịp điệu cân xứng cho khu Thái Học.',
+    description: 'A pair of buildings lending balance to the Thai Hoc precinct.',
     distance: '235 m',
   },
   {
     id: 'location-octagonal-house',
-    name: 'Nhà Bát Giác',
+    name: 'Octagonal Pavilion',
     image: 'octagonal-house.webp',
-    description: 'Không gian kiến trúc tám cạnh giàu tính biểu tượng.',
+    description: 'An octagonal architectural space rich in symbolism.',
     distance: '260 m',
   },
   {
     id: 'location-phuong-dinh',
-    name: 'Phương Đình',
+    name: 'Phuong Dinh Pavilion',
     image: 'phuong-dinh.webp',
-    description: 'Điểm dừng chân nối kết cảnh quan và trục tham quan.',
+    description: 'A resting point linking the landscape to the visitor route.',
     distance: '175 m',
   },
 ]
 
-function LocationCard({ location, unlocked }) {
+function LocationCard({ location, unlocked, t }) {
   return (
     <article className={`location-card${unlocked ? '' : ' locked'}`}>
       <div className="location-image">
         <img
           className="shape-art heritage-photo"
           src={`/images/heritage/${location.image}`}
-          alt={location.name}
+          alt={t('locations.names.' + LOCATION_TRANSLATION_KEYS[location.id])}
           loading="lazy"
         />
         <span className={`badge${unlocked ? ' done' : ''}`}>
-          {unlocked ? '✓ Đã mở khóa' : 'Chưa mở khóa'}
+          {unlocked ? '✓ ' + t('common.unlocked') : t('common.locked')}
         </span>
       </div>
       <div className="location-body">
         <h3>
-          {unlocked ? <a href={detailPaths[location.id]}>{location.name}</a> : location.name}
+          {unlocked ? <a href={detailPaths[location.id]}>{t('locations.names.' + LOCATION_TRANSLATION_KEYS[location.id])}</a> : t('locations.names.' + LOCATION_TRANSLATION_KEYS[location.id])}
         </h3>
-        <p>{location.description}</p>
+        <p>{t('locations.descriptions.' + LOCATION_TRANSLATION_KEYS[location.id])}</p>
         <div className="meta">
           <span>⌖ {location.distance}</span>
         </div>
         {unlocked ? (
           <a className="btn btn-outline btn-block" href={detailPaths[location.id]}>
-            Xem câu chuyện
+            {t('common.readStory')}
           </a>
         ) : (
           <button className="btn btn-outline btn-block locked-action" type="button" disabled>
             <LockKeyhole size={16} aria-hidden="true" />
-            Chưa mở khóa
+            {t('common.locked')}
           </button>
         )}
       </div>
@@ -112,8 +113,8 @@ function LocationCard({ location, unlocked }) {
   )
 }
 
-function LocationsPage() {
-  const unlockedLocations = useUnlockedLocations()
+function LocationsPage({ unlockedLocations }) {
+  const { t } = useLanguage()
   const unlockedCount = locations.filter((location) => unlockedLocations.has(location.id)).length
 
   return (
@@ -122,19 +123,19 @@ function LocationsPage() {
         <div className="inner">
           <div className="catalog-back">
             <a className="btn btn-light" href={paths.explore}>
-              ← Quay lại
+              ← {t('common.back')}
             </a>
           </div>
-          <div className="eyebrow">Công trình kiến trúc</div>
-          <h1>Tất cả địa điểm</h1>
-          <p>Khám phá đầy đủ 10 công trình trong quần thể Văn Miếu – Quốc Tử Giám.</p>
+          <div className="eyebrow">{t('locations.eyebrow')}</div>
+          <h1>{t('locations.title')}</h1>
+          <p>{t('locations.description')}</p>
         </div>
       </header>
       <div className="container">
         <div className="catalog-summary">
-          <span>10 công trình</span>
-          <span>{unlockedCount} đã mở khóa</span>
-          <span>{locations.length - unlockedCount} chưa mở khóa</span>
+          <span>{t('locations.total')}</span>
+          <span>{t('locations.unlockedCount', { count: unlockedCount })}</span>
+          <span>{t('locations.lockedCount', { count: locations.length - unlockedCount })}</span>
         </div>
         <div className="cards all-cards">
           {locations.map((location) => (
@@ -142,6 +143,7 @@ function LocationsPage() {
               key={location.id}
               location={location}
               unlocked={unlockedLocations.has(location.id)}
+              t={t}
             />
           ))}
         </div>

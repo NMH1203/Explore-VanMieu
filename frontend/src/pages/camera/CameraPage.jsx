@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { SwitchCamera } from 'lucide-react'
-import { unlockLocation } from '../../state/heritageProgress.js'
 import { useCameraStream } from './hooks/useCameraStream.js'
 import { useLiveLocation } from './hooks/useLiveLocation.js'
 import CameraViewfinder from './components/CameraViewfinder.jsx'
@@ -8,7 +7,7 @@ import LocationBanner from './components/LocationBanner.jsx'
 import ScanResultModal from './components/ScanResultModal.jsx'
 import './camera.css'
 
-function CameraPage() {
+function CameraPage({ onVerifyCheckin }) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isScanComplete, setIsScanComplete] = useState(false)
   const [isFlashing, setIsFlashing] = useState(false)
@@ -29,6 +28,7 @@ function CameraPage() {
 
   // 2. Quản lý Tọa độ GPS & Xác định công trình
   const {
+    userCoords,
     targetLocation,
     distanceMeters,
     gpsAccuracy,
@@ -44,13 +44,22 @@ function CameraPage() {
     setTimeout(() => setIsFlashing(false), 180)
 
     // Chụp lại khung hình từ camera (đã tích hợp âm thanh tiếng "tách")
-    captureSnapshot()
+    const snapshot = captureSnapshot()
     setIsAnalyzing(true)
 
     // Mô phỏng AI phân tích nhận diện vật thể/hiện vật (1.2s)
-    setTimeout(() => {
-      if (targetLocation?.id) {
-        unlockLocation(targetLocation.id)
+    setTimeout(async () => {
+      if (onVerifyCheckin && targetLocation?.id) {
+        try {
+          await onVerifyCheckin({
+            imageDataUrl: snapshot,
+            locationId: targetLocation.id,
+            latitude: userCoords?.latitude || targetLocation.latitude,
+            longitude: userCoords?.longitude || targetLocation.longitude,
+          })
+        } catch (err) {
+          console.warn('Verify checkin notice:', err)
+        }
       }
       setIsAnalyzing(false)
       setIsScanComplete(true)

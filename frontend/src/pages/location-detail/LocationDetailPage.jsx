@@ -1,135 +1,136 @@
-import { Award, Check, LockKeyhole, Plus, Send } from 'lucide-react'
-import { useUnlockedLocations } from '../../state/heritageProgress.js'
+import { Award, Check, LockKeyhole } from 'lucide-react'
 import { paths } from '../../routes.js'
+import { useLanguage } from '../../i18n/LanguageContext.jsx'
+import HeritageMessageBox from './components/HeritageMessageBox.jsx'
 
 const items = [
   [
     'location-van-mieu-gate',
-    'Công trình',
-    'Cổng Văn Miếu',
+    'Site',
+    'Temple of Literature Gate',
     'van-mieu-gate.webp',
-    'Khởi đầu trục không gian đạo học',
-    'Lối vào chính mở ra hành trình qua năm lớp sân của quần thể Văn Miếu. Kiến trúc tam quan tạo ranh giới trang nghiêm giữa phố thị và không gian di sản.',
+    'Beginning of the scholarly axis',
+    'The main entrance begins a journey through the complex’s five courtyards. Its three-part gate marks a solemn boundary between the city and the heritage grounds.',
   ],
   [
     'location-dai-trung-gate',
-    'Công trình',
-    'Cổng Đại Trung',
+    'Site',
+    'Dai Trung Gate',
     'dai-trung-gate.webp',
-    'Cánh cổng dẫn vào trung tâm di tích',
-    'Đại Trung Môn đánh dấu bước chuyển vào lớp không gian sâu hơn. Hai cổng nhỏ Thành Đức và Đạt Tài gợi nhắc việc rèn đức, luyện tài.',
+    'Gateway to the heart of the complex',
+    'Dai Trung Gate marks the transition into the inner grounds. The smaller Thanh Duc and Dat Tai gates evoke the cultivation of virtue and talent.',
   ],
   [
     'interpret',
-    'Di sản đã thức tỉnh',
-    'Khuê Văn Các',
+    'Awakened heritage',
+    'Khue Van Pavilion',
     'khue-van-cac.webp',
-    'Biểu tượng của văn chương và ánh sáng tri thức',
-    'Công trình đầu thế kỷ XIX nổi bật với lầu vuông tám mái và bốn cửa sổ tròn. Tên gọi gợi sao Khuê, ngôi sao chủ về văn chương.',
+    'A symbol of literature and the light of knowledge',
+    'Built in the early 19th century, the pavilion is known for its square tower, eight roofs, and four round windows. Its name refers to the star Khue, associated with literature.',
   ],
   [
     'location-dai-thanh-gate',
-    'Công trình',
-    'Cổng Đại Thành',
+    'Site',
+    'Dai Thanh Gate',
     'dai-thanh-gate.webp',
-    'Lối vào không gian thờ tự',
-    'Cổng Đại Thành dẫn vào khu điện thờ Khổng Tử và các bậc hiền triết. Tên gọi biểu thị sự thành tựu lớn lao của học vấn và đạo đức.',
+    'Entrance to the sanctuary',
+    'Dai Thanh Gate leads to the sanctuary of Confucius and other sages. Its name evokes great achievement in learning and virtue.',
   ],
   [
     'location-dien-dai-thanh',
-    'Công trình',
-    'Điện Đại Thành',
+    'Site',
+    'Dai Thanh Hall',
     'dien-dai-thanh.webp',
-    'Trung tâm thờ tự của Văn Miếu',
-    'Điện Đại Thành là công trình trung tâm, nơi thờ Khổng Tử và các bậc hiền triết Nho học trong không gian gỗ sơn son trang nghiêm.',
+    'The Temple of Literature’s main sanctuary',
+    'Dai Thanh Hall is the central sanctuary, honoring Confucius and Confucian sages in a solemn lacquered timber setting.',
   ],
   [
     'location-thai-hoc-gate',
-    'Công trình',
-    'Cổng Thái Học',
+    'Site',
+    'Thai Hoc Gate',
     'thai-hoc-gate.webp',
-    'Dấu mốc chuyển vào khu Quốc Tử Giám',
-    'Cổng nối khu Đại Thành với khu Thái Học, có ba gian, mái ngói truyền thống và khoảng sân rộng tạo chiều sâu cho trục tham quan.',
+    'Gateway to the Imperial Academy precinct',
+    'The gate links the Dai Thanh and Thai Hoc precincts. Its three bays, traditional tiled roof, and broad courtyard extend the visitor’s view along the site axis.',
   ],
   [
     'location-thai-hoc-house',
-    'Công trình',
-    'Nhà Thái Học',
+    'Site',
+    'Thai Hoc Hall',
     'thai-hoc-building.webp',
-    'Không gian tiếp nối truyền thống Quốc học',
-    'Khu Thái Học được dựng trên nền Quốc Tử Giám xưa, giới thiệu lịch sử giáo dục và tưởng niệm những người có công với đạo học.',
+    'Continuing the national education tradition',
+    'Built on the grounds of the former Imperial Academy, the Thai Hoc precinct presents the history of education and commemorates those who advanced learning.',
   ],
   [
     'location-bell-drum-tower',
-    'Công trình',
-    'Lầu Chuông – Lầu Trống',
+    'Site',
+    'Bell and Drum Towers',
     'bell-drum-tower.webp',
-    'Cặp công trình tạo thế cân xứng',
-    'Hai lầu đứng hai bên khu Thái Học, tạo bố cục đăng đối và gợi nhịp nghi lễ, sinh hoạt của không gian giáo dục truyền thống.',
+    'A balanced pair of buildings',
+    'Standing on either side of the Thai Hoc precinct, the towers create a balanced composition and recall the rhythms of ceremony and daily life at a traditional academy.',
   ],
   [
     'location-octagonal-house',
-    'Công trình',
-    'Nhà Bát Giác',
+    'Site',
+    'Octagonal Pavilion',
     'octagonal-house.webp',
-    'Không gian tám cạnh giàu biểu tượng',
-    'Mặt bằng tám cạnh và hệ mái thanh thoát tạo một điểm dừng kiến trúc hài hòa giữa cảnh quan cây xanh và các tuyến tham quan.',
+    'An octagonal space rich in symbolism',
+    'Its eight-sided plan and graceful roof make this pavilion a harmonious pause among the greenery and visitor paths.',
   ],
   [
     'location-phuong-dinh',
-    'Công trình',
-    'Phương Đình',
+    'Site',
+    'Phuong Dinh Pavilion',
     'phuong-dinh.webp',
-    'Điểm dừng chân bên Hồ Văn',
-    'Công trình mặt bằng vuông kết nối cảnh quan Hồ Văn với quần thể di tích, tạo nơi nghỉ và quan sát trên trục tham quan.',
+    'A resting place by Van Lake',
+    'The square pavilion links the landscape of Van Lake with the historic complex, offering a place to rest and take in the visitor route.',
   ],
   [
     'figure-ly-thanh-tong',
-    'Danh nhân',
-    'Lý Thánh Tông',
+    'Historical figure',
+    'Ly Thanh Tong',
     'ly-thanh-tong.jpg',
-    'Vị vua cho dựng Văn Miếu',
-    'Năm 1070, Lý Thánh Tông cho dựng Văn Miếu tại Thăng Long, mở đầu truyền thống tôn vinh đạo học và các bậc tiên hiền.',
+    'The king who founded the Temple of Literature',
+    'In 1070, Ly Thanh Tong founded the Temple of Literature in Thang Long, beginning a tradition of honoring learning and the sages of the past.',
   ],
   [
     'figure-ly-nhan-tong',
-    'Danh nhân',
-    'Lý Nhân Tông',
+    'Historical figure',
+    'Ly Nhan Tong',
     'ly-nhan-tong.jpg',
-    'Người đặt nền móng cho Quốc Tử Giám',
-    'Ông tổ chức khoa thi đầu tiên năm 1075 và lập Quốc Tử Giám năm 1076 để đào tạo nhân tài cho đất nước.',
+    'Founder of the Imperial Academy',
+    'He held the first royal examination in 1075 and established the Imperial Academy in 1076 to educate the country’s talent.',
   ],
   [
     'figure-le-thanh-tong',
-    'Danh nhân',
-    'Lê Thánh Tông',
+    'Historical figure',
+    'Le Thanh Tong',
     'le-thanh-tong.jpg',
-    'Vị vua đề cao hiền tài và khoa cử',
-    'Năm 1484, nhà vua cho dựng những bia Tiến sĩ đầu tiên để ghi danh người hiền tài và khuyến khích việc học.',
+    'A king who championed talent and examinations',
+    'In 1484, the king commissioned the first doctoral steles to honor distinguished scholars and encourage learning.',
   ],
   [
     'figure-chu-van-an',
-    'Danh nhân',
-    'Chu Văn An',
+    'Historical figure',
+    'Chu Van An',
     'chu-van-an.jpg',
-    'Người thầy mẫu mực của muôn đời',
-    'Chu Văn An từng giữ chức Tư nghiệp Quốc Tử Giám; nhân cách thanh liêm và chính trực của ông trở thành biểu tượng của người thầy.',
+    'A teacher for the ages',
+    'Chu Van An served as rector of the Imperial Academy. His integrity and upright character became an enduring model for teachers.',
   ],
   [
     'figure-confucius',
-    'Danh nhân',
-    'Khổng Tử',
+    'Historical figure',
+    'Confucius',
     'confucius-statue.jpg',
-    'Bậc vạn thế sư biểu',
-    'Khổng Tử là nhà tư tưởng, nhà giáo lớn của phương Đông. Văn Miếu thờ ông và trở thành biểu tượng cho việc học cùng tu dưỡng đạo đức.',
+    'The exemplary teacher for all generations',
+    'Confucius was a major Eastern thinker and teacher. The Temple of Literature honors him and stands as a symbol of learning and moral cultivation.',
   ],
   [
     'figure-four-sages',
-    'Danh nhân',
-    'Tứ Phối',
+    'Historical figure',
+    'Four Sages',
     'nhan-tu.webp',
-    'Bốn bậc hiền triết phối thờ',
-    'Tứ Phối gồm Nhan Hồi, Tăng Sâm, Tử Tư và Mạnh Tử, những người kế thừa và phát triển tư tưởng của Khổng Tử.',
+    'Four sages honored alongside Confucius',
+    'The Four Sages are Yan Hui, Zengzi, Zisi, and Mencius, who inherited and developed Confucius’s teachings.',
   ],
 ].map(([id, type, title, file, heading, story]) => ({
   id,
@@ -141,15 +142,16 @@ const items = [
 }))
 
 function Detail({ item, unlocked }) {
+  const { t } = useLanguage()
   if (!unlocked) {
     return (
       <section className="screen" id={item.id}>
         <div className="locked-detail">
           <LockKeyhole size={44} aria-hidden="true" />
-          <h1>{item.title}</h1>
-          <p>Câu chuyện của địa điểm này chưa được mở khóa.</p>
+          <h1>{t("detail.items." + item.id + ".title")}</h1>
+          <p>{t("detail.locked")}</p>
           <a className="btn btn-primary" href={paths.locations}>
-            Quay lại các công trình
+            {t("detail.backToSites")}
           </a>
         </div>
       </section>
@@ -160,14 +162,14 @@ function Detail({ item, unlocked }) {
     <section className="screen" id={item.id}>
       <div className="interpret-layout">
         <div className="interpret-visual">
-          <img className="interpret-art heritage-photo" src={item.image} alt={item.title} />
+          <img className="interpret-art heritage-photo" src={item.image} alt={t("detail.items." + item.id + ".title")} />
           <div className="interpret-title">
-            <span className="eyebrow">{item.type}</span>
-            <h1>{item.title}</h1>
-            <span>Văn Miếu – Quốc Tử Giám</span>
+            <span className="eyebrow">{t("detail.items." + item.id + ".type")}</span>
+            <h1>{t("detail.items." + item.id + ".title")}</h1>
+            <span>{t("nav.version")}</span>
           </div>
           <a className="interpret-scroll" href={`#${item.id}-story`}>
-            Khám phá câu chuyện <span>↓</span>
+            {t("detail.exploreStory")} <span>↓</span>
           </a>
         </div>
         <div className="interpret-content" id={`${item.id}-story`}>
@@ -178,19 +180,19 @@ function Detail({ item, unlocked }) {
                   <Check size={20} />
                 </span>
                 <div>
-                  <b>Nội dung di sản đã được mở</b>
-                  <span>Tư liệu Văn Miếu – Quốc Tử Giám.</span>
+                  <b>{t("detail.unlocked")}</b>
+                  <span>{t("detail.materials")}</span>
                 </div>
               </div>
               <article className="article">
-                <span className="kicker">Câu chuyện di sản</span>
-                <h2>{item.heading}</h2>
-                <p>{item.story}</p>
+                <span className="kicker">{t("detail.story")}</span>
+                <h2>{t("detail.items." + item.id + ".heading")}</h2>
+                <p>{t("detail.items." + item.id + ".story")}</p>
               </article>
               <div className="fact">
-                <strong>Dấu ấn nổi bật</strong>
+                <strong>{t("detail.featured")}</strong>
                 <br />
-                {item.story}
+                {t("detail.items." + item.id + ".story")}
               </div>
             </div>
             <div>
@@ -199,66 +201,38 @@ function Detail({ item, unlocked }) {
                   <div className="achievement-icon">
                     <Award size={28} />
                   </div>
-                  <h2>Tiếp tục hành trình</h2>
-                  <p>Khám phá thêm những lớp lịch sử và truyền thống hiếu học của di tích.</p>
+                  <h2>{t("detail.continue")}</h2>
+                  <p>{t("detail.continueDescription")}</p>
                   <a className="btn btn-primary" href={paths.explore}>
-                    Quay lại hành trình
+                    {t("detail.backToJourney")}
                   </a>
                 </div>
               </div>
               <article className="article heritage-stamp">
-                <span className="kicker">Dấu ấn của bạn</span>
-                <h2>Câu chuyện đã được ghi nhận</h2>
-                <p>Nội dung này đã được thêm vào hành trình khám phá.</p>
+                <span className="kicker">{t("detail.yourStamp")}</span>
+                <h2>{t("detail.recorded")}</h2>
+                <p>{t("detail.added")}</p>
                 <a className="btn btn-outline" href={paths.passport}>
-                  Xem hộ chiếu
+                  {t("detail.viewPassport")}
                 </a>
               </article>
             </div>
           </div>
-          <section className="ai-guide" aria-label={`Hỏi AI về ${item.title}`}>
-            <header className="ai-guide-header">
-              <div className="ai-avatar">AI</div>
-              <div>
-                <span>AI Heritage Guide</span>
-                <h2>Hỏi thêm về {item.title}</h2>
-              </div>
-              <span className="ai-status">● Đang trực tuyến</span>
-            </header>
-            <div className="ai-chat-body">
-              <div className="ai-message">
-                <div className="mini-avatar">AI</div>
-                <div>
-                  <span className="message-label">Trợ lý di sản</span>
-                  <div className="bubble ai">
-                    Bạn muốn tìm hiểu lịch sử, kiến trúc hay ý nghĩa của {item.title}?
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="ai-composer">
-              <button className="composer-tool" aria-label="Thêm">
-                <Plus size={19} />
-              </button>
-              <label>
-                <span className="sr-only">Câu hỏi</span>
-                <input placeholder={`Hỏi AI về ${item.title}...`} />
-              </label>
-              <button className="send-button" aria-label="Gửi">
-                <Send size={18} />
-              </button>
-            </div>
-          </section>
+          {!item.id.startsWith('figure-') && (
+            <HeritageMessageBox
+              locationId={item.id}
+              locationName={t("detail.items." + item.id + ".title")}
+            />
+          )}
         </div>
       </div>
     </section>
   )
 }
 
-export default function LocationDetailPage({ id }) {
-  const unlockedLocations = useUnlockedLocations()
+export default function LocationDetailPage({ id, unlockedLocations }) {
   const item = items.find((candidate) => candidate.id === id)
   if (!item) return null
 
-  return <Detail item={item} unlocked={item.type === 'Danh nhân' || unlockedLocations.has(item.id)} />
+  return <Detail item={item} unlocked={item.type === 'Historical figure' || unlockedLocations.has(item.id)} />
 }

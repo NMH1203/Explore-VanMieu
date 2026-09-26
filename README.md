@@ -54,7 +54,8 @@ Các công nghệ backend dự kiến gồm:
 - Alembic
 - Pytest
 
-Backend Python hiện chưa được cài đặt trong dự án.
+Backend hiện đã có API quản lý tiến độ địa điểm và xác thực người dùng bằng
+FastAPI, SQLModel, SQLite, Argon2 và JWT lưu trong cookie `HttpOnly`.
 
 ### AI
 
@@ -65,6 +66,10 @@ Backend Python hiện chưa được cài đặt trong dự án.
 - Ollama để chạy mô hình ngôn ngữ cục bộ nếu cần.
 
 Các thư viện AI sẽ được cài đặt sau khi nhóm thống nhất mô hình và thiết bị triển khai.
+
+Trong giai đoạn demo, backend gọi API nhận diện ảnh tương thích OpenAI của
+YEScale. Khóa API chỉ nằm trong file `.env` của backend; frontend không được
+nhận hoặc lưu khóa này. YOLO có thể thay thế lớp dịch vụ này trong giai đoạn sau.
 
 ### Cơ sở dữ liệu
 
@@ -156,25 +161,108 @@ Explore VanMieu/
 | `docs` | Chứa tài liệu API, cơ sở dữ liệu, sơ đồ và yêu cầu dự án. |
 | `deployment` | Chứa cấu hình Docker, Nginx và các script triển khai. |
 
-## 4. Cài đặt và chạy frontend
+## 4. Cài đặt và chạy dự án
 
-### Yêu cầu
+Các lệnh bên dưới được chạy từ thư mục gốc của repository, nơi có các thư mục
+`backend`, `database` và `frontend`.
 
-- Node.js phiên bản 18 trở lên.
+### 4.1 Yêu cầu
+
+- Node.js 20.19+ or 22.12+ (required by the installed Vite version).
 - npm.
+- Python phiên bản 3.12 trở lên.
+- Git.
 
-### Cài đặt thư viện
+Kiểm tra các công cụ đã được cài:
 
-Từ thư mục gốc của dự án, chạy:
+```powershell
+git --version
+node --version
+npm --version
+python --version
+```
 
-```bash
+### 4.2 Lấy mã nguồn
+
+```powershell
+git clone https://github.com/NMH1203/Explore-VanMieu.git
+cd Explore-VanMieu
+```
+
+Nếu đã clone dự án từ trước:
+
+```powershell
+git switch main
+git pull origin main
+```
+
+### 4.3 Cài đặt backend
+
+Tạo môi trường Python riêng và cài thư viện:
+
+```powershell
+python -m venv backend\.venv
+backend\.venv\Scripts\python.exe -m pip install -r backend\requirements.txt
+```
+
+Create a `.env` file in the repository root if it does not exist.
+Use the settings below and keep your existing credentials when updating it.
+
+Mở `.env` và thay giá trị mẫu bằng một chuỗi bí mật riêng:
+
+```env
+JWT_SECRET_KEY=replace_with_a_random_secret
+YESCALE_API_KEY=replace_with_your_provider_api_key
+YESCALE_BASE_URL=https://api.yescale.io/v1
+YESCALE_VISION_MODEL=gpt-4o-mini
+YESCALE_CHAT_MODEL=gpt-4o-mini
+YESCALE_MIN_CONFIDENCE=0.70
+```
+
+Có thể tạo một chuỗi ngẫu nhiên bằng lệnh:
+
+```powershell
+backend\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_urlsafe(64))"
+```
+
+Không commit file `.env`. File này đã được khai báo trong `.gitignore`.
+
+Tạo database SQLite, toàn bộ các bảng và dữ liệu mẫu của 10 địa điểm:
+
+```powershell
+backend\.venv\Scripts\python.exe -m database.init_db
+backend\.venv\Scripts\python.exe -m database.seed_locations
+```
+
+Khởi động backend:
+
+```powershell
+backend\.venv\Scripts\python.exe -m uvicorn backend.src.app.main:app --reload --port 8000
+```
+
+Khi terminal hiện `Application startup complete`, mở tài liệu API tại:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Giữ terminal backend đang chạy trong khi sử dụng website.
+
+> Các lệnh backend phải chạy từ thư mục gốc. Nếu đang đứng trong thư mục
+> `backend`, hãy chạy `cd ..` trước.
+
+### 4.4 Cài đặt frontend
+
+Mở terminal thứ hai và chạy:
+
+```powershell
 cd frontend
 npm install
 ```
 
-### Chạy môi trường phát triển
+### 4.5 Chạy môi trường phát triển
 
-```bash
+```powershell
 npm run dev
 ```
 
@@ -184,17 +272,108 @@ Vite sẽ hiển thị địa chỉ truy cập trong terminal. Địa chỉ mặ
 http://localhost:5173
 ```
 
-### Tạo bản build production
+Trang đăng nhập/đăng ký:
 
-```bash
-npm run build
+```text
+http://localhost:5173/Explore/Dang-Nhap
 ```
 
-### Xem thử bản build production
+Frontend gọi các đường dẫn `/api/...`; Vite sẽ chuyển tiếp yêu cầu đến backend
+đang chạy tại `http://127.0.0.1:8000`.
 
-```bash
+### 4.6 Kiểm tra dự án
+
+Chạy test backend từ thư mục gốc:
+
+```powershell
+backend\.venv\Scripts\python.exe -m unittest discover -s backend/tests
+```
+
+Kiểm tra frontend có build thành công:
+
+```powershell
+cd frontend
+npm run build
+cd ..
+```
+
+### 4.7 Thử luồng đăng nhập
+
+1. Mở trang đăng nhập và chọn **Đăng ký**.
+2. Nhập họ tên, email và mật khẩu có ít nhất 8 ký tự.
+3. Đăng nhập bằng tài khoản vừa tạo.
+4. Tải lại trang để kiểm tra phiên đăng nhập được giữ bằng cookie.
+5. Bấm **Đăng xuất** và tải lại trang để kiểm tra phiên đã bị xóa.
+
+### 4.8 Thử check-in bằng GPS và AI
+
+1. Điền `YESCALE_API_KEY` trong `.env`, rồi khởi động lại backend.
+2. Đăng nhập và mở trang **Camera** bằng điện thoại hoặc trình duyệt có camera.
+3. Cho phép trang web truy cập camera và vị trí GPS.
+4. Chọn địa điểm gần nhất, hướng camera vào công trình rồi bấm **Bắt đầu quét**.
+5. Backend kiểm tra khoảng cách trước để tránh gọi AI tốn phí khi người dùng ở xa.
+6. Nếu GPS nằm trong bán kính và nhãn ảnh khớp với địa điểm, backend ghi
+   `checkin_logs`, cập nhật `user_history` và frontend hiển thị con dấu.
+
+Ảnh được gửi thẳng đến YEScale để phân tích và hiện chưa được lưu xuống ổ đĩa.
+Giá trị `YESCALE_VISION_MODEL` phải là model có khả năng nhận ảnh đang được tài
+khoản YEScale hỗ trợ. Nếu dashboard không có `gpt-4o-mini`, hãy thay bằng tên
+model vision hiển thị trên dashboard.
+
+### 4.9 Thử trợ lý hỏi đáp lịch sử
+
+1. Đăng nhập và mở một địa điểm đã được mở khóa.
+2. Nhập câu hỏi trong hộp **AI Heritage Guide** ở cuối trang chi tiết.
+3. Backend lấy tư liệu của địa điểm từ `heritage_locations`, gọi model được cấu
+   hình bằng `YESCALE_CHAT_MODEL`, rồi lưu cả câu hỏi và câu trả lời vào
+   `chat_messages`.
+4. Tải lại trang để kiểm tra lịch sử trò chuyện vẫn được giữ theo tài khoản.
+
+API tương ứng là `POST /api/chat` để gửi câu hỏi và
+`GET /api/chat/{location_id}` để tải tối đa 50 lượt trò chuyện gần nhất.
+
+SQLite được dùng cho môi trường phát triển. Mỗi máy có file
+`database/explore_van_mieu.db` riêng, nên tài khoản không tự đồng bộ giữa các
+thành viên.
+
+### 4.10 Tạo và xem bản build production
+
+```powershell
+cd frontend
+npm run build
 npm run preview
 ```
+
+### 4.11 Lỗi thường gặp
+
+#### `No module named backend`
+
+Bạn đang chạy lệnh trong sai thư mục. Quay về thư mục gốc:
+
+```powershell
+cd ..
+```
+
+#### `JWT_SECRET_KEY` bị thiếu
+
+Create `.env` and set a random secret as described in section 4.3.
+
+#### `Thiếu YESCALE_API_KEY trong file .env`
+
+Điền khóa YEScale vào `.env` ở thư mục gốc rồi dừng và chạy lại backend.
+
+#### `'vite' is not recognized`
+
+Cài thư viện frontend trước:
+
+```powershell
+cd frontend
+npm install
+```
+
+#### Không mở được `http://127.0.0.1:8000/docs`
+
+Kiểm tra terminal backend còn chạy và đã hiện `Application startup complete`.
 
 ## 5. Thành viên
 

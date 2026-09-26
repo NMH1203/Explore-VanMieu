@@ -1,18 +1,19 @@
 import { Award, LockKeyhole, MapPin, Plus, ScanLine, Send, Sparkles, UserRound } from 'lucide-react'
 import JourneyCard from '../../components/JourneyCard.jsx'
-import { useUnlockedLocations } from '../../state/heritageProgress.js'
+import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
-function HomePage() {
-  const unlockedLocations = useUnlockedLocations()
+function HomePage({ unlockedLocations }) {
+  const { t } = useLanguage()
+  const khueVanCacUnlocked = unlockedLocations.has('interpret')
   const daiTrungUnlocked = unlockedLocations.has('location-dai-trung-gate')
   const thaiHocUnlocked = unlockedLocations.has('location-thai-hoc-house')
   const passportPreview = [
-    ['interpret', 'khue-van-cac.jpg', 'Khuê Văn Các'],
-    ['location-van-mieu-gate', 'cong-van-mieu.jpg', 'Cổng Văn Miếu'],
-    ['location-dai-trung-gate', 'cong-dai-trung.jpg', 'Cổng Đại Trung'],
-    ['location-dai-thanh-gate', 'cong-dai-thanh.jpg', 'Cổng Đại Thành'],
-    ['location-dien-dai-thanh', 'dien-dai-thanh.jpg', 'Điện Đại Thành'],
-    ['location-thai-hoc-gate', 'cong-thai-hoc.jpg', 'Cổng Thái Học'],
+    ['interpret', 'khue-van-cac.jpg', 'Khue Van Pavilion'],
+    ['location-van-mieu-gate', 'cong-van-mieu.jpg', 'Temple of Literature Gate'],
+    ['location-dai-trung-gate', 'cong-dai-trung.jpg', 'Dai Trung Gate'],
+    ['location-dai-thanh-gate', 'cong-dai-thanh.jpg', 'Dai Thanh Gate'],
+    ['location-dien-dai-thanh', 'dien-dai-thanh.jpg', 'Dai Thanh Hall'],
+    ['location-thai-hoc-gate', 'cong-thai-hoc.jpg', 'Thai Hoc Gate'],
   ]
 
   return (
@@ -21,62 +22,60 @@ function HomePage() {
         <img
           className="hero-bg heritage-photo"
           src="/images/heritage/van-mieu-hero.jpg"
-          alt="Cổng Văn Miếu – Quốc Tử Giám tại Hà Nội"
+          alt={t("home.hero.imageAlt")}
         />
         <header className="hero-header">
           <a className="hero-logo" href="/Explore">
             <img src="/images/brand-khue-van-cac.jpg" alt="" />
             Explore Van Mieu
           </a>
-          <a className="avatar" href="/Explore/Tai-Khoan" aria-label="Tài khoản">
+          <a className="avatar" href="/Explore/Tai-Khoan" aria-label={t("common.account")}>
             <UserRound size={23} strokeWidth={2} aria-hidden="true" />
           </a>
         </header>
         <div className="hero-copy">
-          <div className="eyebrow">Văn Miếu – Quốc Tử Giám</div>
+          <div className="eyebrow">{t("home.hero.eyebrow")}</div>
           <h1>
-            Chạm vào những lớp ký ức <span>của nghìn năm hiếu học</span>
+            {t("home.hero.title")} <span>{t("home.hero.subtitle")}</span>
           </h1>
           <p>
-            Mỗi bước chân mở ra một công trình, một nhân vật và một câu chuyện đã góp phần tạo nên
-            di sản tri thức Việt Nam.
+            {t("home.hero.description")}
           </p>
           <div className="hero-actions">
             <a className="btn btn-gold" href="#journey">
-              Bắt đầu khám phá →
+              {t("home.hero.start")}
             </a>
             <a className="btn btn-light" href="#journey">
-              Xem hành trình hôm nay
+              {t("home.hero.today")}
             </a>
           </div>
         </div>
         <a className="scroll-cue" href="#intro">
-          Cuộn để bắt đầu ↓
+          {t("home.hero.scroll")}
         </a>
       </div>
 
       <div className="intro" id="intro">
         <div className="container intro-grid">
           <div>
-            <span className="kicker">Di sản tri thức</span>
-            <h2>Nơi đạo học Việt Nam được gìn giữ qua nhiều thế kỷ</h2>
+            <span className="kicker">{t("home.intro.kicker")}</span>
+            <h2>{t("home.intro.title")}</h2>
             <p>
-              Không chỉ là một quần thể kiến trúc, Văn Miếu còn lưu giữ ký ức về giáo dục, khoa cử
-              và những thế hệ hiền tài của dân tộc.
+              {t("home.intro.description")}
             </p>
           </div>
           <div className="intro-stat">
             <div>
               <strong>1070</strong>
-              <span>Năm khởi dựng</span>
+              <span>{t("home.intro.founded")}</span>
             </div>
             <div>
               <strong>10</strong>
-              <span>Công trình</span>
+              <span>{t("home.intro.sites")}</span>
             </div>
             <div>
               <strong>82</strong>
-              <span>Bia tiến sĩ</span>
+              <span>{t("home.intro.steles")}</span>
             </div>
           </div>
         </div>
@@ -86,12 +85,11 @@ function HomePage() {
         <div className="container">
           <div className="how-heading">
             <div>
-              <span className="kicker">Bắt đầu thật đơn giản</span>
-              <h2 id="how-title">Khám phá Văn Miếu theo cách của bạn</h2>
+              <span className="kicker">{t("home.how.kicker")}</span>
+              <h2 id="how-title">{t("home.how.title")}</h2>
             </div>
             <p>
-              Chỉ cần điện thoại và vài phút tại mỗi điểm đến, bạn có thể mở từng lớp câu chuyện của
-              di sản.
+              {t("home.how.description")}
             </p>
           </div>
           <div className="use-flow">
@@ -100,7 +98,7 @@ function HomePage() {
                 <img
                   className="flow-photo"
                   src="/images/journey/find-nearby-heritage.jpg"
-                  alt="Bản đồ tìm di sản gần bạn"
+                  alt={t("home.how.findAlt")}
                   loading="lazy"
                 />
                 <span className="flow-icon">
@@ -109,9 +107,9 @@ function HomePage() {
                 <b>01</b>
               </div>
               <div className="flow-copy">
-                <span>Bước 1</span>
-                <h3>Tìm di sản gần bạn</h3>
-                <p>Mở bản đồ để xem các công trình và chọn điểm muốn khám phá.</p>
+                <span>{t("home.how.stepOne")}</span>
+                <h3>{t("home.how.find")}</h3>
+                <p>{t("home.how.findDescription")}</p>
               </div>
             </article>
             <span className="flow-arrow" aria-hidden="true">
@@ -122,7 +120,7 @@ function HomePage() {
                 <img
                   className="flow-photo"
                   src="/images/journey/scan-heritage.jpg"
-                  alt="Quét công trình di sản bằng camera"
+                  alt={t("home.how.scanAlt")}
                   loading="lazy"
                 />
                 <span className="flow-icon">
@@ -131,9 +129,9 @@ function HomePage() {
                 <b>02</b>
               </div>
               <div className="flow-copy">
-                <span>Bước 2</span>
-                <h3>Đưa máy lên quét</h3>
-                <p>Hướng camera vào công trình để xác minh hình ảnh và vị trí.</p>
+                <span>{t("home.how.stepTwo")}</span>
+                <h3>{t("home.how.scan")}</h3>
+                <p>{t("home.how.scanDescription")}</p>
               </div>
             </article>
             <span className="flow-arrow" aria-hidden="true">
@@ -144,7 +142,7 @@ function HomePage() {
                 <img
                   className="flow-photo"
                   src="/images/journey/open-heritage-story.jpg"
-                  alt="Mở câu chuyện về di sản"
+                  alt={t("home.how.storyAlt")}
                   loading="lazy"
                 />
                 <span className="flow-icon">
@@ -153,9 +151,9 @@ function HomePage() {
                 <b>03</b>
               </div>
               <div className="flow-copy">
-                <span>Bước 3</span>
-                <h3>Mở câu chuyện</h3>
-                <p>Đọc, nghe hoặc hỏi AI để hiểu sâu hơn về dấu tích trước mắt.</p>
+                <span>{t("home.how.stepThree")}</span>
+                <h3>{t("home.how.story")}</h3>
+                <p>{t("home.how.storyDescription")}</p>
               </div>
             </article>
             <span className="flow-arrow" aria-hidden="true">
@@ -166,7 +164,7 @@ function HomePage() {
                 <img
                   className="flow-photo"
                   src="/images/journey/complete-heritage-journey.jpg"
-                  alt="Hoàn thành hành trình di sản"
+                  alt={t("home.how.stampAlt")}
                   loading="lazy"
                 />
                 <span className="flow-icon">
@@ -175,41 +173,44 @@ function HomePage() {
                 <b>04</b>
               </div>
               <div className="flow-copy">
-                <span>Bước 4</span>
-                <h3>Lưu dấu hành trình</h3>
-                <p>Nhận con dấu vào Hộ chiếu Di sản và tiếp tục điểm đến mới.</p>
+                <span>{t("home.how.stepFour")}</span>
+                <h3>{t("home.how.stamp")}</h3>
+                <p>{t("home.how.stampDescription")}</p>
               </div>
             </article>
           </div>
           <div className="how-action">
             <a className="btn btn-primary" href="/Explore/Ban-Do">
-              Bắt đầu từ bản đồ →
+              {t("home.how.startMap")}
             </a>
-            <span>Không cần tải ứng dụng</span>
+            <span>{t("home.how.noDownload")}</span>
           </div>
         </div>
       </section>
 
       <div className="container">
         <section className="section" id="journey">
-          <JourneyCard />
+          <JourneyCard unlockedLocations={unlockedLocations} />
         </section>
 
         <section className="section">
           <div className="section-head">
             <div>
-              <span className="kicker">Bản đồ tương tác</span>
-              <h2>Di sản quanh bạn</h2>
-              <p>Tìm công trình gần nhất và theo dõi phần không gian đã được đánh thức.</p>
+              <span className="kicker">{t("home.map.kicker")}</span>
+              <h2>{t("home.map.title")}</h2>
+              <p>{t("home.map.description")}</p>
             </div>
             <a className="btn btn-outline" href="/Explore/Ban-Do">
-              Mở bản đồ lớn
+              {t("home.map.open")}
             </a>
           </div>
           <div className="map-preview">
             <div className="map-art"></div>
-            <div className="map-marker jade" style={{ left: '35%', top: '40%' }}>
-              <span>✓</span>
+            <div
+              className={`map-marker${khueVanCacUnlocked ? ' jade' : ' locked'}`}
+              style={{ left: '35%', top: '40%' }}
+            >
+              <span>{khueVanCacUnlocked ? '✓' : '1'}</span>
             </div>
             <div
               className={`map-marker${daiTrungUnlocked ? ' jade' : ' locked'}`}
@@ -227,11 +228,17 @@ function HomePage() {
               <span>4</span>
             </div>
             <div className="map-card">
-              <strong>Khuê Văn Các · Đã xác minh</strong>
-              <p>Cách bạn 32 m · Dấu ấn đầu tiên trong hành trình hôm nay.</p>
-              <a className="btn btn-primary" href="/Explore/Khue-Van-Cac">
-                Xem câu chuyện
-              </a>
+              <strong>{t("locations.names.khueVanCac")} · {khueVanCacUnlocked ? t("home.map.verifiedState") : t("home.map.unverifiedState")}</strong>
+              <p>{t("home.map.distance")}</p>
+              {khueVanCacUnlocked ? (
+                <a className="btn btn-primary" href="/Explore/Khue-Van-Cac">
+                  {t("common.readStory")}
+                </a>
+              ) : (
+                <a className="btn btn-primary" href="/Explore/Camera">
+                  {t("map.verify", { distance: "32 m" })}
+                </a>
+              )}
             </div>
           </div>
         </section>
@@ -239,32 +246,41 @@ function HomePage() {
         <section className="section">
           <div className="section-head">
             <div>
-              <span className="kicker">Gần bạn</span>
-              <h2>Các công trình nổi bật</h2>
-              <p>Mỗi trạng thái đều có nhãn rõ ràng cùng hành động tiếp theo.</p>
+              <span className="kicker">{t("home.featured.nearby")}</span>
+              <h2>{t("home.featured.title")}</h2>
+              <p>{t("home.featured.description")}</p>
             </div>
           </div>
           <div className="cards">
-            <article className="location-card">
+            <article className={`location-card${khueVanCacUnlocked ? '' : ' locked'}`}>
               <div className="location-image">
                 <img
                   className="shape-art heritage-photo"
                   src="/images/heritage/khue-van-cac.webp"
-                  alt="Khuê Văn Các tại Văn Miếu – Quốc Tử Giám"
+                  alt={t("locations.names.khueVanCac")}
                   loading="lazy"
                 />
-                <span className="badge done">✓ Đã mở khóa</span>
+                <span className={`badge${khueVanCacUnlocked ? ' done' : ''}`}>
+                  {khueVanCacUnlocked ? '✓ ' + t("common.unlocked") : t("common.locked")}
+                </span>
               </div>
               <div className="location-body">
-                <h3>Khuê Văn Các</h3>
-                <p>Biểu tượng văn chương và trí tuệ, được xây dựng dưới triều Nguyễn.</p>
+                <h3>{t("locations.names.khueVanCac")}</h3>
+                <p>{t("locations.descriptions.khueVanCac")}</p>
                 <div className="meta">
                   <span>⌖ 32 m</span>
-                  <span>✓ Camera xác minh</span>
+                  {khueVanCacUnlocked && <span>{t("home.map.verified")}</span>}
                 </div>
-                <a className="btn btn-outline btn-block" href="/Explore/Khue-Van-Cac">
-                  Xem câu chuyện
-                </a>
+                {khueVanCacUnlocked ? (
+                  <a className="btn btn-outline btn-block" href="/Explore/Khue-Van-Cac">
+                    {t("common.readStory")}
+                  </a>
+                ) : (
+                  <button className="btn btn-outline btn-block locked-action" type="button" disabled>
+                    <LockKeyhole size={16} aria-hidden="true" />
+                    {t("common.locked")}
+                  </button>
+                )}
               </div>
             </article>
             <article className={`location-card${daiTrungUnlocked ? '' : ' locked'}`}>
@@ -272,27 +288,27 @@ function HomePage() {
                 <img
                   className="shape-art heritage-photo"
                   src="/images/heritage/dai-trung-gate.webp"
-                  alt="Cổng Đại Trung tại Văn Miếu – Quốc Tử Giám"
+                  alt={t("locations.names.daiTrungGate")}
                   loading="lazy"
                 />
                 <span className={`badge${daiTrungUnlocked ? ' done' : ''}`}>
-                  {daiTrungUnlocked ? '✓ Đã mở khóa' : 'Chưa mở khóa'}
+                  {daiTrungUnlocked ? '✓ ' + t("common.unlocked") : t("common.locked")}
                 </span>
               </div>
               <div className="location-body">
-                <h3>Cổng Đại Trung</h3>
-                <p>Cánh cổng dẫn vào không gian trung tâm của quần thể Văn Miếu.</p>
+                <h3>{t("locations.names.daiTrungGate")}</h3>
+                <p>{t("locations.descriptions.daiTrungGate")}</p>
                 <div className="meta">
                   <span>⌖ 46 m</span>
                 </div>
                 {daiTrungUnlocked ? (
                   <a className="btn btn-outline btn-block" href="/Explore/Cong-Dai-Trung">
-                    Xem câu chuyện
+                    {t("common.readStory")}
                   </a>
                 ) : (
                   <button className="btn btn-outline btn-block locked-action" type="button" disabled>
                     <LockKeyhole size={16} aria-hidden="true" />
-                    Chưa mở khóa
+                    {t("common.locked")}
                   </button>
                 )}
               </div>
@@ -302,27 +318,27 @@ function HomePage() {
                 <img
                   className="shape-art art-c heritage-photo"
                   src="/images/heritage/thai-hoc-building.webp"
-                  alt="Toàn cảnh công trình Nhà Thái Học tại Văn Miếu – Quốc Tử Giám"
+                  alt={t("locations.names.thaiHocHouse")}
                   loading="lazy"
                 />
                 <span className={`badge${thaiHocUnlocked ? ' done' : ''}`}>
-                  {thaiHocUnlocked ? '✓ Đã mở khóa' : 'Chưa mở khóa'}
+                  {thaiHocUnlocked ? '✓ ' + t("common.unlocked") : t("common.locked")}
                 </span>
               </div>
               <div className="location-body">
-                <h3>Nhà Thái Học</h3>
-                <p>Nội dung câu chuyện sẽ hiển thị sau khi công trình được mở khóa.</p>
+                <h3>{t("locations.names.thaiHocHouse")}</h3>
+                <p>{t("home.featured.unlockStory")}</p>
                 <div className="meta">
                   <span>⌖ 210 m</span>
                 </div>
                 {thaiHocUnlocked ? (
                   <a className="btn btn-outline btn-block" href="/Explore/Nha-Thai-Hoc">
-                    Xem câu chuyện
+                    {t("common.readStory")}
                   </a>
                 ) : (
                   <button className="btn btn-outline btn-block locked-action" type="button" disabled>
                     <LockKeyhole size={16} aria-hidden="true" />
-                    Chưa mở khóa
+                    {t("common.locked")}
                   </button>
                 )}
               </div>
@@ -330,7 +346,7 @@ function HomePage() {
           </div>
           <div className="more-row">
             <a className="btn btn-outline" href="/Explore/Cong-Trinh">
-              Xem thêm tất cả công trình →
+              {t("home.featured.viewAll")}
             </a>
           </div>
         </section>
@@ -338,8 +354,8 @@ function HomePage() {
         <section className="section">
           <div className="section-head">
             <div>
-              <span className="kicker">Thư viện tri thức</span>
-              <h2>Danh nhân và bậc hiền triết</h2>
+              <span className="kicker">{t("home.featured.library")}</span>
+              <h2>{t("home.featured.figures")}</h2>
             </div>
           </div>
           <div className="figures">
@@ -347,15 +363,15 @@ function HomePage() {
               <img
                 className="portrait-shape heritage-photo"
                 src="/images/heritage/chu-van-an.jpg"
-                alt="Tượng thầy Chu Văn An"
+                alt={t("figures.alt.chuVanAn")}
                 loading="lazy"
               />
               <div className="figure-copy">
-                <h3>Chu Văn An</h3>
-                <small>Người thầy mẫu mực</small>
-                <p>Gắn với lịch sử Quốc Tử Giám và truyền thống tôn sư trọng đạo.</p>
-                <a className="text-link" href="/Explore/Danh-Nhan/Chu-Van-An">
-                  Nghe câu chuyện →
+                <h3>{t("detail.items.figure-chu-van-an.title")}</h3>
+                <small>{t("figures.profiles.chuVanAnRole")}</small>
+                <p>{t("figures.profiles.chuVanAnStory")}</p>
+                <a className="btn btn-outline btn-block figure-story-btn" href="/Explore/Danh-Nhan/Chu-Van-An">
+                  {t("common.readStory")}
                 </a>
               </div>
             </article>
@@ -363,15 +379,15 @@ function HomePage() {
               <img
                 className="portrait-shape portrait-b heritage-photo"
                 src="/images/heritage/ly-thanh-tong.jpg"
-                alt="Tượng vua Lý Thánh Tông"
+                alt={t("figures.alt.lyThanhTong")}
                 loading="lazy"
               />
               <div className="figure-copy">
-                <h3>Lý Thánh Tông</h3>
+                <h3>{t("detail.items.figure-ly-thanh-tong.title")}</h3>
                 <small>1023–1072</small>
-                <p>Vị vua cho dựng Văn Miếu vào năm 1070.</p>
-                <a className="text-link" href="/Explore/Danh-Nhan/Ly-Thanh-Tong">
-                  Hỏi AI →
+                <p>{t("figures.profiles.lyThanhTongStory")}</p>
+                <a className="btn btn-outline btn-block figure-story-btn" href="/Explore/Danh-Nhan/Ly-Thanh-Tong">
+                  {t("common.readStory")}
                 </a>
               </div>
             </article>
@@ -379,22 +395,22 @@ function HomePage() {
               <img
                 className="portrait-shape portrait-c heritage-photo"
                 src="/images/heritage/confucius-statue.jpg"
-                alt="Tượng thờ Khổng Tử tại Văn Miếu – Quốc Tử Giám"
+                alt={t("figures.alt.confucius")}
                 loading="lazy"
               />
               <div className="figure-copy">
-                <h3>Khổng Tử</h3>
-                <small>Bậc vạn thế sư biểu</small>
-                <p>Nhân vật trung tâm trong không gian thờ tự của Văn Miếu.</p>
-                <a className="text-link" href="/Explore/Danh-Nhan/Khong-Tu">
-                  Nghe câu chuyện →
+                <h3>{t("detail.items.figure-confucius.title")}</h3>
+                <small>{t("figures.profiles.confuciusRole")}</small>
+                <p>{t("figures.profiles.confuciusStory")}</p>
+                <a className="btn btn-outline btn-block figure-story-btn" href="/Explore/Danh-Nhan/Khong-Tu">
+                  {t("common.readStory")}
                 </a>
               </div>
             </article>
           </div>
           <div className="more-row">
             <a className="btn btn-outline" href="/Explore/Danh-Nhan">
-              Xem thêm tất cả danh nhân →
+              {t("home.featured.viewFigures")}
             </a>
           </div>
         </section>
@@ -406,14 +422,14 @@ function HomePage() {
                 <img
                   className="passport-cover-stamp"
                   src="/images/passport/khue-van-cac.jpg"
-                  alt="Dấu ấn Khuê Văn Các đã thu thập"
+                  alt={t("passport.stampAlt", { name: t("locations.names.khueVanCac") })}
                   loading="lazy"
                 />
-                <div className="eyebrow">Digital Heritage Passport</div>
-                <h2>Hộ chiếu Di sản</h2>
-                <p>{unlockedLocations.size} trong 10 dấu ấn đã thu thập</p>
+                <div className="eyebrow">{t("home.passport.eyebrow")}</div>
+                <h2>{t("home.passport.title")}</h2>
+                <p>{t("home.passport.collected", { count: unlockedLocations.size })}</p>
                 <a className="btn btn-gold" href="/Explore/Ho-Chieu">
-                  Mở hộ chiếu
+                  {t("home.passport.open")}
                 </a>
               </div>
             </div>
@@ -424,76 +440,74 @@ function HomePage() {
                   <div className={`stamp${unlocked ? ' collected' : ''}`} key={id}>
                     <img
                       src={`/images/passport/${image}`}
-                      alt={`${name} ${unlocked ? 'đã mở khóa' : 'chưa mở khóa'}`}
+                      alt={`${name} ${unlocked ? 'unlocked' : 'locked'}`}
                       loading="lazy"
                     />
                   </div>
                 )
               })}
               <a className="passport-stamps-link" href="/Explore/Ho-Chieu">
-                Xem đủ 10 dấu ấn →
+                {t("home.passport.allStamps")}
               </a>
             </div>
           </div>
         </section>
 
         <section className="section">
-          <div className="ai-guide ai-guide-home" aria-label="Trò chuyện với AI Heritage Guide">
+          <div className="ai-guide ai-guide-home" aria-label={t("home.ai.title")}>
             <header className="ai-guide-header">
               <div className="ai-avatar">AI</div>
               <div>
                 <span>AI Heritage Guide</span>
-                <h2>Hỏi để hiểu sâu hơn</h2>
+                <h2>{t("home.ai.title")}</h2>
               </div>
-              <span className="ai-status">● Đang trực tuyến</span>
+              <span className="ai-status">{t("home.ai.online")}</span>
             </header>
             <div className="ai-chat-body">
               <div className="ai-message">
                 <div className="mini-avatar">AI</div>
                 <div>
-                  <span className="message-label">Trợ lý di sản</span>
+                  <span className="message-label">{t("home.ai.assistant")}</span>
                   <div className="bubble ai">
-                    Xin chào! Bạn đang đứng trước Khuê Văn Các. Tôi có thể kể về kiến trúc, ý nghĩa
-                    biểu tượng hoặc lịch sử của công trình này.
+                    {t("home.ai.greeting")}
                   </div>
                 </div>
               </div>
               <div className="ai-message user-message">
                 <div>
-                  <span className="message-label">Bạn</span>
+                  <span className="message-label">{t("home.ai.you")}</span>
                   <div className="bubble user">
-                    Vì sao hình ảnh Khuê Văn Các được in trên tiền Việt Nam?
+                    {t("home.ai.sampleQuestion")}
                   </div>
                 </div>
               </div>
-              <p className="suggestion-label">Bạn có thể hỏi tiếp</p>
+              <p className="suggestion-label">{t("home.ai.suggestions")}</p>
               <div className="question-row">
-                <button className="chip">Kiến trúc có gì đặc biệt?</button>
-                <button className="chip">Nghe câu chuyện 2 phút</button>
-                <button className="chip">Nhân vật liên quan</button>
+                <button className="chip">{t("home.ai.architecture")}</button>
+                <button className="chip">{t("home.ai.shortStory")}</button>
+                <button className="chip">{t("home.ai.relatedFigures")}</button>
               </div>
             </div>
             <div className="ai-composer">
-              <button className="composer-tool" aria-label="Thêm nội dung">
+              <button className="composer-tool" aria-label={t("home.ai.add")}>
                 <Plus size={19} aria-hidden="true" />
               </button>
               <label>
-                <span className="sr-only">Câu hỏi dành cho AI</span>
-                <input type="text" placeholder="Hỏi AI về di sản bạn đang khám phá..." />
+                <span className="sr-only">{t("home.ai.inputLabel")}</span>
+                <input type="text" placeholder={t("home.ai.placeholder")} />
               </label>
-              <button className="send-button" aria-label="Gửi câu hỏi">
+              <button className="send-button" aria-label={t("home.ai.send")}>
                 <Send size={18} aria-hidden="true" />
               </button>
             </div>
             <p className="ai-note">
-              AI có thể mắc lỗi. Hãy kiểm chứng những thông tin lịch sử quan trọng.
+              {t("home.ai.notice")}
             </p>
           </div>
         </section>
       </div>
       <footer className="footer">
-        <strong>Explore Van Mieu</strong>Một hành trình số đánh thức di sản và truyền thống hiếu học
-        Việt Nam.
+        <strong>Explore Van Mieu</strong>{t("home.footer")}
       </footer>
     </section>
   )

@@ -1,0 +1,24 @@
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+
+# Configuration secrets
+.env
+.env.*
+!.env.example
+
+# Local self-signed HTTPS credentials shared by the development servers
+/backend-local.key
+/backend-local.crt
+
+# Local development databases
+database/*.db
+database/*.db-*
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Isolated HTTPS/load-test certificates, databases, and server logs
+.local-test/

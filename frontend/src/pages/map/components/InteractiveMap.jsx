@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { VAN_MIEU_BOUNDS } from '../mapData.js'
+import { useLanguage } from '../../../i18n/LanguageContext.jsx'
 
 export default function InteractiveMap({
   locations,
@@ -9,15 +10,16 @@ export default function InteractiveMap({
   selectedLocation,
   onSelectLocation,
 }) {
+  const { t } = useLanguage()
   const mapContainerRef = useRef(null)
   const mapInstanceRef = useRef(null)
   const markersRef = useRef({})
 
-  // Khởi tạo Leaflet map
+  // Initialize the Leaflet map
   useEffect(() => {
     if (!mapContainerRef.current) return
 
-    // Tránh khởi tạo nhiều lần
+    // Avoid initializing the map more than once
     if (mapInstanceRef.current) return
 
     const map = L.map(mapContainerRef.current, {
@@ -30,13 +32,13 @@ export default function InteractiveMap({
       zoomControl: false,
     })
 
-    // Thêm tile layer OpenStreetMap
+    // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 19,
     }).addTo(map)
 
-    // Thêm nút zoom ở góc phải dưới
+    // Add zoom controls in the bottom right corner
     L.control.zoom({ position: 'bottomright' }).addTo(map)
 
     mapInstanceRef.current = map
@@ -47,12 +49,12 @@ export default function InteractiveMap({
     }
   }, [])
 
-  // Cập nhật các Marker khi locations hoặc trạng thái mở khóa thay đổi
+  // Update markers when locations or unlock status change
   useEffect(() => {
     const map = mapInstanceRef.current
     if (!map) return
 
-    // Xóa các marker cũ nếu có
+    // Remove existing markers
     Object.values(markersRef.current).forEach((marker) => marker.remove())
     markersRef.current = {}
 
@@ -87,7 +89,7 @@ export default function InteractiveMap({
     })
   }, [locations, unlockedLocations, selectedLocation, onSelectLocation])
 
-  // Khi selectedLocation thay đổi, lia bản đồ đến vị trí đó
+  // Pan to the selected location
   useEffect(() => {
     const map = mapInstanceRef.current
     if (!map || !selectedLocation) return
@@ -110,25 +112,25 @@ export default function InteractiveMap({
     <div className="interactive-map-wrapper">
       <div ref={mapContainerRef} className="interactive-map-canvas" />
 
-      {/* Bảng chú giải trạng thái */}
+      {/* Status legend */}
       <div className="map-overlay-legend">
         <span>
-          <i className="dot jade"></i> Đã mở khóa
+          <i className="dot jade"></i> {t("common.unlocked")}
         </span>
         <span>
-          <i className="dot stone"></i> Chưa mở khóa
+          <i className="dot stone"></i> {t("common.locked")}
         </span>
       </div>
 
-      {/* Phím bấm tiện ích trên bản đồ */}
+      {/* Map controls */}
       <div className="map-overlay-controls">
         <button
           type="button"
           className="map-control-btn"
-          title="Xem toàn cảnh Văn Miếu"
+          title={t("map.overviewTitle")}
           onClick={handleResetView}
         >
-          ⌖ Toàn cảnh
+          ⌖ {t("map.overview")}
         </button>
       </div>
     </div>
