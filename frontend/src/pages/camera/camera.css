@@ -1,16 +1,40 @@
 /* ==========================================================================
-   CAMERA & SCAN RECOGNITION MODULE (VAN MIEU CHECK-IN 2 LAYERS)
+   CAMERA & AI RECOGNITION MODULE (ALL IN ONE FRAME)
    ========================================================================== */
+
+#camera {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
 
 .camera-screen {
   position: relative;
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
+  max-height: 100vh;
   overflow: hidden;
-  background: #07101c;
+  background: #000000;
   color: white;
 }
 
-/* Live camera video and fallback layer */
+/* Hiệu ứng chớp sáng màn trập khi bấm chụp */
+.camera-shutter-flash {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  z-index: 100;
+  animation: flashAnim 0.2s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes flashAnim {
+  0% { opacity: 0.95; }
+  100% { opacity: 0; }
+}
+
+/* Lớp 1: Khung chứa video webcam thật (lớp nền dưới cùng z-index: 1) */
 .camera-viewfinder-container {
   position: absolute;
   inset: 0;
@@ -20,6 +44,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: crosshair;
+  z-index: 1;
 }
 
 .camera-live-video {
@@ -28,41 +54,106 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: filter 0.3s ease;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  z-index: 1;
+}
+
+.camera-live-video.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.camera-live-video.visible {
+  opacity: 1;
+}
+
+/* Lật gương khi dùng camera trước (quét mặt/selfie) */
+.camera-live-video.mirror,
+.captured-preview-img.mirror {
+  transform: scaleX(-1);
 }
 
 .camera-live-video.blur {
   filter: brightness(0.7) blur(2px);
 }
 
-.camera-art-fallback {
+/* Nền đen chờ camera - Tuyệt đối không hiển thị ảnh di tích */
+.camera-dark-placeholder {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.55;
-  filter: brightness(0.65);
-}
-
-.fallback-badge {
-  position: absolute;
-  top: 90px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #f1f5f9;
-  font-size: 11px;
-  padding: 6px 14px;
-  border-radius: 999px;
+  background: #000000;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  z-index: 5;
+}
+
+/* Hộp thông báo và nút bật camera khi chưa kết nối */
+.fallback-card {
+  position: relative;
   z-index: 10;
-  white-space: nowrap;
+  max-width: 360px;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  padding: 22px 24px;
+  text-align: center;
+  color: #f8fafc;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.fallback-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(240, 194, 123, 0.2);
+  color: #f0c27b;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 12px;
+  border: 1px solid rgba(240, 194, 123, 0.4);
+}
+
+.fallback-card h3 {
+  font-size: 16px;
+  margin: 0 0 6px;
+  color: #ffffff;
+}
+
+.fallback-card p {
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+
+.btn-enable-camera {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f0c27b 0%, #e1ad6e 100%);
+  color: #0f172a;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(240, 194, 123, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.btn-enable-camera:hover {
+  transform: translateY(-2px);
 }
 
 .captured-preview-img {
@@ -72,114 +163,126 @@
   height: 100%;
   object-fit: cover;
   z-index: 2;
-  animation: freezeFlash 0.4s ease-out;
 }
 
-@keyframes freezeFlash {
-  0% { opacity: 0.2; filter: brightness(2); }
-  100% { opacity: 1; filter: brightness(1); }
+/* Vòng tròn lấy nét khi chạm vào màn hình (Tap to Focus) */
+.camera-focus-ring {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 2px solid #efbd74;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 20;
+  animation: focusPulse 0.4s ease-out forwards;
+}
+
+@keyframes focusPulse {
+  0% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; }
+  60% { transform: translate(-50%, -50%) scale(0.95); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
 }
 
 /* --------------------------------------------------------------------------
-   Camera control overlay
+   LỚP 3: TOÀN BỘ GIAO DIỆN HIỂN THỊ CHUNG 1 KHUNG HÌNH (z-index: 20)
    -------------------------------------------------------------------------- */
 .camera-ui {
-  position: relative;
-  z-index: 5;
-  min-height: 100vh;
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 16px;
-  padding: 24px 5vw 36px;
-  background: radial-gradient(ellipse at center, transparent 35%, rgba(4, 9, 18, 0.82) 100%);
+  padding: 18px 24px 28px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.65) 0%,
+    transparent 20%,
+    transparent 72%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
+  pointer-events: none;
 }
 
-.camera-top {
+.camera-ui > * {
+  pointer-events: auto;
+}
+
+/* Khối phần đầu trên cùng: Tiến trình & Banner vị trí */
+.camera-header-block {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  z-index: 25;
 }
 
-.round-btn {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  color: white;
-  background: rgba(6, 19, 33, 0.65);
-  backdrop-filter: blur(10px);
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.round-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
-}
-
-.round-btn.torch-active {
-  background: #eab308;
-  color: #0f172a;
-  border-color: #fde047;
-  box-shadow: 0 0 16px rgba(234, 179, 8, 0.8);
+/* Thanh tiến trình: Chữ to hơn, đậm hơn theo yêu cầu */
+.camera-progress-center {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .camera-progress {
   display: flex;
-  gap: 8px;
+  gap: 14px;
   align-items: center;
-  padding: 8px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 10px 26px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 999px;
-  background: rgba(6, 19, 33, 0.75);
-  backdrop-filter: blur(12px);
+  background: rgba(6, 19, 33, 0.9);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
 }
 
 .camera-progress span {
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 11px;
-  font-weight: 600;
-  transition: color 0.3s ease;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  transition: all 0.3s ease;
 }
 
 .camera-progress span.active {
   color: #f0c27b;
-  font-weight: 700;
+  font-weight: 900;
+  text-shadow: 0 0 14px rgba(240, 194, 123, 0.65);
 }
 
 .camera-progress span.completed {
   color: #10b981;
+  font-weight: 800;
 }
 
 .camera-progress i {
-  width: 20px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.2);
+  width: 26px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.35);
 }
 
-/* --------------------------------------------------------------------------
-   GPS location banner and dropdown
-   -------------------------------------------------------------------------- */
+/* Banner vị trí GPS: Đặt gọn gàng phía trên */
 .camera-location-wrap {
-  position: relative;
-  align-self: flex-start;
-  z-index: 20;
+  width: 100%;
 }
 
 .camera-location {
   display: flex;
   gap: 12px;
   align-items: center;
-  padding: 10px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 14px;
-  background: rgba(6, 19, 33, 0.85);
+  justify-content: space-between;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  background: rgba(10, 25, 45, 0.85);
   backdrop-filter: blur(14px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .location-dot {
@@ -197,29 +300,24 @@
   text-shadow: 0 0 10px #f59e0b;
 }
 
-.location-info small {
-  display: block;
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 10px;
+.location-info {
+  flex: 1;
 }
 
-.location-name-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  margin: 1px 0;
+.location-info small {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .location-info strong {
+  display: block;
   font-size: 14px;
   color: #ffffff;
-}
-
-.location-selector-trigger {
-  display: inline-flex;
-  color: #f0c27b;
-  opacity: 0.8;
+  margin: 1px 0;
+  font-weight: 700;
 }
 
 .location-info span {
@@ -230,277 +328,204 @@
 
 .distance-pill {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   padding: 4px 10px;
   border-radius: 999px;
   white-space: nowrap;
 }
 
 .distance-pill.green {
-  background: rgba(16, 185, 129, 0.2);
+  background: rgba(16, 185, 129, 0.25);
   color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.4);
+  border: 1px solid rgba(16, 185, 129, 0.45);
 }
 
 .distance-pill.amber {
-  background: rgba(245, 158, 11, 0.2);
+  background: rgba(245, 158, 11, 0.25);
   color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.4);
+  border: 1px solid rgba(245, 158, 11, 0.45);
 }
 
-/* Dropdown for the ten heritage sites */
-.location-dropdown-menu {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  width: 290px;
-  background: #0f172a;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 14px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-  padding: 10px;
-  max-height: 320px;
-  overflow-y: auto;
-  z-index: 50;
-  animation: fadeIn 0.2s ease;
+/* --------------------------------------------------------------------------
+   Phần điều khiển dưới cùng: HƯỚNG DẪN + NÚT CHỤP TRÒN LỚN + NÚT ĐỔI CAM
+   -------------------------------------------------------------------------- */
+.camera-bottom-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: auto;
+  z-index: 25;
 }
 
-.dropdown-header {
+/* Lời hướng dẫn quét hiện vật / khuôn mặt */
+.camera-instruction-hint {
+  margin-bottom: 14px;
+  background: rgba(6, 19, 33, 0.9);
+  backdrop-filter: blur(16px);
+  padding: 8px 24px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+}
+
+.camera-instruction-hint p {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+/* Dock thanh điều khiển bo tròn kiểu iPhone/Android */
+.camera-shutter-dock {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 8px 8px;
-  font-size: 11px;
-  color: #94a3b8;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  width: min(360px, 92vw);
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: rgba(10, 20, 35, 0.88);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.65);
 }
 
-.dropdown-header button {
-  background: none;
-  border: none;
-  color: #94a3b8;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.dropdown-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.dropdown-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.dropdown-item.selected {
-  background: rgba(240, 194, 123, 0.15);
-  border: 1px solid rgba(240, 194, 123, 0.3);
-}
-
-.item-thumb {
-  width: 38px;
-  height: 38px;
-  border-radius: 6px;
-  object-fit: cover;
-}
-
-.item-info {
+.dock-slot {
   flex: 1;
   display: flex;
-  flex-direction: column;
-}
-
-.item-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: #f1f5f9;
-}
-
-.item-desc {
-  font-size: 10px;
-  color: #94a3b8;
-}
-
-.item-check {
-  color: #10b981;
-}
-
-/* --------------------------------------------------------------------------
-   Heritage viewfinder
-   -------------------------------------------------------------------------- */
-.viewfinder {
-  position: relative;
-  align-self: center;
-  width: min(560px, 80vw);
-  aspect-ratio: 1.45;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.corner {
-  position: absolute;
-  width: 44px;
-  height: 44px;
-  border-color: #efbd74;
-  border-style: solid;
-  filter: drop-shadow(0 0 6px rgba(239, 189, 116, 0.6));
-}
-
-.corner.tl {
-  left: 0;
-  top: 0;
-  border-width: 3px 0 0 3px;
-  border-radius: 16px 0 0;
-}
-
-.corner.tr {
-  right: 0;
-  top: 0;
-  border-width: 3px 3px 0 0;
-  border-radius: 0 16px 0 0;
-}
-
-.corner.bl {
-  left: 0;
-  bottom: 0;
-  border-width: 0 0 3px 3px;
-  border-radius: 0 0 0 16px;
-}
-
-.corner.br {
-  right: 0;
-  bottom: 0;
-  border-width: 0 3px 3px 0;
-  border-radius: 0 0 16px;
-}
-
-.scan-line {
-  position: absolute;
-  left: 6%;
-  right: 6%;
-  top: 50%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #efbd74, transparent);
-  box-shadow: 0 0 14px #efbd74;
-  animation: scan 2.6s ease-in-out infinite;
-}
-
-.scan-line.fast-scan {
-  background: linear-gradient(90deg, transparent, #10b981, transparent);
-  box-shadow: 0 0 18px #10b981;
-  animation: scan 0.8s ease-in-out infinite;
-}
-
-.scan-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 16px;
-  transform: translateX(-50%);
-  width: max-content;
-  max-width: 90%;
-  padding: 6px 14px;
-  border-radius: 999px;
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(6, 19, 33, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 11px;
-  font-weight: 500;
-  text-align: center;
-}
-
-@keyframes scan {
-  0%, 100% {
-    top: 14%;
-    opacity: 0.4;
-  }
-  50% {
-    top: 86%;
-    opacity: 1;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Scan controls and results
-   -------------------------------------------------------------------------- */
-.camera-bottom {
-  width: min(650px, 100%);
-  align-self: center;
-  padding: 20px 24px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 20px;
-  background: rgba(6, 16, 29, 0.92);
-  backdrop-filter: blur(16px);
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  z-index: 15;
-}
-
-.camera-kicker {
-  display: block;
-  margin-bottom: 4px;
-  color: #efbd74;
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-.camera-bottom h2 {
-  margin: 0 0 6px;
-  color: white;
-  font-size: 18px;
-}
-
-.camera-bottom p {
-  margin: 0 0 16px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.scan-button {
-  display: inline-flex;
-  gap: 10px;
   align-items: center;
   justify-content: center;
-  padding: 12px 28px;
-  border-radius: 12px;
-  color: #142238;
-  background: linear-gradient(135deg, #f0c27b 0%, #e1ad6e 100%);
-  font-size: 13px;
-  font-weight: 800;
-  border: none;
+}
+
+.dock-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Nút chụp tròn lớn (76px) màu trắng nổi bật */
+.camera-shutter-btn {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(225, 173, 110, 0.4);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5), 0 4px 20px rgba(0, 0, 0, 0.6);
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+  outline: none;
+}
+
+.camera-shutter-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 0 3px rgba(240, 194, 123, 0.8), 0 6px 25px rgba(240, 194, 123, 0.5);
+}
+
+.camera-shutter-btn:active {
+  transform: scale(0.92);
+}
+
+.camera-shutter-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.camera-shutter-btn:active .camera-shutter-inner {
+  transform: scale(0.86);
+  background: #f0c27b;
+}
+
+/* Nút Đổi Camera [ 🔄 Cam trước / Cam sau ] */
+.camera-flip-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 14px;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.scan-button:hover:not(:disabled) {
+.camera-flip-btn:hover {
+  background: rgba(240, 194, 123, 0.28);
+  color: #f0c27b;
+  border-color: rgba(240, 194, 123, 0.6);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(225, 173, 110, 0.6);
 }
 
-.scan-button.scanning {
-  background: #334155;
-  color: #94a3b8;
-  cursor: wait;
-  box-shadow: none;
+.camera-flip-btn .flip-label {
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
 }
 
-/* Successful recognition modal */
+/* Trạng thái đang phân tích hình ảnh */
+.camera-analyzing-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(240, 194, 123, 0.4);
+  color: #f0c27b;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+  animation: pulsePill 1.2s infinite alternate;
+}
+
+@keyframes pulsePill {
+  from { transform: scale(0.98); }
+  to { transform: scale(1.02); }
+}
+
+.analyzing-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(240, 194, 123, 0.3);
+  border-top-color: #f0c27b;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Modal Kết quả nhận diện thành công
+   -------------------------------------------------------------------------- */
+.camera-bottom {
+  width: min(580px, 100%);
+  align-self: center;
+  padding: 20px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  background: rgba(6, 16, 29, 0.94);
+  backdrop-filter: blur(18px);
+  text-align: center;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  z-index: 30;
+}
+
 .scan-result-modal {
   display: grid;
   grid-template-columns: 56px 1fr;
@@ -510,7 +535,7 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -527,12 +552,34 @@
   flex-shrink: 0;
 }
 
+.camera-kicker {
+  display: block;
+  margin-bottom: 4px;
+  color: #efbd74;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.scan-result-modal h2 {
+  margin: 0 0 6px;
+  color: white;
+  font-size: 18px;
+}
+
+.scan-result-modal p {
+  margin: 0 0 16px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .result-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
-  margin-top: 14px;
 }
 
 .btn-gold {
@@ -573,7 +620,7 @@
   gap: 6px;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.65);
   font-size: 12px;
   font-weight: 600;
   padding: 8px 10px;
@@ -590,7 +637,25 @@
    -------------------------------------------------------------------------- */
 @media (max-width: 600px) {
   .camera-ui {
-    padding: 16px 4vw 24px;
+    padding: 14px 4vw 24px;
+  }
+
+  .camera-progress {
+    padding: 8px 16px;
+    gap: 8px;
+  }
+
+  .camera-progress span {
+    font-size: 12px;
+  }
+
+  .camera-shutter-dock {
+    width: 90vw;
+  }
+
+  .camera-shutter-btn {
+    width: 70px;
+    height: 70px;
   }
 
   .scan-result-modal {

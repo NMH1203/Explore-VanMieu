@@ -1,5 +1,5 @@
-export const VAN_MIEU_BOUNDS = {
-  center: [21.02875, 105.8360],
+export const VAN_MIEU_BOUNDS = { // Xuất ra ngoài để không ấy lại Data
+  center: [21.02875, 105.8360], // Kinh độ , Vĩ độ 
   defaultZoom: 17,
   minZoom: 16,
   maxZoom: 19,
