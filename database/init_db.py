@@ -6,6 +6,7 @@ from backend.src.models.checkin_log import CheckinLog
 from backend.src.models.heritage_location import HeritageLocation
 from backend.src.models.user import User
 from backend.src.models.user_history import UserHistory
+from backend.src.models.user_journey import UserJourney
 
 
 def create_database_and_tables():
