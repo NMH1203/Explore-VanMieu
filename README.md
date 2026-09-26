@@ -168,7 +168,7 @@ Các lệnh bên dưới được chạy từ thư mục gốc của repository,
 
 ### 4.1 Yêu cầu
 
-- Node.js phiên bản 18 trở lên.
+- Node.js 20.19+ or 22.12+ (required by the installed Vite version).
 - npm.
 - Python phiên bản 3.12 trở lên.
 - Git.
@@ -205,17 +205,14 @@ python -m venv backend\.venv
 backend\.venv\Scripts\python.exe -m pip install -r backend\requirements.txt
 ```
 
-Tạo file cấu hình cá nhân từ file mẫu:
-
-```powershell
-Copy-Item .env.example .env
-```
+Create a `.env` file in the repository root if it does not exist.
+Use the settings below and keep your existing credentials when updating it.
 
 Mở `.env` và thay giá trị mẫu bằng một chuỗi bí mật riêng:
 
 ```env
-JWT_SECRET_KEY=chuoi_bi_mat_ngau_nhien_cua_ban
-YESCALE_API_KEY=api_key_yescale_cua_ban
+JWT_SECRET_KEY=replace_with_a_random_secret
+YESCALE_API_KEY=replace_with_your_provider_api_key
 YESCALE_BASE_URL=https://api.yescale.io/v1
 YESCALE_VISION_MODEL=gpt-4o-mini
 YESCALE_CHAT_MODEL=gpt-4o-mini
@@ -359,7 +356,7 @@ cd ..
 
 #### `JWT_SECRET_KEY` bị thiếu
 
-Tạo file `.env` từ `.env.example` và điền khóa bí mật như phần 4.3.
+Create `.env` and set a random secret as described in section 4.3.
 
 #### `Thiếu YESCALE_API_KEY trong file .env`
 

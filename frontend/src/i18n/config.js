@@ -2,7 +2,7 @@ import vi from '../locales/vi.json'
 import en from '../locales/en.json'
 
 export const LANGUAGES = Object.freeze({
-  vi: { label: 'Tiếng Việt', short: 'VI', locale: 'vi-VN', dir: 'ltr', messages: vi },
+  vi: { label: 'Vietnamese', short: 'VI', locale: 'vi-VN', dir: 'ltr', messages: vi },
   en: { label: 'English', short: 'EN', locale: 'en-US', dir: 'ltr', messages: en },
 })
 

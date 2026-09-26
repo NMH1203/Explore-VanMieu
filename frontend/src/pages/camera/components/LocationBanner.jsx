@@ -27,16 +27,16 @@ export default function LocationBanner({
             </span>
           </div>
           <span>
-            {t("camera.accuracy", { accuracy: gpsAccuracy, distance: distanceMeters })}
+            {t("camera.accuracy", { accuracy: gpsAccuracy ?? "—", distance: distanceMeters ?? "—" })}
           </span>
         </div>
 
         <div className={`distance-pill ${isNearEnough ? 'green' : 'amber'}`}>
-          {isNearEnough ? t("camera.valid") : t("camera.distance", { distance: distanceMeters })}
+          {isNearEnough ? t("camera.valid") : t("camera.distance", { distance: distanceMeters ?? "—" })}
         </div>
       </div>
 
-      {/* Menu chọn địa điểm mô phỏng nhanh nếu du khách muốn kiểm tra các công trình khác */}
+      {/* Select a different heritage site */}
       {showSelector && (
         <div className="location-dropdown-menu">
           <div className="dropdown-header">

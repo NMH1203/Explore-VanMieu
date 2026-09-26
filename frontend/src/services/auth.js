@@ -1,3 +1,5 @@
+import { handleResponse } from './response.js'
+
 export async function login(email, password) {
   const response = await fetch('/api/auth/login', {
     method: 'POST',
@@ -5,17 +7,7 @@ export async function login(email, password) {
     body: JSON.stringify({ email, password }),
   })
 
-  const data = await response.json()
-
-  if (!response.ok) {
-    throw new Error(
-      typeof data.detail === 'string'
-        ? data.detail
-        : 'Không thể đăng nhập',
-    )
-  }
-
-  return data
+  return handleResponse(response, 'Unable to sign in')
 }
 export async function register(email, password, username) {
   const response = await fetch('/api/auth/register', {
@@ -24,26 +16,16 @@ export async function register(email, password, username) {
     body: JSON.stringify({ email, password, username }),
   })
 
-  const data = await response.json()
-
-  if (!response.ok) {
-    throw new Error(
-      typeof data.detail === 'string'
-        ? data.detail
-        : 'Không thể đăng ký',
-    )
-  }
-
-  return data
+  return handleResponse(response, 'Unable to register')
 }
 export async function getCurrentUser() {
   const response = await fetch('/api/auth/me')
 
   if (!response.ok) {
-    throw new Error('Chưa đăng nhập')
+    throw new Error('Not signed in')
   }
 
-  return response.json()
+  return handleResponse(response, 'Unable to load your account')
 }
 
 export async function logout() {
@@ -52,6 +34,6 @@ export async function logout() {
   })
 
   if (!response.ok) {
-    throw new Error('Không thể đăng xuất')
+    throw new Error('Unable to sign out')
   }
 }

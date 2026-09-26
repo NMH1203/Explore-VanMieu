@@ -1,8 +1,16 @@
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
 from sqlalchemy import event
 from sqlmodel import create_engine
 
 
-database_url = "sqlite:///database/explore_van_mieu.db"
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+load_dotenv(PROJECT_ROOT / ".env")
+database_url = os.getenv(
+    "DATABASE_URL", f"sqlite:///{(PROJECT_ROOT / 'database/explore_van_mieu.db').as_posix()}",
+)
 
 engine = create_engine(database_url)
 

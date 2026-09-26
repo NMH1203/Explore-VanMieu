@@ -10,7 +10,7 @@
   color: white;
 }
 
-/* Lớp video camera trực tiếp hoặc fallback giả lập */
+/* Live camera video and fallback layer */
 .camera-viewfinder-container {
   position: absolute;
   inset: 0;
@@ -81,7 +81,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Lớp UI điều khiển nổi bên trên Camera
+   Camera control overlay
    -------------------------------------------------------------------------- */
 .camera-ui {
   position: relative;
@@ -162,7 +162,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Banner Vị trí GPS & Menu Dropdown
+   GPS location banner and dropdown
    -------------------------------------------------------------------------- */
 .camera-location-wrap {
   position: relative;
@@ -248,7 +248,7 @@
   border: 1px solid rgba(245, 158, 11, 0.4);
 }
 
-/* Dropdown chọn 10 điểm Văn Miếu */
+/* Dropdown for the ten heritage sites */
 .location-dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);
@@ -338,7 +338,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Kính ngắm Di sản (Viewfinder)
+   Heritage viewfinder
    -------------------------------------------------------------------------- */
 .viewfinder {
   position: relative;
@@ -433,7 +433,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Bảng điều khiển nút bấm & Kết quả quét
+   Scan controls and results
    -------------------------------------------------------------------------- */
 .camera-bottom {
   width: min(650px, 100%);
@@ -500,7 +500,7 @@
   box-shadow: none;
 }
 
-/* Modal Kết quả nhận diện thành công */
+/* Successful recognition modal */
 .scan-result-modal {
   display: grid;
   grid-template-columns: 56px 1fr;

@@ -51,7 +51,7 @@ function App() {
         ))
       })
       .catch((error) => {
-        console.error('Không thể tải tiến độ:', error)
+        console.error('Unable to load progress:', error)
         if (!ignoreResult) setUnlockedLocations(new Set())
       })
 

@@ -1,0 +1,44 @@
+[
+  {
+    "file": "frontend\\public\\images\\heritage\\khue-van-cac.jpg",
+    "original_dimensions": [
+      960,
+      1280
+    ],
+    "optimized_dimensions": [
+      384,
+      512
+    ],
+    "original_bytes": 348870,
+    "optimized_bytes": 39559,
+    "bytes_reduction_percent": 88.7
+  },
+  {
+    "file": "frontend\\public\\images\\heritage\\van-mieu-hero.jpg",
+    "original_dimensions": [
+      1920,
+      1280
+    ],
+    "optimized_dimensions": [
+      512,
+      341
+    ],
+    "original_bytes": 973961,
+    "optimized_bytes": 49081,
+    "bytes_reduction_percent": 95.0
+  },
+  {
+    "file": "frontend\\public\\images\\heritage\\thai-hoc-building.webp",
+    "original_dimensions": [
+      1200,
+      630
+    ],
+    "optimized_dimensions": [
+      512,
+      269
+    ],
+    "original_bytes": 268362,
+    "optimized_bytes": 37391,
+    "bytes_reduction_percent": 86.1
+  }
+]

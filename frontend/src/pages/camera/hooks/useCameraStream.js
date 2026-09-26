@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { captureOptimizedFrame } from '../../../services/imageProcessing.js'
 
 export function useCameraStream() {
   const videoRef = useRef(null)
   const streamRef = useRef(null)
+  const requestRef = useRef(0)
   const [isStreaming, setIsStreaming] = useState(false)
   const [hasPermission, setHasPermission] = useState(null)
   const [cameraError, setCameraError] = useState(null)
@@ -10,6 +12,8 @@ export function useCameraStream() {
   const [isTorchOn, setIsTorchOn] = useState(false)
 
   const stopCamera = useCallback(() => {
+    requestRef.current += 1
+    setIsTorchOn(false)
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => {
         track.stop()
@@ -23,17 +27,19 @@ export function useCameraStream() {
   }, [])
 
   const startCamera = useCallback(async () => {
+    stopCamera()
+    const requestId = requestRef.current
     setCameraError(null)
 
-    // Kiểm tra hỗ trợ trình duyệt
+    // Check browser support
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       setHasPermission(false)
-      setCameraError('Trình duyệt của bạn không hỗ trợ truy cập Camera trực tiếp.')
+      setCameraError('Your browser does not support live camera access. Use HTTPS or localhost.')
       return
     }
 
     try {
-      // Ưu tiên camera sau (environment) cho trải nghiệm quét di tích
+      // Prefer the rear camera for scanning heritage sites
       const constraints = {
         video: {
           facingMode: { ideal: 'environment' },
@@ -44,33 +50,39 @@ export function useCameraStream() {
       }
 
       const stream = await navigator.mediaDevices.getUserMedia(constraints)
+      if (requestId !== requestRef.current) {
+        stream.getTracks().forEach((track) => track.stop())
+        return
+      }
       streamRef.current = stream
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream
         videoRef.current.onloadedmetadata = () => {
           videoRef.current?.play().then(() => {
+            if (requestId !== requestRef.current) return
             setIsStreaming(true)
             setHasPermission(true)
           }).catch((e) => {
-            console.warn('Lỗi tự động phát video:', e)
+            console.warn('Video autoplay failed:', e)
           })
         }
       }
     } catch (err) {
-      console.warn('Không thể truy cập camera:', err)
+      if (requestId !== requestRef.current) return
+      console.warn('Unable to access the camera:', err)
       setHasPermission(false)
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        setCameraError('Bạn đã từ chối quyền truy cập Camera. Hãy cấp quyền để quét hiện vật.')
+        setCameraError('Camera access was denied. Allow camera access to scan artifacts.')
       } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-        setCameraError('Không tìm thấy thiết bị Camera trên máy của bạn.')
+        setCameraError('No camera was found on this device.')
       } else {
-        setCameraError('Không thể khởi động Camera: ' + (err.message || 'Lỗi không xác định'))
+        setCameraError('Unable to start the camera: ' + (err.message || 'Unknown error'))
       }
     }
-  }, [])
+  }, [stopCamera])
 
-  // Bật/tắt đèn pin (Flash/Torch) nếu thiết bị hỗ trợ
+  // Toggle the torch on supported devices
   const toggleTorch = useCallback(async () => {
     if (!streamRef.current) return
     const track = streamRef.current.getVideoTracks()[0]
@@ -85,37 +97,29 @@ export function useCameraStream() {
         })
         setIsTorchOn(nextState)
       } else {
-        setIsTorchOn((prev) => !prev) // Mô phỏng trạng thái
+        setIsTorchOn(false)
       }
     } catch (err) {
-      console.warn('Thiết bị không hỗ trợ bật đèn pin:', err)
-      setIsTorchOn((prev) => !prev)
+      console.warn('Unable to enable the torch:', err)
+      setIsTorchOn(false)
     }
   }, [isTorchOn])
 
-  // Chụp ảnh từ khung hình video hiện tại sang Data URL
+  // Capture the current video frame as a data URL
   const captureSnapshot = useCallback(() => {
     if (!videoRef.current || !isStreaming) return null
 
     try {
-      const video = videoRef.current
-      const canvas = document.createElement('canvas')
-      canvas.width = video.videoWidth || 640
-      canvas.height = video.videoHeight || 480
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return null
-
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
+      const dataUrl = captureOptimizedFrame(videoRef.current)
       setCapturedImage(dataUrl)
       return dataUrl
     } catch (e) {
-      console.error('Lỗi chụp khung hình:', e)
+      console.error('Unable to capture the frame:', e)
       return null
     }
   }, [isStreaming])
 
-  // Dọn dẹp tài nguyên khi unmount trang (tắt camera để bảo vệ pin và quyền riêng tư)
+  // Stop the camera when the component unmounts
   useEffect(() => {
     startCamera()
     return () => {
