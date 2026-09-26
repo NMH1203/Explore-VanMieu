@@ -1,7 +1,7 @@
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
 function AccountPage({ user, onLogout, unlockedLocations }) {
-  const { t, lang } = useLanguage()
+  const { t, lang, setLang } = useLanguage()
   const unlockedCount = unlockedLocations.size
   const displayName = user?.username || user?.email || t('common.loading')
   const avatarText = displayName[0].toUpperCase()
@@ -34,7 +34,7 @@ function AccountPage({ user, onLogout, unlockedLocations }) {
             <span>{t('account.milestones')}</span>
           </div>
         </div>
-        <section className="panel section">
+        <section className="panel quick-panel section">
           <h2>{t('account.quick')}</h2>
           <div className="quick-grid">
             <a className="btn btn-outline" href="/Explore/Ho-Chieu">
@@ -53,9 +53,12 @@ function AccountPage({ user, onLogout, unlockedLocations }) {
         </section>
         <section className="panel settings section">
           <h2>{t('account.settings')}</h2>
-          <div className="setting">
+          <div className="setting language-setting">
             <span>{t('account.language')}</span>
-            <span>{t(lang === 'en' ? 'account.english' : 'account.vietnamese')}</span>
+            <div className="account-language-switch" role="group" aria-label={t('common.language')}>
+              <button type="button" aria-pressed={lang === 'vi'} onClick={() => setLang('vi')}>VI</button>
+              <button type="button" aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
+            </div>
           </div>
           <div className="setting">
             <span>{t('account.notifications')}</span>
@@ -64,10 +67,6 @@ function AccountPage({ user, onLogout, unlockedLocations }) {
           <div className="setting">
             <span>{t('account.gps')}</span>
             <span>{t('account.alwaysOn')}</span>
-          </div>
-          <div className="setting">
-            <span>{t('account.theme')}</span>
-            <span>{t('account.light')}</span>
           </div>
         </section>
         <button className="btn btn-outline btn-block" type="button" onClick={onLogout}>

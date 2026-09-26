@@ -1,5 +1,5 @@
-import { Award, LockKeyhole, MapPin, Plus, ScanLine, Send, Sparkles, UserRound } from 'lucide-react'
-import JourneyCard from '../../components/JourneyCard.jsx'
+import { Award, LockKeyhole, MapPin, Plus, ScanLine, Send, Sparkles } from 'lucide-react'
+import JourneyCard from '../../components/journey-card/JourneyCard.jsx'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
 function HomePage({ unlockedLocations }) {
@@ -28,9 +28,6 @@ function HomePage({ unlockedLocations }) {
           <a className="hero-logo" href="/Explore">
             <img src="/images/brand-khue-van-cac.jpg" alt="" />
             Explore Van Mieu
-          </a>
-          <a className="avatar" href="/Explore/Tai-Khoan" aria-label={t("common.account")}>
-            <UserRound size={23} strokeWidth={2} aria-hidden="true" />
           </a>
         </header>
         <div className="hero-copy">
@@ -205,41 +202,12 @@ function HomePage({ unlockedLocations }) {
             </a>
           </div>
           <div className="map-preview">
-            <div className="map-art"></div>
-            <div
-              className={`map-marker${khueVanCacUnlocked ? ' jade' : ' locked'}`}
-              style={{ left: '35%', top: '40%' }}
-            >
-              <span>{khueVanCacUnlocked ? '✓' : '1'}</span>
-            </div>
-            <div
-              className={`map-marker${daiTrungUnlocked ? ' jade' : ' locked'}`}
-              style={{ left: '55%', top: '27%' }}
-            >
-              <span>2</span>
-            </div>
-            <div className="map-marker locked" style={{ left: '71%', top: '57%' }}>
-              <span>3</span>
-            </div>
-            <div
-              className={`map-marker${thaiHocUnlocked ? ' jade' : ' locked'}`}
-              style={{ left: '48%', top: '68%' }}
-            >
-              <span>4</span>
-            </div>
-            <div className="map-card">
-              <strong>{t("locations.names.khueVanCac")} · {khueVanCacUnlocked ? t("home.map.verifiedState") : t("home.map.unverifiedState")}</strong>
-              <p>{t("home.map.distance")}</p>
-              {khueVanCacUnlocked ? (
-                <a className="btn btn-primary" href="/Explore/Khue-Van-Cac">
-                  {t("common.readStory")}
-                </a>
-              ) : (
-                <a className="btn btn-primary" href="/Explore/Camera">
-                  {t("map.verify", { distance: "32 m" })}
-                </a>
-              )}
-            </div>
+            <img
+              className="map-preview-image"
+              src="/images/locations/van-mieu-map.webp"
+              alt={t("home.map.imageAlt")}
+              loading="lazy"
+            />
           </div>
         </section>
 

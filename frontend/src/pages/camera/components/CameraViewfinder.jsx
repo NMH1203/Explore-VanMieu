@@ -58,9 +58,6 @@ export default function CameraViewfinder({
         <span className="corner bl"></span>
         <span className="corner br"></span>
 
-        {/* Animated scan line */}
-        <div className={`scan-line ${isAnalyzing ? 'fast-scan' : ''}`}></div>
-
         {/* Viewfinder instructions */}
         <div className="scan-hint">
           {isAnalyzing

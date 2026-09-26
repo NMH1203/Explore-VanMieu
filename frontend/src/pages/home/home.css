@@ -550,6 +550,10 @@
   font-size: 9px;
 }
 
+.ai-guide-home .ai-composer {
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+}
+
 .footer {
   padding: 34px 5vw 100px;
   color: #ffffff6e;

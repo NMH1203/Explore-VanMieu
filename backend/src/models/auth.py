@@ -13,6 +13,7 @@ class UserResponse(SQLModel):
     user_id: str
     email: str
     username: str | None
+    target_location_id: str | None = None
 
 class LoginRequest(SQLModel):
     email: EmailStr

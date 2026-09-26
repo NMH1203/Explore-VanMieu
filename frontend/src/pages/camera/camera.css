@@ -96,10 +96,13 @@
 }
 
 .camera-top {
+  position: relative;
+  z-index: 30;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
+
 
 .round-btn {
   width: 42px;
@@ -162,182 +165,6 @@
 }
 
 /* --------------------------------------------------------------------------
-   GPS location banner and dropdown
-   -------------------------------------------------------------------------- */
-.camera-location-wrap {
-  position: relative;
-  align-self: flex-start;
-  z-index: 20;
-}
-
-.camera-location {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 10px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 14px;
-  background: rgba(6, 19, 33, 0.85);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.location-dot {
-  font-size: 14px;
-  line-height: 1;
-}
-
-.location-dot.valid {
-  color: #10b981;
-  text-shadow: 0 0 10px #10b981;
-}
-
-.location-dot.warning {
-  color: #f59e0b;
-  text-shadow: 0 0 10px #f59e0b;
-}
-
-.location-info small {
-  display: block;
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 10px;
-}
-
-.location-name-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  margin: 1px 0;
-}
-
-.location-info strong {
-  font-size: 14px;
-  color: #ffffff;
-}
-
-.location-selector-trigger {
-  display: inline-flex;
-  color: #f0c27b;
-  opacity: 0.8;
-}
-
-.location-info span {
-  display: block;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 11px;
-}
-
-.distance-pill {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
-.distance-pill.green {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.4);
-}
-
-.distance-pill.amber {
-  background: rgba(245, 158, 11, 0.2);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.4);
-}
-
-/* Dropdown for the ten heritage sites */
-.location-dropdown-menu {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  width: 290px;
-  background: #0f172a;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 14px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-  padding: 10px;
-  max-height: 320px;
-  overflow-y: auto;
-  z-index: 50;
-  animation: fadeIn 0.2s ease;
-}
-
-.dropdown-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 8px 8px;
-  font-size: 11px;
-  color: #94a3b8;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.dropdown-header button {
-  background: none;
-  border: none;
-  color: #94a3b8;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.dropdown-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.dropdown-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.dropdown-item.selected {
-  background: rgba(240, 194, 123, 0.15);
-  border: 1px solid rgba(240, 194, 123, 0.3);
-}
-
-.item-thumb {
-  width: 38px;
-  height: 38px;
-  border-radius: 6px;
-  object-fit: cover;
-}
-
-.item-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.item-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: #f1f5f9;
-}
-
-.item-desc {
-  font-size: 10px;
-  color: #94a3b8;
-}
-
-.item-check {
-  color: #10b981;
-}
-
-/* --------------------------------------------------------------------------
    Heritage viewfinder
    -------------------------------------------------------------------------- */
 .viewfinder {
@@ -386,23 +213,6 @@
   border-radius: 0 0 16px;
 }
 
-.scan-line {
-  position: absolute;
-  left: 6%;
-  right: 6%;
-  top: 50%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #efbd74, transparent);
-  box-shadow: 0 0 14px #efbd74;
-  animation: scan 2.6s ease-in-out infinite;
-}
-
-.scan-line.fast-scan {
-  background: linear-gradient(90deg, transparent, #10b981, transparent);
-  box-shadow: 0 0 18px #10b981;
-  animation: scan 0.8s ease-in-out infinite;
-}
-
 .scan-hint {
   position: absolute;
   left: 50%;
@@ -419,17 +229,6 @@
   font-size: 11px;
   font-weight: 500;
   text-align: center;
-}
-
-@keyframes scan {
-  0%, 100% {
-    top: 14%;
-    opacity: 0.4;
-  }
-  50% {
-    top: 86%;
-    opacity: 1;
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -498,6 +297,129 @@
   color: #94a3b8;
   cursor: wait;
   box-shadow: none;
+}
+
+.camera-bottom.capture-active {
+  width: auto;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.camera-bottom.match-active {
+  width: min(650px, 100%);
+  padding: 0;
+}
+
+.camera-capture-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.camera-target-label {
+  max-width: 190px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  color: white;
+  background: rgba(6, 16, 29, 0.86);
+  text-align: left;
+}
+
+.camera-target-label small,
+.camera-target-label strong {
+  display: block;
+}
+
+.camera-target-label small {
+  margin-bottom: 3px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+}
+
+.camera-target-label strong {
+  font-size: 12px;
+}
+
+.camera-shutter {
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+  margin: 4px auto 0;
+  padding: 5px;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.camera-shutter span {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.camera-shutter:hover:not(:disabled) span {
+  transform: scale(0.9);
+}
+
+.camera-shutter.scanning span {
+  background: #efbd74;
+  animation: shutterPulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes shutterPulse {
+  to { transform: scale(0.76); opacity: 0.7; }
+}
+
+.scan-failure-panel {
+  margin-top: 0;
+  padding: 14px;
+  border: 1px solid rgba(239, 189, 116, 0.4);
+  border-radius: 12px;
+  color: white;
+  background: rgba(73, 36, 25, 0.78);
+  text-align: left;
+}
+
+.scan-failure-panel > strong,
+.scan-failure-panel label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 11px;
+}
+
+.scan-failure-panel p {
+  margin-bottom: 10px;
+}
+
+.scan-failure-panel select {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 9px;
+  color: white;
+  background: #172337;
+}
+
+.retry-match-button {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 9px;
+  color: #142238;
+  background: #efbd74;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 /* Successful recognition modal */
@@ -589,8 +511,37 @@
    Responsive Mobile
    -------------------------------------------------------------------------- */
 @media (max-width: 600px) {
+  .camera-screen {
+    min-height: calc(100svh - 68px);
+    overflow-y: auto;
+  }
+
   .camera-ui {
-    padding: 16px 4vw 24px;
+    min-height: calc(100svh - 68px);
+    padding: 16px 4vw 92px;
+  }
+
+  .camera-top {
+    display: flex;
+  }
+
+  .camera-progress {
+    justify-content: center;
+    gap: 4px;
+    padding: 8px;
+  }
+
+  .camera-progress span {
+    font-size: 9px;
+    white-space: nowrap;
+  }
+
+  .camera-progress i {
+    width: 8px;
+  }
+
+  .scan-hint {
+    bottom: 112px;
   }
 
   .scan-result-modal {

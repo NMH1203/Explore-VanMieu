@@ -95,6 +95,11 @@
   color: var(--lacquer);
   font-size: 22px;
 }
+.article h3 {
+  margin: 26px 0 8px;
+  color: var(--wood);
+  font-size: 15px;
+}
 .article p {
   color: var(--stone);
   font-size: 12px;
@@ -138,8 +143,7 @@
   font-size: 10px;
   line-height: 1.7;
 }
-.achievement-gate .after-unlock,
-body:has(#heritage-awakened:checked) .achievement-gate .before-unlock {
+.achievement-gate .after-unlock {
   display: none;
 }
 body:has(#heritage-awakened:checked) .achievement-gate .after-unlock {
@@ -207,6 +211,9 @@ body:has(#heritage-awakened:checked) .achievement-gate {
   margin: 3px 0 0;
   color: white;
   font-size: 18px;
+}
+.ai-guide-header > div:last-of-type {
+  min-width: 0;
 }
 .ai-guide-header .ai-status {
   margin-left: auto;
@@ -309,6 +316,7 @@ body:has(#heritage-awakened:checked) .achievement-gate {
 .ai-composer label,
 .ai-composer input {
   width: 100%;
+  min-width: 0;
 }
 .ai-composer input {
   border: 0;

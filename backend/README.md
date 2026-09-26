@@ -1,7 +1,7 @@
 # Backend HTTPS and location progress
 
 Run these commands from the repository root. The API uses the SQLite database
-created by `database/init_db.py` and seeded by `database/seed_locations.py`.
+created by `database/schema/init_db.py` and seeded by `database/seeds/seed_locations.py`.
 
 ## HTTPS and camera access
 
@@ -64,9 +64,9 @@ The backend modules connect as follows:
 
 - `backend/src/app/main.py` registers the API routers and creates the app.
 - `backend/src/config/db.py` creates the SQLite SQLModel engine.
-- `database/init_db.py` creates tables for the models, including
+- `database/schema/init_db.py` creates tables for the models, including
   `heritage_locations`, `checkin_logs`, and `user_history`.
-- `database/seed_locations.py` inserts the 10 locations into
+- `database/seeds/seed_locations.py` inserts the 10 locations into
   `heritage_locations`.
 - `backend/src/routes/checkins.py` checks GPS distance, calls the configured
   YEScale vision service, writes the verification log, and creates a user's
@@ -80,8 +80,8 @@ The backend modules connect as follows:
 Initialize or refresh the local development database and start the API:
 
 ```powershell
-backend\.venv\Scripts\python.exe -m database.init_db
-backend\.venv\Scripts\python.exe -m database.seed_locations
+backend\.venv\Scripts\python.exe -m database.schema.init_db
+backend\.venv\Scripts\python.exe -m database.seeds.seed_locations
 backend\.venv\Scripts\python.exe -m uvicorn backend.src.app.main:app --reload --port 8000
 ```
 
@@ -118,7 +118,7 @@ Run the isolated HTTPS/concurrency verification without changing the development
 database or certificate files:
 
 ```powershell
-backend\.venv\Scripts\python.exe scripts/test_https_load.py --users 10,25,50 --seconds 10
+backend\.venv\Scripts\python.exe deployment/scripts/test_https_load.py --users 10,25,50 --seconds 10
 ```
 
 The script starts and stops its own HTTPS server. It writes the measured results

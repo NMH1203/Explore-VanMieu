@@ -1,5 +1,5 @@
 import { LockKeyhole } from 'lucide-react'
-import { detailPaths, paths } from '../../routes.js'
+import { detailPaths, paths } from '../../routes/index.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import { LOCATION_TRANSLATION_KEYS } from '../../i18n/locationKeys.js'
 

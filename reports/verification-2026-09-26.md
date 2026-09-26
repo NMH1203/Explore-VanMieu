@@ -63,7 +63,7 @@ npm run build
 npm test
 Set-Location ..
 .\backend\.venv\Scripts\python.exe -m unittest discover -s backend/tests
-.\backend\.venv\Scripts\python.exe scripts/test_https_load.py --users 10,25,50 --seconds 10
+.\backend\.venv\Scripts\python.exe deployment/scripts/test_https_load.py --users 10,25,50 --seconds 10
 ```
 
 The script finds OpenSSL on PATH or at `D:/Git/usr/bin/openssl.exe`. On another
@@ -73,7 +73,7 @@ journey and only targets the server it starts on loopback.
 
 ## Image optimization
 
-`frontend/src/services/imageProcessing.js` scales camera frames before upload.
+`frontend/src/utils/imageProcessing.js` scales camera frames before upload.
 `backend/src/services/image_processing.py` also normalizes direct API uploads:
 
 - Fit within 512 x 512 pixels, preserving aspect ratio, without cropping/upscaling.

@@ -1,4 +1,4 @@
-import JourneyCard from '../../components/JourneyCard.jsx'
+import JourneyCard from '../../components/journey-card/JourneyCard.jsx'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
 const stampKeys = { interpret: 'khueVanCac', 'location-van-mieu-gate': 'vanMieuGate', 'location-dai-trung-gate': 'daiTrungGate', 'location-dai-thanh-gate': 'daiThanhGate', 'location-dien-dai-thanh': 'dienDaiThanh', 'location-thai-hoc-gate': 'thaiHocGate', 'location-thai-hoc-house': 'thaiHocHouse', 'location-bell-drum-tower': 'bellDrum', 'location-octagonal-house': 'octagonalHouse', 'location-phuong-dinh': 'phuongDinh' }
