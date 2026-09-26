@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft, Sun, SunMedium, Camera as CameraIcon } from 'lucide-react'
+import { SwitchCamera } from 'lucide-react'
 import { unlockLocation } from '../../state/heritageProgress.js'
 import { useCameraStream } from './hooks/useCameraStream.js'
 import { useLiveLocation } from './hooks/useLiveLocation.js'
@@ -11,8 +11,9 @@ import './camera.css'
 function CameraPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isScanComplete, setIsScanComplete] = useState(false)
+  const [isFlashing, setIsFlashing] = useState(false)
 
-  // 1. Quản lý Camera thiết bị
+  // 1. Quản lý Camera thiết bị (mặc định camera trước quét mặt, hỗ trợ đổi camera trước/sau)
   const {
     videoRef,
     isStreaming,
@@ -20,40 +21,43 @@ function CameraPage() {
     cameraError,
     capturedImage,
     setCapturedImage,
-    isTorchOn,
-    toggleTorch,
+    facingMode,
+    toggleFacingMode,
+    startCamera,
     captureSnapshot,
   } = useCameraStream()
 
-  // 2. Quản lý Tọa độ GPS & 10 điểm Văn Miếu
+  // 2. Quản lý Tọa độ GPS & Xác định công trình
   const {
     targetLocation,
-    setTargetLocation,
     distanceMeters,
     gpsAccuracy,
     isNearEnough,
   } = useLiveLocation()
 
-  // 3. Xử lý quét nhận diện
-  const handleStartScan = () => {
-    if (isAnalyzing) return
+  // 3. Xử lý khi nhấn nút chụp ảnh
+  const handleShutterClick = () => {
+    if (isAnalyzing || isScanComplete) return
 
-    // Chụp lại khung hình hiện tại từ camera
+    // Hiệu ứng chớp sáng màn trập (Shutter Flash)
+    setIsFlashing(true)
+    setTimeout(() => setIsFlashing(false), 180)
+
+    // Chụp lại khung hình từ camera (đã tích hợp âm thanh tiếng "tách")
     captureSnapshot()
     setIsAnalyzing(true)
 
-    // Mô phỏng AI đối chiếu kiến trúc và vị trí (1.2s)
+    // Mô phỏng AI phân tích nhận diện vật thể/hiện vật (1.2s)
     setTimeout(() => {
-      // Tự động trao con dấu vào Hộ chiếu số
       if (targetLocation?.id) {
         unlockLocation(targetLocation.id)
       }
       setIsAnalyzing(false)
       setIsScanComplete(true)
-    }, 1300)
+    }, 1200)
   }
 
-  // Quét lại
+  // Quét lại / Chụp ảnh khác
   const handleResetScan = () => {
     setCapturedImage(null)
     setIsScanComplete(false)
@@ -63,76 +67,101 @@ function CameraPage() {
   return (
     <section className="screen" id="camera">
       <div className="camera-screen">
-        <div className="camera-ui">
-          {/* Thanh điều khiển trên cùng */}
-          <div className="camera-top">
-            <a className="round-btn" href="/Explore/Ban-Do" title="Quay lại Bản đồ">
-              <ArrowLeft size={18} />
-            </a>
+        {/* LỚP 1: VIDEO WEBCAM NẰM DƯỚI CÙNG (z-index: 1) */}
+        <CameraViewfinder
+          videoRef={videoRef}
+          isStreaming={isStreaming}
+          hasPermission={hasPermission}
+          cameraError={cameraError}
+          isAnalyzing={isAnalyzing}
+          capturedImage={capturedImage}
+          targetLocation={targetLocation}
+          facingMode={facingMode}
+          onStartCamera={startCamera}
+        />
 
-            <div className="camera-progress">
-              <span className={!isScanComplete && !isAnalyzing ? 'active' : 'completed'}>
-                1 · Quét
-              </span>
-              <i></i>
-              <span className={isAnalyzing ? 'active' : isScanComplete ? 'completed' : ''}>
-                2 · Nhận diện AI
-              </span>
-              <i></i>
-              <span className={isScanComplete ? 'active' : ''}>
-                3 · Khám phá
-              </span>
+        {/* LỚP 2: HIỆU ỨNG CHỚP SÁNG MÀN TRẬP KHI BẤM CHỤP (z-index: 15) */}
+        {isFlashing && <div className="camera-shutter-flash"></div>}
+
+        {/* LỚP 3: TOÀN BỘ GIAO DIỆN NỔI TRÊN CÙNG 1 KHUNG HÌNH (z-index: 20) */}
+        <div className="camera-ui">
+          {/* TRÊN CÙNG: THANH TIẾN TRÌNH HƯỚNG DẪN + VỊ TRÍ */}
+          <div className="camera-header-block">
+            <div className="camera-progress-center">
+              <div className="camera-progress">
+                <span className={!isScanComplete && !isAnalyzing ? 'active' : 'completed'}>
+                  1 · Quét
+                </span>
+                <i></i>
+                <span className={isAnalyzing ? 'active' : isScanComplete ? 'completed' : ''}>
+                  2 · Nhận diện AI
+                </span>
+                <i></i>
+                <span className={isScanComplete ? 'active' : ''}>
+                  3 · Khám phá
+                </span>
+              </div>
             </div>
 
-            <button
-              type="button"
-              className={`round-btn ${isTorchOn ? 'torch-active' : ''}`}
-              onClick={toggleTorch}
-              title="Bật/tắt đèn chiếu sáng"
-              aria-label="Bật đèn"
-            >
-              {isTorchOn ? <SunMedium size={18} /> : <Sun size={18} />}
-            </button>
+            {/* Banner vị trí GPS */}
+            <LocationBanner
+              targetLocation={targetLocation}
+              distanceMeters={distanceMeters}
+              gpsAccuracy={gpsAccuracy}
+              isNearEnough={isNearEnough}
+            />
           </div>
 
-          {/* Banner vị trí GPS thời gian thực */}
-          <LocationBanner
-            targetLocation={targetLocation}
-            setTargetLocation={setTargetLocation}
-            distanceMeters={distanceMeters}
-            gpsAccuracy={gpsAccuracy}
-            isNearEnough={isNearEnough}
-          />
-
-          {/* Khung ngắm Camera thật & Kính ngắm di sản */}
-          <CameraViewfinder
-            videoRef={videoRef}
-            isStreaming={isStreaming}
-            hasPermission={hasPermission}
-            cameraError={cameraError}
-            isAnalyzing={isAnalyzing}
-            capturedImage={capturedImage}
-            targetLocation={targetLocation}
-          />
-
-          {/* Bảng điều khiển nút bấm phía dưới */}
+          {/* DƯỚI CÙNG: LỜI HƯỚNG DẪN + NÚT CHỤP TRÒN TRẮNG + NÚT ĐỔI CAM */}
           {!isScanComplete ? (
-            <div className="camera-bottom scan-ready">
-              <span className="camera-kicker">Nhận diện công trình & Hiện vật</span>
-              <h2>Hướng camera về phía {targetLocation?.name || 'Khuê Văn Các'}</h2>
-              <p>
-                Hệ thống AI sẽ đối chiếu đặc trưng kiến trúc và GPS để xác nhận lượt tham quan và trao con dấu di sản.
-              </p>
+            <div className="camera-bottom-controls">
+              {/* Lời hướng dẫn quét khuôn mặt / hiện vật (giữ nguyên không xóa) */}
+              <div className="camera-instruction-hint">
+                <p>
+                  Hướng camera vào khuôn mặt hoặc hiện vật cần nhận diện, sau đó bấm nút chụp.
+                </p>
+              </div>
 
-              <button
-                type="button"
-                className={`scan-button ${isAnalyzing ? 'scanning' : ''}`}
-                onClick={handleStartScan}
-                disabled={isAnalyzing}
-              >
-                <CameraIcon size={16} />
-                <span>{isAnalyzing ? 'Đang phân tích hình ảnh...' : 'Bắt đầu quét'}</span>
-              </button>
+              {isAnalyzing ? (
+                <div className="camera-analyzing-pill">
+                  <span className="analyzing-spinner"></span>
+                  <span>AI đang phân tích nhận diện hình ảnh...</span>
+                </div>
+              ) : (
+                <div className="camera-shutter-dock">
+                  {/* Cột trái để cân đối nút chụp ở chính giữa */}
+                  <div className="dock-slot"></div>
+
+                  {/* Nút Chụp tròn lớn ở giữa (chuẩn Camera 76px) */}
+                  <div className="dock-center">
+                    <button
+                      type="button"
+                      className="camera-shutter-btn"
+                      onClick={handleShutterClick}
+                      aria-label="Chụp ảnh nhận diện"
+                      title="Bấm để chụp ảnh nhận diện"
+                    >
+                      <span className="camera-shutter-inner"></span>
+                    </button>
+                  </div>
+
+                  {/* Nút Đổi Camera [ 🔄 Cam trước / Cam sau ] nằm ngay bên phải nút chụp tròn */}
+                  <div className="dock-slot">
+                    <button
+                      type="button"
+                      className="camera-flip-btn"
+                      onClick={toggleFacingMode}
+                      title={facingMode === 'user' ? 'Đang dùng Cam trước (quét mặt) - Bấm đổi sang Cam sau' : 'Đang dùng Cam sau - Bấm đổi sang Cam trước'}
+                      aria-label="Đổi camera trước hoặc sau"
+                    >
+                      <SwitchCamera size={22} />
+                      <span className="flip-label">
+                        {facingMode === 'user' ? 'Cam trước' : 'Cam sau'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <ScanResultModal

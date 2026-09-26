@@ -4,101 +4,74 @@ Tài liệu này được biên soạn dành cho nhóm phát triển dự án **
 
 ---
 
-## 1. Tổng quan Tính năng
+## 1. Tổng quan Tính năng & Giao diện Mới (Camera Thực tế)
 
-Module **Camera & Quét Nhận diện** là tính năng nòng cốt và phức tạp nhất trong ứng dụng:
+Module **Camera & Quét Nhận diện** đã được tinh chỉnh hoàn thiện theo đúng chuẩn Camera hiện đại:
 - **Đường dẫn màn hình**: `/Explore/Camera`.
-- **Mục tiêu chính**: Hiện thực hóa quy trình **Check-in 2 lớp** (xác thực vị trí GPS kết hợp với nhận diện hình ảnh hiện vật qua AI).
-- **Luồng người dùng**:
-  1. Người dùng đến gần một công trình di tích thuộc Văn Miếu.
-  2. Mở màn hình Camera, hướng ống kính về phía hiện vật / công trình.
-  3. Bấm **"Bắt đầu quét"**: Hệ thống chụp lại khung hình, AI phân tích kiến trúc kết hợp đối chiếu tọa độ GPS.
-  4. Khi xác nhận hợp lệ: Hệ thống tự động đóng dấu di sản vào **Hộ chiếu số** (`/Explore/Ho-Chieu`) và đổi trạng thái trên **Bản đồ** (`/Explore/Ban-Do`), đồng thời mở thuyết minh lịch sử.
+- **Mục tiêu chính**: Tạo trải nghiệm quét và nhận diện khuôn mặt / hiện vật, công trình di tích tự nhiên như ứng dụng Camera thật trên điện thoại và laptop.
+- **Những tính năng & quy cách hiển thị chính**:
+  1. **Hiển thị chung 1 khung hình (Single Viewport)**: Toàn bộ video webcam, thanh tiến trình, banner GPS, thông điệp hướng dẫn, nút chụp tròn và nút đổi camera đều nổi bật trên cùng 1 khung hình, tuyệt đối không bị cuộn trang hay che khuất.
+  2. **Mặc định Camera trước (webcam quét mặt)**: Tự động kết nối camera trước với hiệu ứng **lật gương (mirror `scaleX(-1)`)** tự nhiên như soi gương. Tự động fallback sang bất kỳ webcam nào đang kết nối nếu thiết bị không phân biệt camera trước/sau.
+  3. **Nút đổi Camera `[ 🔄 Cam trước / Cam sau ]`**: Nằm ngay bên phải nút chụp tròn, cho phép người dùng chuyển đổi linh hoạt qua lại giữa camera trước và camera sau bất cứ lúc nào.
+  4. **Thanh tiến trình hướng dẫn (Progress Bar)**: Đặt ở vị trí trung tâm trên cùng, kích thước chữ to hơn và in đậm rõ nét (`14.5px, font-weight: 800-900`): `1 · Quét —— 2 · Nhận diện AI —— 3 · Khám phá`.
+  5. **Khung thông điệp hướng dẫn**: Hiển thị hộp chỉ dẫn thanh lịch ngay phía trên nút chụp: *"Hướng camera vào khuôn mặt hoặc hiện vật cần nhận diện, sau đó bấm nút chụp."*
+  6. **Nút chụp tròn lớn (76px)**: Nút chụp tròn đôi viền trắng sang trọng, tích hợp âm thanh chụp cơ học ("tách") qua Web Audio API và hiệu ứng chớp sáng màn trập (Shutter Flash).
+  7. **Chạm để lấy nét (Tap to Focus)**: Chạm bất cứ điểm nào trên màn hình để hiện vòng lấy nét vàng tinh tế.
 
 ---
 
 ## 2. Cấu trúc Thư mục Độc lập (Isolation Architecture)
 
-Toàn bộ mã nguồn, custom hook và component của module Camera được đóng gói khép kín trong thư mục `frontend/src/pages/camera/`, **hoàn toàn không đụng chạm** vào các trang khác của team:
+Toàn bộ mã nguồn của module Camera nằm khép kín trong thư mục `frontend/src/pages/camera/`:
 
 ```text
 frontend/src/pages/camera/
-├── CameraPage.jsx                 # Component trang chính: Điều phối luồng quét, GPS và mở khóa
-├── camera.css                     # Toàn bộ CSS cho video stream toàn màn hình, kính ngắm laser, modal kết quả
+├── CameraPage.jsx                 # Component trang chính: Điều phối hiển thị chung 1 khung hình, luồng chụp & nhận diện
+├── camera.css                     # CSS giao diện camera, mirror video, thanh tiến trình, nút chụp 76px, nút đổi cam
 ├── hooks/
-│   ├── useCameraStream.js         # Hook WebRTC: Bật/tắt camera sau, giải phóng tài nguyên, chụp ảnh canvas
+│   ├── useCameraStream.js         # Hook WebRTC: Mặc định camera trước, lật gương mirror, âm thanh màn trập, đổi cam
 │   └── useLiveLocation.js         # Hook Geolocation: Lấy GPS thực tế, tính khoảng cách Haversine tới 10 công trình
 └── components/
-    ├── CameraViewfinder.jsx       # Component chứa luồng <video> thật, kính ngắm di sản và đường quét laser
-    ├── LocationBanner.jsx         # Component hiển thị tọa độ GPS, khoảng cách và menu chọn nhanh 10 công trình
+    ├── CameraViewfinder.jsx       # Component chứa luồng <video> thật (lật gương) và hiệu ứng tap to focus
+    ├── LocationBanner.jsx         # Component hiển thị tọa độ GPS gọn gàng phía trên
     └── ScanResultModal.jsx        # Modal thông báo nhận diện thành công, độ tin cậy AI và các nút điều hướng
 ```
 
 ---
 
-## 3. Chi tiết Vai trò Từng File & Kỹ thuật Áp dụng
+## 3. Chi tiết Kỹ thuật Áp dụng
 
 ### 1. `hooks/useCameraStream.js`
-- **Công nghệ**: WebRTC MediaStream API (`navigator.mediaDevices.getUserMedia`).
-- **Cấu hình**: Ưu tiên mở camera sau trên thiết bị di động (`facingMode: { ideal: 'environment' }`) với độ phân giải tiêu chuẩn `1280x720`.
-- **Tự động dọn dẹp (`Cleanup`)**: Khi người dùng rời khỏi trang Camera (chuyển sang Bản đồ, Hộ chiếu, Trang chủ), hook sẽ gọi `stream.getTracks().forEach(track => track.stop())` để tắt ngay đèn camera, tiết kiệm pin và bảo vệ quyền riêng tư.
-- **Cơ chế Fallback thông minh**: Nếu thiết bị không có webcam hoặc người dùng từ chối quyền, hệ thống tự động chuyển sang chế độ mô phỏng di sản, không để ứng dụng bị crash hay màn hình đen.
-- **Hàm `captureSnapshot()`**: Bắt khung hình video sang `<canvas>` ngầm và trích xuất ảnh định dạng `data:image/jpeg`.
+- **Mặc định `facingMode: 'user'`**: Tự động mở webcam máy tính/laptop để soi mặt trực tiếp.
+- **Lật gương tự nhiên (`mirror`)**: Áp dụng `transform: scaleX(-1)` cho cả thẻ video trực tiếp và ảnh chụp canvas khi ở chế độ camera trước.
+- **Chuyển đổi Camera (`toggleFacingMode`)**: Đổi qua lại tức thì giữa `user` và `environment`.
+- **Âm thanh màn trập (`playShutterSound`)**: Bộ tổng hợp âm thanh bằng Web Audio API không cần tải file âm thanh ngoài, phát tiếng click cơ học cực kỳ chân thực.
 
 ### 2. `hooks/useLiveLocation.js`
 - **Công nghệ**: HTML5 Geolocation API (`navigator.geolocation.watchPosition`).
-- **Thuật toán Haversine**: Tính toán khoảng cách hình cầu thực tế (đơn vị: mét) từ vị trí người dùng đến 10 điểm GPS Văn Miếu (lấy từ dữ liệu dùng chung `mapData.js`).
+- **Thuật toán Haversine**: Tính toán khoảng cách thực tế (đơn vị: mét) từ vị trí người dùng đến 10 điểm GPS Văn Miếu (lấy từ dữ liệu `mapData.js`).
 - **Quy tắc bán kính hợp lệ**: Tự động đánh dấu vị trí hợp lệ khi khoảng cách $\le 50\text{ m}$.
-- **Hỗ trợ kiểm thử**: Tích hợp sẵn cơ chế gán vị trí mặc định tại Sân Khuê Văn Các (cách 12m) khi kiểm thử trên máy tính không có GPS ngoài trời.
 
 ### 3. `components/CameraViewfinder.jsx`
-- Nhúng thẻ `<video playsInline autoPlay muted>` hiển thị luồng hình ảnh camera thời gian thực.
-- Phủ lớp kính ngắm di sản (Viewfinder) gồm 4 góc vàng đồng Hoàng kỳ (`corner tl, tr, bl, br`).
-- Đường tia laser (`scan-line`) chạy quét chuyển động liên tục. Khi người dùng bấm quét, tia laser đổi sang màu xanh ngọc và quét nhanh gấp 3 lần để thể hiện trạng thái AI đang phân tích.
+- Hiển thị luồng video webcam trực tiếp, không dùng ảnh di tích làm nền giả.
+- Hỗ trợ tap-to-focus tại vị trí nhấp chuột/chạm tay.
 
 ### 4. `components/LocationBanner.jsx`
-- Thanh hiển thị vị trí nổi ở góc trên: Chấm radar trạng thái (xanh khi hợp lệ, cam khi đang định vị), tên công trình, độ chính xác GPS và khoảng cách.
-- **Menu chọn nhanh 10 công trình**: Cho phép người kiểm thử hoặc người dùng bấm vào tên công trình để chuyển đổi nhanh giữa 10 địa danh của Văn Miếu.
+- Đặt gọn gàng ở đỉnh màn hình dưới thanh tiến trình: Chấm trạng thái GPS (xanh khi hợp lệ), tên công trình gần nhất, khoảng cách và độ chính xác GPS.
 
 ### 5. `components/ScanResultModal.jsx`
-- Card kết quả xuất hiện dạng hiệu ứng trượt mượt mà (slide-up) khi nhận diện thành công:
-  - Icon tích xanh phát sáng hào quang.
-  - Thông báo độ tin cậy AI (98.4%).
-  - Xác nhận vị trí và thông báo đã đóng dấu vào Hộ chiếu số.
-  - Các nút hành động nhanh: *Xem thông tin di sản*, *Mở Hộ chiếu* và *Quét lại*.
+- Card kết quả xuất hiện dạng hiệu ứng trượt mượt mà khi nhận diện thành công (98.4%).
+- Tự động lưu mở khóa công trình vào `localStorage` qua hàm `unlockLocation(id)`.
 
-### 6. `CameraPage.jsx`
-- Đóng vai trò bộ não điều phối: Kết nối camera stream, GPS, xử lý nút bấm "Bắt đầu quét", tạo độ trễ phân tích 1.3 giây và gọi hàm `unlockLocation(targetLocation.id)` để ghi nhận tiến trình.
-
-### 7. `camera.css`
-- Phong cách giao diện đêm huyền bí (`#07101c`) kết hợp màu vàng đồng và xanh ngọc bích.
-- Hoàn toàn responsive trên mọi kích thước màn hình (tối ưu đặc biệt cho trình duyệt điện thoại).
+### 6. `CameraPage.jsx` & `camera.css`
+- Bố cục **chung 1 khung hình** (`height: 100vh; overflow: hidden; pointer-events: none` cho lớp overlay và `pointer-events: auto` cho nút bấm).
+- Nút chụp tròn 76px viền đôi ở trung tâm dưới cùng.
+- Nút đổi Camera `[ 🔄 Cam trước / Cam sau ]` nằm ngay bên phải nút chụp.
+- Hộp thông điệp hướng dẫn nằm ngay phía trên nút chụp.
 
 ---
 
-## 4. Cơ chế Đồng bộ Dữ liệu Toàn Ứng dụng
-
-Khi người dùng thực hiện quét thành công một công trình tại trang Camera:
-```mermaid
-sequenceDiagram
-    participant User as Du khách (Camera UI)
-    participant CP as CameraPage.jsx
-    participant State as heritageProgress.js (LocalStorage)
-    participant Map as Trang Bản đồ (/Ban-Do)
-    participant Passport as Trang Hộ chiếu (/Ho-Chieu)
-
-    User->>CP: Bấm "Bắt đầu quét"
-    CP->>CP: Chụp ảnh Canvas + Quét AI (1.3s)
-    CP->>State: unlockLocation(locationId)
-    State->>State: Lưu vào localStorage('explore-van-mieu-unlocked-locations')
-    CP->>User: Hiển thị Modal Chúc mừng + Con dấu
-    State-->>Map: Marker tự đổi sang màu xanh ngọc bích (✓)
-    State-->>Passport: Con dấu công trình tự sáng lên (Collected)
-```
-
----
-
-## 5. Hướng dẫn Chạy & Kiểm thử
+## 4. Hướng dẫn Chạy & Kiểm thử
 
 ### 1. Khởi động ứng dụng:
 ```bash
@@ -109,16 +82,11 @@ npm run dev
 ### 2. Truy cập màn hình Camera:
 👉 **`http://localhost:5173/Explore/Camera`**
 
-### 3. Kịch bản kiểm thử đề xuất:
-- **Kiểm tra Camera**: Khi mở trang, nếu trình duyệt hỏi quyền truy cập Camera, bấm **"Allow/Cho phép"** để thấy luồng video trực tiếp.
-- **Kiểm tra Fallback**: Nếu chạy trên máy không có camera hoặc chọn "Block", kiểm tra giao diện tự động chuyển sang nền mô phỏng di sản.
-- **Kiểm tra đổi địa điểm**: Bấm vào tên công trình trên banner vị trí để chọn một địa danh (ví dụ: *Cổng Đại Trung*, *Điện Đại Thành* hoặc *Nhà Thái Học*).
-- **Kiểm tra Quét & Mở khóa**: Bấm nút **"Bắt đầu quét"** ➔ Đợi 1.3 giây ➔ Xem modal thông báo thành công ➔ Bấm **"Mở Hộ chiếu"** để thấy con dấu của địa điểm vừa quét đã được kích hoạt!
-- **Kiểm tra Build**:
-  ```bash
-  npm run build    # Đảm bảo 0 lỗi biên dịch Vite
-  ```
+### 3. Kiểm tra tính hợp lệ của mã nguồn:
+```bash
+npm run build    # Đảm bảo 0 lỗi biên dịch Vite
+```
 
 ---
 
-*Tài liệu này được tạo vào ngày 18/09/2026 bởi thành viên phụ trách nhóm Frontend (Module Bản đồ & Camera).*
+*Tài liệu này được cập nhật vào ngày 26/09/2026 bởi thành viên phụ trách nhóm Frontend (Module Bản đồ & Camera).*
