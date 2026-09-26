@@ -11,7 +11,7 @@ export default function LocationSidebar({
   const { t } = useLanguage()
   const itemRefs = useRef({})
 
-  // Tự động cuộn đến thẻ tương ứng khi người dùng click vào Marker trên bản đồ
+  // Scroll to the corresponding card when a map marker is selected
   useEffect(() => {
     if (selectedLocation && itemRefs.current[selectedLocation.id]) {
       itemRefs.current[selectedLocation.id].scrollIntoView({

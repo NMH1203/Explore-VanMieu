@@ -1,3 +1,11 @@
+"""Verify visitor check-ins and record successful location unlocks.
+
+This route connects the API request to the check-in response and log models,
+the heritage-location catalog, authenticated users, user progress history, and
+the image-recognition service. Related behavior is covered by
+``backend/tests/test_checkin_routes.py``.
+"""
+
 import math
 import os
 from datetime import datetime, timezone
@@ -12,6 +20,7 @@ from backend.src.models.checkin_log import CheckinLog
 from backend.src.models.heritage_location import HeritageLocation
 from backend.src.models.user import User
 from backend.src.models.user_history import UserHistory
+from backend.src.services.image_processing import InvalidImageError
 from backend.src.services.vision import (
     VisionConfigurationError,
     VisionProviderError,
@@ -24,6 +33,7 @@ ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
 
 def calculate_distance_meters(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Return the great-circle distance between two latitude/longitude pairs."""
     earth_radius = 6_371_000
     latitude_delta = math.radians(lat2 - lat1)
     longitude_delta = math.radians(lon2 - lon1)
@@ -44,22 +54,26 @@ async def verify_checkin(
     image: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
 ):
+    """Validate the upload and location, recognize the image, and save its result."""
     if not -90 <= latitude <= 90 or not -180 <= longitude <= 180:
-        raise HTTPException(status_code=422, detail="Tọa độ GPS không hợp lệ")
+        raise HTTPException(status_code=422, detail="Invalid GPS coordinates.")
 
     if image.content_type not in ALLOWED_IMAGE_TYPES:
-        raise HTTPException(status_code=415, detail="Chỉ chấp nhận ảnh JPEG, PNG hoặc WebP")
+        raise HTTPException(
+            status_code=415,
+            detail="Only JPEG, PNG, or WebP images are accepted.",
+        )
 
     image_bytes = await image.read(MAX_IMAGE_BYTES + 1)
     if not image_bytes:
-        raise HTTPException(status_code=400, detail="Ảnh gửi lên đang rỗng")
+        raise HTTPException(status_code=400, detail="The uploaded image is empty.")
     if len(image_bytes) > MAX_IMAGE_BYTES:
-        raise HTTPException(status_code=413, detail="Ảnh vượt quá giới hạn 5 MB")
+        raise HTTPException(status_code=413, detail="The image exceeds the 5 MB limit.")
 
     with Session(engine) as session:
         location = session.get(HeritageLocation, location_id)
         if location is None:
-            raise HTTPException(status_code=404, detail="Không tìm thấy địa điểm")
+            raise HTTPException(status_code=404, detail="Location not found.")
 
         distance = calculate_distance_meters(
             latitude,
@@ -83,7 +97,10 @@ async def verify_checkin(
                 verified=False,
                 location_id=location.location_id,
                 distance_meters=round(distance, 2),
-                message=f"Bạn đang cách địa điểm {round(distance)} m, ngoài vùng check-in.",
+                message=(
+                    f"You are {round(distance)} m away from this location, "
+                    "outside the check-in area."
+                ),
             )
 
         labels = list(session.exec(select(HeritageLocation.yolo_label)).all())
@@ -93,6 +110,8 @@ async def verify_checkin(
                 image.content_type,
                 labels,
             )
+        except InvalidImageError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
         except VisionConfigurationError as error:
             raise HTTPException(status_code=503, detail=str(error)) from error
         except VisionProviderError as error:
@@ -124,9 +143,10 @@ async def verify_checkin(
 
         session.commit()
         message = (
-            f"Đã xác nhận {location.name} và lưu con dấu di sản."
+            f"{location.name} has been verified and its heritage stamp saved."
             if verified
-            else "Ảnh chưa khớp với địa điểm đã chọn. Hãy chụp rõ công trình rồi thử lại."
+            else "The image does not match the selected location. "
+            "Capture a clear image of the site and try again."
         )
         return CheckinVerificationResponse(
             verified=verified,

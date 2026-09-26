@@ -3,9 +3,9 @@ import { Send } from 'lucide-react'
 import { askHeritageGuide, getChatHistory } from '../../../services/chat.js'
 
 const suggestions = [
-  'Công trình này có ý nghĩa gì?',
-  'Hãy giải thích ngắn gọn cho học sinh.',
-  'Điểm kiến trúc nổi bật là gì?',
+  'What is the significance of this building?',
+  'Explain this briefly for a student.',
+  'What are the architectural highlights?',
 ]
 
 export default function HeritageMessageBox({ locationId, locationName }) {
@@ -74,45 +74,45 @@ export default function HeritageMessageBox({ locationId, locationName }) {
   }
 
   return (
-    <section className="ai-guide" aria-label={`Hỏi AI về ${locationName}`}>
+    <section className="ai-guide" aria-label={`Ask AI about ${locationName}`}>
       <header className="ai-guide-header">
         <div className="ai-avatar">AI</div>
         <div>
           <span>AI Heritage Guide</span>
-          <h2>Hỏi thêm về {locationName}</h2>
+          <h2>Learn more about {locationName}</h2>
         </div>
-        <span className="ai-status">● Đang trực tuyến</span>
+        <span className="ai-status">● Heritage guide</span>
       </header>
 
       <div className="ai-chat-body" aria-live="polite">
         <div className="ai-message">
           <div className="mini-avatar">AI</div>
           <div>
-            <span className="message-label">Trợ lý di sản</span>
+            <span className="message-label">Heritage assistant</span>
             <div className="bubble ai">
-              Bạn muốn tìm hiểu lịch sử, kiến trúc hay ý nghĩa của {locationName}?
+              Would you like to explore the history, architecture, or meaning of {locationName}?
             </div>
           </div>
         </div>
 
         {isLoadingHistory && (
-          <p className="ai-chat-state">Đang tải lịch sử trò chuyện...</p>
+          <p className="ai-chat-state">Loading chat history...</p>
         )}
 
         {messages.map((message) => (
           <div className="chat-exchange" key={message.message_id}>
             <div className="ai-message user-message">
               <div>
-                <span className="message-label">Bạn</span>
+                <span className="message-label">You</span>
                 <div className="bubble user">{message.question}</div>
               </div>
             </div>
             <div className="ai-message">
               <div className="mini-avatar">AI</div>
               <div>
-                <span className="message-label">Trợ lý di sản</span>
+                <span className="message-label">Heritage assistant</span>
                 <div className="bubble ai">
-                  {message.answer || 'Đang suy nghĩ...'}
+                  {message.answer || 'Thinking...'}
                 </div>
               </div>
             </div>
@@ -121,7 +121,7 @@ export default function HeritageMessageBox({ locationId, locationName }) {
 
         {messages.length === 0 && !isLoadingHistory && (
           <>
-            <p className="suggestion-label">Gợi ý câu hỏi</p>
+            <p className="suggestion-label">Suggested questions</p>
             <div className="question-row">
               {suggestions.map((suggestion) => (
                 <button
@@ -140,26 +140,26 @@ export default function HeritageMessageBox({ locationId, locationName }) {
 
       <form className="ai-composer" onSubmit={handleSubmit}>
         <label>
-          <span className="sr-only">Câu hỏi</span>
+          <span className="sr-only">Question</span>
           <input
             value={question}
             maxLength={500}
             onChange={(event) => setQuestion(event.target.value)}
-            placeholder={`Hỏi AI về ${locationName}...`}
+            placeholder={`Ask AI about ${locationName}...`}
             disabled={isSending}
           />
         </label>
         <button
           type="submit"
           className="send-button"
-          aria-label="Gửi"
+          aria-label="Send"
           disabled={isSending || !question.trim()}
         >
           <Send size={18} />
         </button>
       </form>
       {error && <p className="ai-chat-error" role="alert">{error}</p>}
-      <p className="ai-note">Câu trả lời được tạo từ tư liệu địa điểm trong database.</p>
+      <p className="ai-note">Answers are generated from the site information in the database.</p>
     </section>
   )
 }

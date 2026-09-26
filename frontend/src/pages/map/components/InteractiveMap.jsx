@@ -15,11 +15,11 @@ export default function InteractiveMap({
   const mapInstanceRef = useRef(null)
   const markersRef = useRef({})
 
-  // Khởi tạo Leaflet map
+  // Initialize the Leaflet map
   useEffect(() => {
     if (!mapContainerRef.current) return
 
-    // Tránh khởi tạo nhiều lần
+    // Avoid initializing the map more than once
     if (mapInstanceRef.current) return
 
     const map = L.map(mapContainerRef.current, {
@@ -32,13 +32,13 @@ export default function InteractiveMap({
       zoomControl: false,
     })
 
-    // Thêm tile layer OpenStreetMap
+    // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 19,
     }).addTo(map)
 
-    // Thêm nút zoom ở góc phải dưới
+    // Add zoom controls in the bottom right corner
     L.control.zoom({ position: 'bottomright' }).addTo(map)
 
     mapInstanceRef.current = map
@@ -49,12 +49,12 @@ export default function InteractiveMap({
     }
   }, [])
 
-  // Cập nhật các Marker khi locations hoặc trạng thái mở khóa thay đổi
+  // Update markers when locations or unlock status change
   useEffect(() => {
     const map = mapInstanceRef.current
     if (!map) return
 
-    // Xóa các marker cũ nếu có
+    // Remove existing markers
     Object.values(markersRef.current).forEach((marker) => marker.remove())
     markersRef.current = {}
 
@@ -89,7 +89,7 @@ export default function InteractiveMap({
     })
   }, [locations, unlockedLocations, selectedLocation, onSelectLocation])
 
-  // Khi selectedLocation thay đổi, lia bản đồ đến vị trí đó
+  // Pan to the selected location
   useEffect(() => {
     const map = mapInstanceRef.current
     if (!map || !selectedLocation) return
@@ -112,7 +112,7 @@ export default function InteractiveMap({
     <div className="interactive-map-wrapper">
       <div ref={mapContainerRef} className="interactive-map-canvas" />
 
-      {/* Bảng chú giải trạng thái */}
+      {/* Status legend */}
       <div className="map-overlay-legend">
         <span>
           <i className="dot jade"></i> {t("common.unlocked")}
@@ -122,7 +122,7 @@ export default function InteractiveMap({
         </span>
       </div>
 
-      {/* Phím bấm tiện ích trên bản đồ */}
+      {/* Map controls */}
       <div className="map-overlay-controls">
         <button
           type="button"

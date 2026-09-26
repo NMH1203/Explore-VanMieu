@@ -29,7 +29,7 @@ class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
         location = HeritageLocation(
             location_id="interpret",
             yolo_label="khue_van_cac",
-            name="Khuê Văn Các",
+            name="Constellation of Literature Pavilion",
             sequence_order=3,
             latitude=21.02868,
             longitude=105.83592,

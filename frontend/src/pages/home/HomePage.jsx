@@ -8,12 +8,12 @@ function HomePage({ unlockedLocations }) {
   const daiTrungUnlocked = unlockedLocations.has('location-dai-trung-gate')
   const thaiHocUnlocked = unlockedLocations.has('location-thai-hoc-house')
   const passportPreview = [
-    ['interpret', 'khue-van-cac.jpg', 'Khuê Văn Các'],
-    ['location-van-mieu-gate', 'cong-van-mieu.jpg', 'Cổng Văn Miếu'],
-    ['location-dai-trung-gate', 'cong-dai-trung.jpg', 'Cổng Đại Trung'],
-    ['location-dai-thanh-gate', 'cong-dai-thanh.jpg', 'Cổng Đại Thành'],
-    ['location-dien-dai-thanh', 'dien-dai-thanh.jpg', 'Điện Đại Thành'],
-    ['location-thai-hoc-gate', 'cong-thai-hoc.jpg', 'Cổng Thái Học'],
+    ['interpret', 'khue-van-cac.jpg', 'Khue Van Pavilion'],
+    ['location-van-mieu-gate', 'cong-van-mieu.jpg', 'Temple of Literature Gate'],
+    ['location-dai-trung-gate', 'cong-dai-trung.jpg', 'Dai Trung Gate'],
+    ['location-dai-thanh-gate', 'cong-dai-thanh.jpg', 'Dai Thanh Gate'],
+    ['location-dien-dai-thanh', 'dien-dai-thanh.jpg', 'Dai Thanh Hall'],
+    ['location-thai-hoc-gate', 'cong-thai-hoc.jpg', 'Thai Hoc Gate'],
   ]
 
   return (
@@ -440,7 +440,7 @@ function HomePage({ unlockedLocations }) {
                   <div className={`stamp${unlocked ? ' collected' : ''}`} key={id}>
                     <img
                       src={`/images/passport/${image}`}
-                      alt={`${name} ${unlocked ? 'đã mở khóa' : 'chưa mở khóa'}`}
+                      alt={`${name} ${unlocked ? 'unlocked' : 'locked'}`}
                       loading="lazy"
                     />
                   </div>

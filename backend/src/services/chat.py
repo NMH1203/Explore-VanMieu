@@ -27,14 +27,14 @@ async def answer_heritage_question(
 ) -> str:
     api_key = os.getenv("YESCALE_API_KEY", "").strip()
     if not api_key:
-        raise ChatConfigurationError("Thiếu YESCALE_API_KEY trong file .env")
+        raise ChatConfigurationError("YESCALE_API_KEY is missing from the .env file.")
 
     base_url = os.getenv("YESCALE_BASE_URL", "https://api.yescale.io/v1").rstrip("/")
     model = os.getenv("YESCALE_CHAT_MODEL", "gpt-4o-mini")
     context = (
-        f"Địa điểm: {location_name}\n"
-        f"Tóm tắt: {story_summary}\n"
-        f"Lịch sử chi tiết: {deep_history or 'Chưa có dữ liệu bổ sung.'}"
+        f"Location: {location_name}\n"
+        f"Summary: {story_summary}\n"
+        f"Detailed history: {deep_history or 'No additional information is available.'}"
     )
     payload = {
         "model": model,
@@ -44,16 +44,16 @@ async def answer_heritage_question(
             {
                 "role": "system",
                 "content": (
-                    "Bạn là hướng dẫn viên lịch sử tại Văn Miếu - Quốc Tử Giám. "
-                    "Hãy trả lời bằng tiếng Việt, rõ ràng và thân thiện. "
-                    "Chỉ sử dụng thông tin trong phần tư liệu được cung cấp. "
-                    "Nếu tư liệu không đủ để trả lời, hãy nói rằng dữ liệu hiện có "
-                    "chưa cung cấp thông tin đó; không được tự bịa sự kiện hoặc niên đại."
+                    "You are a historical guide at the Temple of Literature in Hanoi. "
+                    "Answer clearly and warmly in English. "
+                    "Use only the information in the supplied reference material. "
+                    "If the material does not contain enough information, say so; "
+                    "never invent events or dates."
                 ),
             },
             {
                 "role": "user",
-                "content": f"TƯ LIỆU:\n{context}\n\nCÂU HỎI:\n{question}",
+                "content": f"REFERENCE MATERIAL:\n{context}\n\nQUESTION:\n{question}",
             },
         ],
     }
@@ -68,7 +68,7 @@ async def answer_heritage_question(
             response.raise_for_status()
             answer = response.json()["choices"][0]["message"]["content"]
     except httpx.TimeoutException as error:
-        raise ChatProviderError("YEScale trả lời quá thời gian cho phép") from error
+        raise ChatProviderError("YEScale chat request timed out.") from error
     except httpx.HTTPStatusError as error:
         logger.warning(
             "YEScale chat returned HTTP %s: %s",
@@ -76,11 +76,11 @@ async def answer_heritage_question(
             error.response.text[:500],
         )
         raise ChatProviderError(
-            f"YEScale từ chối yêu cầu (HTTP {error.response.status_code})"
+            f"YEScale rejected the chat request (HTTP {error.response.status_code})."
         ) from error
     except (httpx.HTTPError, KeyError, IndexError, TypeError, ValueError) as error:
-        raise ChatProviderError("Không thể nhận câu trả lời từ YEScale") from error
+        raise ChatProviderError("Could not retrieve a response from YEScale.") from error
 
     if not isinstance(answer, str) or not answer.strip():
-        raise ChatProviderError("YEScale trả về câu trả lời rỗng")
+        raise ChatProviderError("YEScale returned an empty answer.")
     return answer.strip()

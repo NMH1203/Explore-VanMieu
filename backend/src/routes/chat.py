@@ -34,13 +34,13 @@ def require_unlocked_location(
 ) -> HeritageLocation:
     location = session.get(HeritageLocation, location_id)
     if location is None:
-        raise HTTPException(status_code=404, detail="Không tìm thấy địa điểm")
+        raise HTTPException(status_code=404, detail="Location not found.")
 
     history = session.get(UserHistory, (user_id, location_id))
     if history is None or not history.status:
         raise HTTPException(
             status_code=403,
-            detail="Bạn cần mở khóa địa điểm trước khi sử dụng trợ lý AI",
+            detail="Unlock this location before using the AI guide.",
         )
     return location
 

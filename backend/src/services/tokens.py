@@ -10,7 +10,7 @@ load_dotenv(project_root / ".env")
 
 secret_key = os.getenv("JWT_SECRET_KEY")
 if not secret_key:
-    raise RuntimeError("Thiếu JWT_SECRET_KEY trong file .env")
+    raise RuntimeError("JWT_SECRET_KEY is missing from the .env file.")
 
 
 def create_access_token(user_id: str) -> str:
@@ -28,4 +28,4 @@ def get_user_id_from_token(token: str) -> str | None:
         user_id = payload.get("sub")
         return user_id if isinstance(user_id, str) else None
     except jwt.InvalidTokenError:
-        return None   
+        return None

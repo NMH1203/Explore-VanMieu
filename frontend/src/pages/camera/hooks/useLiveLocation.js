@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { MAP_LOCATIONS } from '../../map/mapData.js'
 
-// Công thức Haversine tính khoảng cách giữa 2 tọa độ (đơn vị: mét)
 function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371000 // Bán kính Trái Đất (mét)
+  const R = 6371000 // Earth radius in meters
   const dLat = ((lat2 - lat1) * Math.PI) / 180
   const dLon = ((lon2 - lon1) * Math.PI) / 180
   const a =
@@ -18,80 +17,48 @@ function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
 
 export function useLiveLocation(selectedTargetId = null) {
   const [userCoords, setUserCoords] = useState(null)
-  const [gpsStatus, setGpsStatus] = useState('locating') // 'locating' | 'ready' | 'denied' | 'fallback'
-  const [gpsAccuracy, setGpsAccuracy] = useState(8) // mét
-
-  // Mặc định địa điểm mục tiêu là Khuê Văn Các hoặc địa điểm được chọn
-  const defaultTarget = MAP_LOCATIONS.find((l) => l.id === (selectedTargetId || 'interpret')) || MAP_LOCATIONS[2]
-  const [targetLocation, setTargetLocation] = useState(defaultTarget)
-  const [distanceMeters, setDistanceMeters] = useState(12) // mặc định mô phỏng hợp lý nếu chưa có GPS
-
-  const updateNearestLocation = useCallback((lat, lng) => {
-    let minDistance = Infinity
-    let nearest = defaultTarget
-
-    MAP_LOCATIONS.forEach((loc) => {
-      const dist = calculateHaversineDistance(lat, lng, loc.lat, loc.lng)
-      if (dist < minDistance) {
-        minDistance = dist
-        nearest = loc
-      }
-    })
-
-    // Nếu người dùng không chọn cụ thể một điểm thì ưu tiên điểm gần nhất
-    if (!selectedTargetId) {
-      setTargetLocation(nearest)
-      setDistanceMeters(minDistance)
-    } else {
-      const target = MAP_LOCATIONS.find((l) => l.id === selectedTargetId) || nearest
-      setTargetLocation(target)
-      setDistanceMeters(calculateHaversineDistance(lat, lng, target.lat, target.lng))
-    }
-  }, [selectedTargetId, defaultTarget])
+  const [gpsStatus, setGpsStatus] = useState('locating')
+  const [gpsAccuracy, setGpsAccuracy] = useState(null)
+  const [manualTarget, setTargetLocation] = useState(null)
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setGpsStatus('fallback')
+      setGpsStatus('unavailable')
       return
     }
-
-    // Lấy tọa độ GPS ban đầu
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude, accuracy } = position.coords
-        setUserCoords({ lat: latitude, lng: longitude })
-        setGpsAccuracy(Math.round(accuracy) || 8)
-        setGpsStatus('ready')
-        updateNearestLocation(latitude, longitude)
-      },
-      (error) => {
-        console.warn('Lỗi lấy tọa độ GPS:', error.message)
-        setGpsStatus('denied')
-        // Dùng vị trí giả lập tại Sân Khuê Văn Các
-        setDistanceMeters(12)
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 }
-    )
-
-    // Theo dõi thay đổi vị trí liên tục (watchPosition)
+    let active = true
     const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        const { latitude, longitude, accuracy } = position.coords
-        setUserCoords({ lat: latitude, lng: longitude })
-        setGpsAccuracy(Math.round(accuracy) || 8)
+      ({ coords }) => {
+        if (!active) return
+        setUserCoords({ lat: coords.latitude, lng: coords.longitude })
+        setGpsAccuracy(Math.round(coords.accuracy))
         setGpsStatus('ready')
-        updateNearestLocation(latitude, longitude)
       },
       (error) => {
-        // im lặng xử lý nếu watch tạm thời mất sóng
+        if (!active) return
+        console.warn('Unable to obtain GPS coordinates:', error.message)
+        setUserCoords(null)
+        setGpsAccuracy(null)
+        setGpsStatus(error.code === 1 ? 'denied' : 'unavailable')
       },
-      { enableHighAccuracy: true, maximumAge: 5000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 },
     )
-
     return () => {
+      active = false
       navigator.geolocation.clearWatch(watchId)
     }
-  }, [updateNearestLocation])
+  }, [])
+
+  const distanceTo = (location) => userCoords
+    ? calculateHaversineDistance(userCoords.lat, userCoords.lng, location.lat, location.lng)
+    : null
+  const nearest = userCoords
+    ? MAP_LOCATIONS.reduce((best, location) => distanceTo(location) < distanceTo(best) ? location : best)
+    : MAP_LOCATIONS[2]
+  const targetLocation = manualTarget
+    || MAP_LOCATIONS.find((location) => location.id === selectedTargetId)
+    || nearest
+  const distanceMeters = distanceTo(targetLocation)
 
   return {
     userCoords,
@@ -100,6 +67,6 @@ export function useLiveLocation(selectedTargetId = null) {
     targetLocation,
     setTargetLocation,
     distanceMeters,
-    isNearEnough: distanceMeters <= 50, // Chuẩn bán kính check-in hợp lệ (<= 50 mét)
+    isNearEnough: gpsStatus === 'ready' && distanceMeters !== null && distanceMeters <= 30,
   }
 }

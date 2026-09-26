@@ -8,132 +8,102 @@ LOCATIONS = [
     {
         "location_id": "location-van-mieu-gate",
         "yolo_label": "van_mieu_gate",
-        "name": "Cổng Văn Miếu",
+        "name": "Temple of Literature Gate",
         "sequence_order": 1,
         "latitude": 21.02758,
         "longitude": 105.83551,
         "geofence_radius": 30.0,
-        "story_summary": (
-            "Lối vào đầu tiên mở ra trục kiến trúc "
-            "và không gian đạo học của quần thể."
-        ),
+        "story_summary": "The main entrance begins a journey through the complex\u2019s five courtyards. Its three-part gate marks a solemn boundary between the city and the heritage grounds.",
     },
     {
         "location_id": "location-dai-trung-gate",
         "yolo_label": "dai_trung_gate",
-        "name": "Cổng Đại Trung",
+        "name": "Dai Trung Gate",
         "sequence_order": 2,
         "latitude": 21.02817,
         "longitude": 105.83574,
         "geofence_radius": 30.0,
-        "story_summary": (
-            "Cánh cổng dẫn vào không gian trung tâm, "
-            "rèn đức luyện tài."
-        ),
+        "story_summary": "Dai Trung Gate marks the transition into the inner grounds. The smaller Thanh Duc and Dat Tai gates evoke the cultivation of virtue and talent.",
     },
     {
         "location_id": "interpret",
         "yolo_label": "khue_van_cac",
-        "name": "Khuê Văn Các",
+        "name": "Khue Van Pavilion",
         "sequence_order": 3,
         "latitude": 21.02868,
         "longitude": 105.83592,
         "geofence_radius": 30.0,
-        "story_summary": (
-            "Biểu tượng của văn chương, trí tuệ "
-            "và Thủ đô Hà Nội ngàn năm văn hiến."
-        ),
+        "story_summary": "Built in the early 19th century, the pavilion is known for its square tower, eight roofs, and four round windows. Its name refers to the star Khue, associated with literature.",
     },
         {
         "location_id": "location-dai-thanh-gate",
         "yolo_label": "dai_thanh_gate",
-        "name": "Cổng Đại Thành",
+        "name": "Dai Thanh Gate",
         "sequence_order": 4,
         "latitude": 21.02908,
         "longitude": 105.83608,
         "geofence_radius": 30.0,
-        "story_summary": (
-            "Cánh cổng đánh dấu lối vào khu điện thờ "
-            "trang nghiêm và sân Đại Bái."
-        ),
+        "story_summary": "Dai Thanh Gate leads to the sanctuary of Confucius and other sages. Its name evokes great achievement in learning and virtue.",
     },
     {
         "location_id": "location-dien-dai-thanh",
         "yolo_label": "dien_dai_thanh",
-        "name": "Điện Đại Thành",
+        "name": "Dai Thanh Hall",
         "sequence_order": 5,
         "latitude": 21.02935,
         "longitude": 105.83619,
         "geofence_radius": 30.0,
-        "story_summary": (
-            "Không gian thờ Khổng Tử và các bậc hiền triết "
-            "Nho học trong cấu trúc sơn son."
-        ),
+        "story_summary": "Dai Thanh Hall is the central sanctuary, honoring Confucius and Confucian sages in a solemn lacquered timber setting.",
     },
     {
         "location_id": "location-thai-hoc-gate",
         "yolo_label": "thai_hoc_gate",
-        "name": "Cổng Thái Học",
+        "name": "Thai Hoc Gate",
         "sequence_order": 6,
         "latitude": 21.02951,
         "longitude": 105.83626,
         "geofence_radius": 30.0,
-        "story_summary": (
-            "Lối chuyển tiếp vào khu vực tưởng niệm "
-            "truyền thống giáo dục Quốc học."
-        ),
+        "story_summary": "The gate links the Dai Thanh and Thai Hoc precincts. Its three bays, traditional tiled roof, and broad courtyard extend the visitor\u2019s view along the site axis.",
     },
         {
         "location_id": "location-thai-hoc-house",
         "yolo_label": "thai_hoc_house",
-        "name": "Nhà Thái Học",
+        "name": "Thai Hoc Hall",
         "sequence_order": 7,
         "latitude": 21.02998,
         "longitude": 105.83643,
         "geofence_radius": 30.0,
-        "story_summary": (
-            "Công trình tôn vinh Quốc Tử Giám và những "
-            "người thầy tiêu biểu của dân tộc."
-        ),
+        "story_summary": "Built on the grounds of the former Imperial Academy, the Thai Hoc precinct presents the history of education and commemorates those who advanced learning.",
     },
     {
         "location_id": "location-bell-drum-tower",
         "yolo_label": "bell_drum_tower",
-        "name": "Lầu Chuông – Lầu Trống",
+        "name": "Bell and Drum Towers",
         "sequence_order": 8,
         "latitude": 21.02996,
         "longitude": 105.83631,
         "geofence_radius": 30.0,
-        "story_summary": (
-            "Cặp công trình đăng đối hai bên sân Thái Học, "
-            "tạo nhịp nghi lễ trang nghiêm."
-        ),
+        "story_summary": "Standing on either side of the Thai Hoc precinct, the towers create a balanced composition and recall the rhythms of ceremony and daily life at a traditional academy.",
     },
     {
         "location_id": "location-octagonal-house",
         "yolo_label": "octagonal_house",
-        "name": "Nhà Bát Giác",
+        "name": "Octagonal Pavilion",
         "sequence_order": 9,
         "latitude": 21.02891,
         "longitude": 105.83533,
         "geofence_radius": 30.0,
-        "story_summary": (
-            "Không gian kiến trúc tám cạnh giàu biểu tượng "
-            "giữa cảnh quan cây xanh."
-        ),
+        "story_summary": "Its eight-sided plan and graceful roof make this pavilion a harmonious pause among the greenery and visitor paths.",
     },
     {
         "location_id": "location-phuong-dinh",
         "yolo_label": "phuong_dinh",
-        "name": "Phương Đình (Hồ Văn)",
+        "name": "Phuong Dinh Pavilion (Literature Lake)",
         "sequence_order": 10,
         "latitude": 21.02672,
         "longitude": 105.83630,
         "geofence_radius": 30.0,
-        "story_summary": (
-            "Điểm dừng chân kết nối cảnh quan mặt nước "
-            "Hồ Văn và trục chính di tích."
-        ),
+        "story_summary": "The square pavilion links the landscape of Van Lake with the historic complex, offering a place to rest and take in the visitor route.",
     },
 ]
 def seed_locations():

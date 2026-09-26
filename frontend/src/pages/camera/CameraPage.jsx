@@ -15,7 +15,7 @@ function CameraPage({ onVerifyCheckin }) {
   const [isScanComplete, setIsScanComplete] = useState(false)
   const [scanError, setScanError] = useState('')
 
-  // 1. Quản lý Camera thiết bị
+  // 1. Manage the device camera
   const {
     videoRef,
     isStreaming,
@@ -28,7 +28,7 @@ function CameraPage({ onVerifyCheckin }) {
     captureSnapshot,
   } = useCameraStream()
 
-  // 2. Quản lý Tọa độ GPS & 10 điểm Văn Miếu
+  // 2. Manage GPS coordinates and the ten heritage sites
   const {
     userCoords,
     targetLocation,
@@ -41,7 +41,7 @@ function CameraPage({ onVerifyCheckin }) {
   const targetLocationKey = getLocationTranslationKey(targetLocation?.id)
   const displayedTargetLocation = targetLocation ? { ...targetLocation, name: t('locations.names.' + targetLocationKey) } : null
 
-  // 3. Xử lý quét nhận diện
+  // 3. Handle image recognition
   const handleStartScan = async () => {
     if (isAnalyzing) return
 
@@ -76,7 +76,7 @@ function CameraPage({ onVerifyCheckin }) {
     }
   }
 
-  // Quét lại
+  // Scan again
   const handleResetScan = () => {
     setCapturedImage(null)
     setIsScanComplete(false)
@@ -88,7 +88,7 @@ function CameraPage({ onVerifyCheckin }) {
     <section className="screen" id="camera">
       <div className="camera-screen">
         <div className="camera-ui">
-          {/* Thanh điều khiển trên cùng */}
+          {/* Top controls */}
           <div className="camera-top">
             <a className="round-btn" href="/Explore/Ban-Do" title={t("common.back") + " " + t("common.map")}>
               <ArrowLeft size={18} />
@@ -119,7 +119,7 @@ function CameraPage({ onVerifyCheckin }) {
             </button>
           </div>
 
-          {/* Banner vị trí GPS thời gian thực */}
+          {/* Live GPS location banner */}
           <LocationBanner
             targetLocation={displayedTargetLocation}
             setTargetLocation={setTargetLocation}
@@ -128,7 +128,7 @@ function CameraPage({ onVerifyCheckin }) {
             isNearEnough={isNearEnough}
           />
 
-          {/* Khung ngắm Camera thật & Kính ngắm di sản */}
+          {/* Live camera and heritage viewfinder */}
           <CameraViewfinder
             videoRef={videoRef}
             isStreaming={isStreaming}
@@ -139,7 +139,7 @@ function CameraPage({ onVerifyCheckin }) {
             targetLocation={displayedTargetLocation}
           />
 
-          {/* Bảng điều khiển nút bấm phía dưới */}
+          {/* Bottom controls */}
           {!isScanComplete ? (
             <div className="camera-bottom scan-ready">
               <span className="camera-kicker">{t("camera.kicker")}</span>
