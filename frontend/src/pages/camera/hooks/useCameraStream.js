@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { captureOptimizedFrame } from '../../../services/imageProcessing.js'
+import { captureOptimizedFrame } from '../../../utils/imageProcessing.js'
 
 export function useCameraStream() {
   const videoRef = useRef(null)
@@ -119,13 +119,13 @@ export function useCameraStream() {
     }
   }, [isStreaming])
 
-  // Stop the camera when the component unmounts
+  // Camera access is requested from the user's explicit scan action so mobile
+  // browsers can show the permission prompt from a trusted interaction.
   useEffect(() => {
-    startCamera()
     return () => {
       stopCamera()
     }
-  }, [startCamera, stopCamera])
+  }, [stopCamera])
 
   return {
     videoRef,

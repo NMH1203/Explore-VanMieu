@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
-import Navigation from './components/Navigation.jsx'
+import { useEffect, useRef, useState } from 'react'
+import { getRewards, claimReward } from './services/reward-service/index.js'
+import { RewardContext } from './store/RewardContext.jsx'
+import Navigation from './components/navigation/Navigation.jsx'
 import AccountPage from './pages/account/AccountPage.jsx'
 import CameraPage from './pages/camera/CameraPage.jsx'
 import FiguresPage from './pages/figures/FiguresPage.jsx'
@@ -9,28 +11,43 @@ import LocationsPage from './pages/locations/LocationsPage.jsx'
 import MapPage from './pages/map/MapPage.jsx'
 import PassportPage from './pages/passport/PassportPage.jsx'
 import RegisterPage from './pages/register/RegisterPage.jsx'
-import { getRoute, normalizeInitialUrl, paths } from './routes.js'
-import { getCurrentUser, logout } from './services/auth.js'
-import { getProgress } from './services/progress.js'
-import { verifyCheckin } from './services/checkins.js'
+import { getRoute, normalizeInitialUrl, paths } from './routes/index.js'
+import { getCurrentUser, logout } from './services/auth-service/index.js'
+import { getProgress } from './services/passport-service/index.js'
+import { verifyCheckin } from './services/check-in-service/index.js'
 import { useLanguage } from './i18n/LanguageContext.jsx'
 
 normalizeInitialUrl()
-
-
 const protectedPages = new Set(['account', 'camera'])
 
 function App() {
   const [pathname, setPathname] = useState(window.location.pathname)
   const [user, setUser] = useState(undefined)
+  const authVersion = useRef(0)
+  const [reward, setReward] = useState(null)
+  const [rewardError, setRewardError] = useState('')
+  useEffect(() => {
+    let active = true
+    setReward(null)
+    setRewardError('')
+    if (user) getRewards().then(value => { if (active) setReward(value) })
+      .catch(error => { if (active) setRewardError(error.message) })
+    return () => { active = false }
+  }, [user])
+  async function handleClaimReward() {
+    setReward(await claimReward())
+  }
   const [unlockedLocations, setUnlockedLocations] = useState(new Set())
   const { t } = useLanguage()
   const isAuthenticated = Boolean(user)
   const route = getRoute(pathname)
   useEffect(() => {
+    let active = true
+    const version = authVersion.current
     getCurrentUser()
-      .then((account) => setUser(account))
-      .catch(() => setUser(null))
+      .then((account) => { if (active && version === authVersion.current) setUser(account) })
+      .catch(() => { if (active && version === authVersion.current) setUser(null) })
+    return () => { active = false }
   }, [])
 
   useEffect(() => {
@@ -113,16 +130,20 @@ function App() {
   }
 
   function handleAuthenticate(account) {
+    authVersion.current += 1
     setUser(account)
 
     const nextPath = new URLSearchParams(window.location.search).get('next')
-    navigate(nextPath?.startsWith('/Explore') ? nextPath : paths.account, { replace: true })
+    const safeNextPath = nextPath?.startsWith('/Explore') ? nextPath : paths.account
+    navigate(safeNextPath, { replace: true })
   }
 
   async function handleVerifyCheckin(checkinData) {
     const result = await verifyCheckin(checkinData)
     if (result.verified) {
       setUnlockedLocations((current) => new Set(current).add(result.location_id))
+      try { setReward(await getRewards()); setRewardError('') }
+      catch (error) { setRewardError(error.message) }
     }
     return result
   }
@@ -130,6 +151,7 @@ function App() {
   async function handleLogout() {
     try {
       await logout()
+      authVersion.current += 1
       setUser(null)
       setUnlockedLocations(new Set())
       navigate(paths.explore, { replace: true })
@@ -194,10 +216,13 @@ function App() {
 
   return (
     <div className="heritage-app" onClick={handleNavigation}>
+      <RewardContext.Provider value={{ reward, error: rewardError, claim: handleClaimReward, signedIn: Boolean(user) }}>
       <input
         className="theme-toggle"
         type="checkbox"
         id="heritage-awakened"
+        checked={Boolean(user) && reward?.theme === 'vermilion'}
+        readOnly
         aria-label={t('app.themeStatus')}
       />
       <input
@@ -206,8 +231,9 @@ function App() {
         id="scan-complete"
         aria-label={t('app.scanStatus')}
       />
-      <Navigation />
+      <Navigation showLanguageSwitch={route.page === 'explore'} />
       <main>{page}</main>
+      </RewardContext.Provider>
     </div>
   )
 }

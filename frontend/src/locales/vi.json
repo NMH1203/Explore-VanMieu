@@ -64,9 +64,10 @@
     },
     "map": {
       "kicker": "Bản đồ tương tác",
-      "title": "Di sản quanh bạn",
-      "description": "Tìm công trình gần nhất và theo dõi phần không gian đã được đánh thức.",
-      "open": "Mở bản đồ lớn",
+      "title": "Khám phá Văn Miếu qua bản đồ",
+      "description": "Xem toàn bộ khu di tích, xác định các điểm tham quan và lên lộ trình khám phá phù hợp.",
+      "open": "Đi tới trang bản đồ",
+      "imageAlt": "Sơ đồ tổng thể khu di tích Văn Miếu – Quốc Tử Giám",
       "distance": "Cách bạn 32 m · Xác minh GPS và camera để mở khóa nội dung.",
       "verified": "✓ Camera xác minh",
       "verifiedState": "Đã xác minh",
@@ -181,6 +182,7 @@
     "overviewTitle": "Xem toàn cảnh Văn Miếu",
     "story": "Xem câu chuyện di sản",
     "verify": "Mở camera xác minh (Cách {{distance}})",
+    "verifySite": "Mở camera xác minh",
     "valid": "Đã mở khóa",
     "locked": "Chưa mở khóa"
   },
@@ -230,6 +232,11 @@
     "defaultSite": "Khuê Văn Các",
     "description": "Hệ thống AI sẽ đối chiếu đặc trưng kiến trúc và GPS để xác nhận lượt tham quan và trao con dấu di sản.",
     "start": "Bắt đầu quét",
+    "captureNow": "Chụp ảnh",
+    "matchFailed": "Chưa nhận diện được địa điểm",
+    "chooseMatch": "Chọn địa điểm để đối chiếu lại",
+    "confirmMatch": "Xác nhận và đối chiếu lại",
+    "recognitionTarget": "Đang muốn nhận diện",
     "analyzing": "Đang phân tích hình ảnh...",
     "noImage": "Chưa chụp được ảnh. Hãy cấp quyền camera rồi thử lại.",
     "noGps": "Chưa lấy được vị trí GPS. Hãy cấp quyền vị trí rồi thử lại.",
@@ -259,119 +266,164 @@
     "unlocked": "Nội dung di sản đã được mở",
     "materials": "Tư liệu Văn Miếu – Quốc Tử Giám.",
     "story": "Câu chuyện di sản",
+    "moreInformation": "Lịch sử và ý nghĩa",
+    "officialSource": "Đọc tư liệu chính thức của Văn Miếu",
     "featured": "Dấu ấn nổi bật",
     "continue": "Tiếp tục hành trình",
     "continueDescription": "Khám phá thêm những lớp lịch sử và truyền thống hiếu học của di tích.",
     "backToJourney": "Quay lại hành trình",
-    "yourStamp": "Dấu ấn của bạn",
-    "recorded": "Câu chuyện đã được ghi nhận",
-    "added": "Nội dung này đã được thêm vào hành trình khám phá.",
+    "yourStamp": "Dấu ấn điểm trọng tâm",
+    "recorded": "Đã thu thập dấu ấn",
+    "added": "Địa điểm trọng tâm này đã được ghi vào Hộ chiếu Di sản của bạn.",
     "viewPassport": "Xem hộ chiếu",
     "aiLabel": "Hỏi AI về {{title}}",
     "askMore": "Hỏi thêm về {{title}}",
     "online": "● Đang trực tuyến",
     "assistant": "Trợ lý di sản",
     "question": "Bạn muốn tìm hiểu lịch sử, kiến trúc hay ý nghĩa của {{title}}?",
+    "figureQuestion": "Bạn muốn tìm hiểu cuộc đời, tư tưởng hay dấu ấn lịch sử của {{title}}?",
     "add": "Thêm",
     "inputLabel": "Câu hỏi",
     "placeholder": "Hỏi AI về {{title}}...",
     "send": "Gửi",
+    "you": "Bạn",
+    "loadingChat": "Đang tải lịch sử trò chuyện...",
+    "thinking": "Đang suy nghĩ...",
+    "suggestedQuestions": "Câu hỏi gợi ý",
+    "suggestionSignificance": "Nhân vật này có ý nghĩa như thế nào?",
+    "suggestionStudent": "Hãy giải thích ngắn gọn cho học sinh.",
+    "suggestionHighlights": "Những dấu ấn lịch sử nổi bật là gì?",
+    "locationSuggestionSignificance": "Công trình này có ý nghĩa như thế nào?",
+    "locationSuggestionHighlights": "Những nét kiến trúc nổi bật là gì?",
+    "aiDisclaimer": "Câu trả lời được tạo từ thông tin di sản trong cơ sở dữ liệu.",
     "items": {
       "location-van-mieu-gate": {
         "title": "Cổng Văn Miếu",
         "type": "Công trình",
         "heading": "Khởi đầu trục không gian đạo học",
-        "story": "Lối vào chính mở ra hành trình qua năm lớp sân của quần thể Văn Miếu. Kiến trúc tam quan tạo ranh giới trang nghiêm giữa phố thị và không gian di sản."
+        "story": "Lối vào chính mở ra hành trình qua năm lớp sân của quần thể Văn Miếu. Kiến trúc tam quan tạo ranh giới trang nghiêm giữa phố thị và không gian di sản.",
+        "fact1": "Văn Miếu được dựng năm 1070 dưới triều vua Lý Thánh Tông để thờ Khổng Tử và các bậc tiên hiền Nho học. Thái tử Càn Đức, sau là vua Lý Nhân Tông, cũng từng học tại đây.",
+        "fact2": "Cổng mở vào trục thần đạo của khu Nội tự, một trong ba bộ phận chính của quần thể rộng 54.331 m² cùng với Hồ Văn và Vườn Giám."
       },
       "location-dai-trung-gate": {
         "title": "Cổng Đại Trung",
         "type": "Công trình",
         "heading": "Cánh cổng dẫn vào trung tâm di tích",
-        "story": "Đại Trung Môn đánh dấu bước chuyển vào lớp không gian sâu hơn. Hai cổng nhỏ Thành Đức và Đạt Tài gợi nhắc việc rèn đức, luyện tài."
+        "story": "Đại Trung Môn đánh dấu bước chuyển vào lớp không gian sâu hơn. Hai cổng nhỏ Thành Đức và Đạt Tài gợi nhắc việc rèn đức, luyện tài.",
+        "fact1": "Cổng gồm ba gian và tám cột gỗ sơn đỏ đặt trên chân tảng đá. Kiến trúc mang phong cách thời Hậu Lê, trong khi phần trang trí mái có dấu ấn mỹ thuật cung đình triều Nguyễn.",
+        "fact2": "Trên bờ nóc là hình hai cá chép chầu bình. Hình tượng cá chép vượt Vũ Môn nhắc người học kiên trì rèn luyện để thành đạt trong khoa cử."
       },
       "interpret": {
         "title": "Khuê Văn Các",
         "type": "Di sản đã thức tỉnh",
         "heading": "Biểu tượng của văn chương và ánh sáng tri thức",
-        "story": "Công trình đầu thế kỷ XIX nổi bật với lầu vuông tám mái và bốn cửa sổ tròn. Tên gọi gợi sao Khuê, ngôi sao chủ về văn chương."
+        "story": "Công trình đầu thế kỷ XIX nổi bật với lầu vuông tám mái và bốn cửa sổ tròn. Tên gọi gợi sao Khuê, ngôi sao chủ về văn chương.",
+        "fact1": "Khuê Văn Các được Tổng trấn Bắc Thành Nguyễn Văn Thành cho dựng năm 1805. Tầng dưới vuông, tầng trên có các cửa sổ tròn, tạo nên bố cục cân xứng và thanh thoát.",
+        "fact2": "Theo quan niệm xưa, sao Khuê chủ về văn chương và học vấn. Công trình trở thành biểu tượng của truyền thống hiếu học Việt Nam và được chọn làm biểu tượng của Thủ đô Hà Nội năm 2012."
       },
       "location-dai-thanh-gate": {
         "title": "Cổng Đại Thành",
         "type": "Công trình",
         "heading": "Lối vào không gian thờ tự",
-        "story": "Cổng Đại Thành dẫn vào khu điện thờ Khổng Tử và các bậc hiền triết. Tên gọi biểu thị sự thành tựu lớn lao của học vấn và đạo đức."
+        "story": "Cổng Đại Thành dẫn vào khu điện thờ Khổng Tử và các bậc hiền triết. Tên gọi biểu thị sự thành tựu lớn lao của học vấn và đạo đức.",
+        "fact1": "Trên sơ đồ chính thức, Cổng Đại Thành mở vào khu Đại Thành, lớp không gian thứ tư trên trục trung tâm của quần thể.",
+        "fact2": "Phía sau cổng là sân Đại Bái và khu thờ tự thiêng liêng nhất, nơi các công trình nghi lễ được bố trí đăng đối quanh sân trung tâm."
       },
       "location-dien-dai-thanh": {
         "title": "Điện Đại Thành",
         "type": "Công trình",
         "heading": "Trung tâm thờ tự của Văn Miếu",
-        "story": "Điện Đại Thành là công trình trung tâm, nơi thờ Khổng Tử và các bậc hiền triết Nho học trong không gian gỗ sơn son trang nghiêm."
+        "story": "Điện Đại Thành là công trình trung tâm, nơi thờ Khổng Tử và các bậc hiền triết Nho học trong không gian gỗ sơn son trang nghiêm.",
+        "fact1": "Bái Đường và Điện Đại Thành đều gồm chín gian. Hệ cột gỗ lim, mái ngói mũi hài, khung sơn son thếp vàng và chạm khắc rồng mây lưu giữ nhiều đặc trưng kiến trúc thời Lê.",
+        "fact2": "Điện thờ Khổng Tử, Tứ Phối và Thập Triết. Tượng Khổng Tử được đặt ở vị trí trung tâm, quay mặt về hướng nam, phía sau là ngai và bài vị."
       },
       "location-thai-hoc-gate": {
         "title": "Cổng Thái Học",
         "type": "Công trình",
         "heading": "Dấu mốc chuyển vào khu Quốc Tử Giám",
-        "story": "Cổng nối khu Đại Thành với khu Thái Học, có ba gian, mái ngói truyền thống và khoảng sân rộng tạo chiều sâu cho trục tham quan."
+        "story": "Cổng nối khu Đại Thành với khu Thái Học, có ba gian, mái ngói truyền thống và khoảng sân rộng tạo chiều sâu cho trục tham quan.",
+        "fact1": "Cổng Thái Học đánh dấu bước chuyển từ khu thờ tự sang không gian giới thiệu truyền thống giáo dục của Quốc Tử Giám, được dựng theo lối kiến trúc gỗ truyền thống Việt Nam.",
+        "fact2": "Ba gian cổng đều có cửa gỗ hai cánh sơn son. Sân lát gạch rộng cùng hai cổng phụ tạo nên một không gian giản dị, cân xứng và trang nghiêm."
       },
       "location-thai-hoc-house": {
         "title": "Nhà Thái Học",
         "type": "Công trình",
         "heading": "Không gian tiếp nối truyền thống Quốc học",
-        "story": "Khu Thái Học được dựng trên nền Quốc Tử Giám xưa, giới thiệu lịch sử giáo dục và tưởng niệm những người có công với đạo học."
+        "story": "Khu Thái Học được dựng trên nền Quốc Tử Giám xưa, giới thiệu lịch sử giáo dục và tưởng niệm những người có công với đạo học.",
+        "fact1": "Các công trình Quốc Tử Giám cũ bị phá hủy năm 1946. Khu Thái Học hiện nay được khởi công năm 1999 và hoàn thành năm 2000 nhân dịp kỷ niệm 990 năm Thăng Long – Hà Nội.",
+        "fact2": "Tầng dưới Hậu Đường thờ thầy Chu Văn An; tầng trên thờ ba vị vua Lý Thánh Tông, Lý Nhân Tông và Lê Thánh Tông, kết nối lịch sử vương triều với truyền thống giáo dục."
       },
       "location-bell-drum-tower": {
         "title": "Lầu Chuông – Lầu Trống",
         "type": "Công trình",
         "heading": "Cặp công trình tạo thế cân xứng",
-        "story": "Hai lầu đứng hai bên khu Thái Học, tạo bố cục đăng đối và gợi nhịp nghi lễ, sinh hoạt của không gian giáo dục truyền thống."
+        "story": "Hai lầu đứng hai bên khu Thái Học, tạo bố cục đăng đối và gợi nhịp nghi lễ, sinh hoạt của không gian giáo dục truyền thống.",
+        "fact1": "Lầu Chuông và Lầu Trống thuộc quần thể Thái Học được phục dựng trên nền lịch sử của Quốc Tử Giám theo hình thức kiến trúc truyền thống Việt Nam.",
+        "fact2": "Cùng với Tiền Đường, Hậu Đường và hai dãy Tả Vu – Hữu Vu, cặp lầu định hình không gian tổ chức triển lãm, hoạt động học thuật và lễ tưởng niệm ngày nay."
       },
       "location-octagonal-house": {
         "title": "Nhà Bát Giác",
         "type": "Công trình",
         "heading": "Không gian tám cạnh giàu biểu tượng",
-        "story": "Mặt bằng tám cạnh và hệ mái thanh thoát tạo một điểm dừng kiến trúc hài hòa giữa cảnh quan cây xanh và các tuyến tham quan."
+        "story": "Mặt bằng tám cạnh và hệ mái thanh thoát tạo một điểm dừng kiến trúc hài hòa giữa cảnh quan cây xanh và các tuyến tham quan.",
+        "fact1": "Sơ đồ tham quan chính thức xác định Nhà Bát Giác là điểm số 16 trong Vườn Giám, nằm về phía bắc khu Nội tự.",
+        "fact2": "Vị trí này kéo dài tuyến tham quan ra ngoài năm lớp không gian trung tâm và kết nối với khu vườn gắn với nền Quốc Tử Giám xưa."
       },
       "location-phuong-dinh": {
         "title": "Phương Đình",
         "type": "Công trình",
         "heading": "Điểm dừng chân bên Hồ Văn",
-        "story": "Công trình mặt bằng vuông kết nối cảnh quan Hồ Văn với quần thể di tích, tạo nơi nghỉ và quan sát trên trục tham quan."
+        "story": "Công trình mặt bằng vuông kết nối cảnh quan Hồ Văn với quần thể di tích, tạo nơi nghỉ và quan sát trên trục tham quan.",
+        "fact1": "Phương Đình nằm trên gò Kim Châu giữa Hồ Văn, hồ hiện rộng khoảng 12.297 m². Xưa kia nơi đây có Phán Thủy Đường, chỗ các nho sĩ tụ họp bình văn và ngâm vịnh.",
+        "fact2": "Hà Nội phê duyệt phục dựng công trình năm 2017 và hoàn thành năm 2022. Kiến trúc gỗ hai tầng tám mái, gồm mười sáu cột, nằm thẳng với trục thần đạo của quần thể."
       },
       "figure-ly-thanh-tong": {
         "title": "Lý Thánh Tông",
         "type": "Danh nhân",
         "heading": "Vị vua cho dựng Văn Miếu",
-        "story": "Năm 1070, Lý Thánh Tông cho dựng Văn Miếu tại Thăng Long, mở đầu truyền thống tôn vinh đạo học và các bậc tiên hiền."
+        "story": "Năm 1070, Lý Thánh Tông cho dựng Văn Miếu tại Thăng Long, mở đầu truyền thống tôn vinh đạo học và các bậc tiên hiền.",
+        "fact1": "Lý Thánh Tông (1023–1072), tên húy Lý Nhật Tôn, trị vì từ năm 1054 đến 1072. Tư liệu chính thức ghi nhận ông là vị vua chú trọng nông nghiệp, giáo dục và củng cố quốc phòng.",
+        "fact2": "Năm 1070, ông cho dựng Văn Miếu để thờ Khổng Tử và các bậc tiên hiền Nho học. Thái tử Lý Càn Đức cũng được học tại đây."
       },
       "figure-ly-nhan-tong": {
         "title": "Lý Nhân Tông",
         "type": "Danh nhân",
         "heading": "Người đặt nền móng cho Quốc Tử Giám",
-        "story": "Ông tổ chức khoa thi đầu tiên năm 1075 và lập Quốc Tử Giám năm 1076 để đào tạo nhân tài cho đất nước."
+        "story": "Ông tổ chức khoa thi đầu tiên năm 1075 và lập Quốc Tử Giám năm 1076 để đào tạo nhân tài cho đất nước.",
+        "fact1": "Lý Nhân Tông (1066–1128), tên húy Lý Càn Đức, lên ngôi khi bảy tuổi và trị vì 56 năm. Ông là con vua Lý Thánh Tông và Nguyên phi Ỷ Lan.",
+        "fact2": "Ông mở khoa thi Minh Kinh Bác Học năm 1075 và cho lập Quốc Tử Giám năm 1076, đặt nền tảng thể chế cho nền giáo dục Nho học ở Việt Nam."
       },
       "figure-le-thanh-tong": {
         "title": "Lê Thánh Tông",
         "type": "Danh nhân",
         "heading": "Vị vua đề cao hiền tài và khoa cử",
-        "story": "Năm 1484, nhà vua cho dựng những bia Tiến sĩ đầu tiên để ghi danh người hiền tài và khuyến khích việc học."
+        "story": "Năm 1484, nhà vua cho dựng những bia Tiến sĩ đầu tiên để ghi danh người hiền tài và khuyến khích việc học.",
+        "fact1": "Dưới triều Lê sơ, Lê Thánh Tông mở rộng quy mô Quốc Tử Giám năm 1483 trong quá trình củng cố giáo dục và chế độ khoa cử.",
+        "fact2": "Năm 1484, ông cho dựng bia Tiến sĩ. Hệ thống 82 bia còn lại sau này được UNESCO ghi danh là Di sản tư liệu và được Việt Nam công nhận là Bảo vật quốc gia."
       },
       "figure-chu-van-an": {
         "title": "Chu Văn An",
         "type": "Danh nhân",
         "heading": "Người thầy mẫu mực của muôn đời",
-        "story": "Chu Văn An từng giữ chức Tư nghiệp Quốc Tử Giám; nhân cách thanh liêm và chính trực của ông trở thành biểu tượng của người thầy."
+        "story": "Chu Văn An từng giữ chức Tư nghiệp Quốc Tử Giám; nhân cách thanh liêm và chính trực của ông trở thành biểu tượng của người thầy.",
+        "fact1": "Chu Văn An (1292–1370) được mời về kinh dưới triều Trần và giữ chức Tư nghiệp Quốc Tử Giám, tương đương người đứng đầu trường Quốc học.",
+        "fact2": "Tượng của ông được thờ ở tầng dưới Hậu Đường khu Thái Học. Không gian này tôn vinh ông như biểu tượng của sự chính trực, nghề dạy học và tinh thần tôn sư trọng đạo."
       },
       "figure-confucius": {
         "title": "Khổng Tử",
         "type": "Danh nhân",
         "heading": "Bậc vạn thế sư biểu",
-        "story": "Khổng Tử là nhà tư tưởng, nhà giáo lớn của phương Đông. Văn Miếu thờ ông và trở thành biểu tượng cho việc học cùng tu dưỡng đạo đức."
+        "story": "Khổng Tử là nhà tư tưởng, nhà giáo lớn của phương Đông. Văn Miếu thờ ông và trở thành biểu tượng cho việc học cùng tu dưỡng đạo đức.",
+        "fact1": "Văn Miếu được lập năm 1070 để thờ Khổng Tử và các bậc tiên hiền Nho học, vì vậy di sản giáo dục và đạo đức của ông giữ vị trí trung tâm trong ý nghĩa của di tích.",
+        "fact2": "Tại Điện Đại Thành, tượng Khổng Tử được đặt ở vị trí trung tâm, quay về hướng nam; phía sau là ngai và bài vị."
       },
       "figure-four-sages": {
         "title": "Tứ Phối",
         "type": "Danh nhân",
         "heading": "Bốn bậc hiền triết phối thờ",
-        "story": "Tứ Phối gồm Nhan Hồi, Tăng Sâm, Tử Tư và Mạnh Tử, những người kế thừa và phát triển tư tưởng của Khổng Tử."
+        "story": "Tứ Phối gồm Nhan Hồi, Tăng Sâm, Tử Tư và Mạnh Tử, những người kế thừa và phát triển tư tưởng của Khổng Tử.",
+        "fact1": "Tứ Phối được phối thờ cùng Khổng Tử tại Điện Đại Thành, bên cạnh Thập Triết — mười học trò tiêu biểu trong truyền thống Nho học.",
+        "fact2": "Sự hiện diện của bốn vị tượng trưng cho quá trình kế thừa và phát triển tư tưởng Nho học qua nhiều thế hệ, từ học trò trực tiếp đến những người diễn giải về sau."
       }
     }
   },

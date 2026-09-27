@@ -25,6 +25,7 @@
   background: #fffbf2;
 }
 .stamp-wrap .art-stamp.collected {
+  border-color: var(--gold);
   border-width: 4px;
   border-style: solid;
 }
@@ -102,6 +103,14 @@
   border-radius: 11px;
   color: white;
   background: var(--stone);
+}
+.milestone.current {
+  border-color: var(--gold);
+  background: var(--gold-pale);
+}
+.milestone.current .milestone-icon {
+  color: var(--wood);
+  background: var(--gold);
 }
 .milestone.achieved {
   transition: all 0.3s ease;

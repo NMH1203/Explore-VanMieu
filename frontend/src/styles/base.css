@@ -24,13 +24,15 @@
 
 body:has(#heritage-awakened:checked) {
   /* Achievement colors: lacquer red and imperial gold */
-  --lacquer: #991f1f;
-  --lacquer-dark: #6e1515;
-  --red: #da251d;
-  --yellow: #ffcd00;
-  --gold: #d9a441;
-  --gold-pale: #f5e4b8;
-  --paper: #fff8e7;
+  --lacquer: #8e252b;
+  --lacquer-dark: #581820;
+  --red: #b83a35;
+  --yellow: #e8bf7b;
+  --gold: #d6aa65;
+  --gold-pale: #f7e8cc;
+  --paper: #fff7ed;
+  --border: #e6cfc2;
+  --stone: #79635d;
   --warm: #fffdf7;
   --jade: #2f6b55;
   --jade-pale: #d0ebe1;
@@ -103,7 +105,7 @@ img {
   background: linear-gradient(175deg, var(--lacquer) 0%, var(--lacquer-dark) 100%);
 }
 .language-switch {
-  position: fixed;
+  position: absolute;
   z-index: 60;
   top: 14px;
   right: 18px;
@@ -301,7 +303,12 @@ img {
   background: #eadfca;
 }
 .map-preview {
-  min-height: 400px;
+  background: white;
+}
+.map-preview-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 .map-full {
   min-height: 540px;

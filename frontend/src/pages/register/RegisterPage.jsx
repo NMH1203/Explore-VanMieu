@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { CircleHelp } from 'lucide-react'
 import './register.css'
-import { login, register } from '../../services/auth.js'
+import { login, register } from '../../services/auth-service/index.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
 function RegisterPage({ onAuthenticate }) {
@@ -13,6 +13,7 @@ function RegisterPage({ onAuthenticate }) {
   const [mode, setMode] = useState('login')
   const signup = mode === 'signup'
   const [username, setUsername] = useState('')
+
   async function handleSubmit(event) {
     event.preventDefault()
 

@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import { getLocationTranslationKey } from '../../i18n/locationKeys.js'
-import { MAP_LOCATIONS } from './mapData.js'
-import InteractiveMap from './components/InteractiveMap.jsx'
-import LocationSidebar from './components/LocationSidebar.jsx'
+import { MAP_LOCATIONS } from '../../data/mapLocations.js'
+import InteractiveMap from '../../components/map-view/InteractiveMap.jsx'
+import LocationSidebar from '../../components/map-view/LocationSidebar.jsx'
 import './map.css'
 
 function MapPage({ unlockedLocations }) {
@@ -37,7 +37,7 @@ function MapPage({ unlockedLocations }) {
               <div className="selected-card-actions">
                 {unlockedLocations.has(selectedLocation.id)
                   ? <a className="btn btn-gold" href={selectedLocation.detailPath}>{t('map.story')} →</a>
-                  : <a className="btn btn-primary" href="/Explore/Camera">{t('map.verify', { distance: selectedLocation.distanceEst })}</a>}
+                  : <a className="btn btn-primary" href="/Explore/Camera">{t('map.verifySite')}</a>}
               </div>
             </div>
           </div>}

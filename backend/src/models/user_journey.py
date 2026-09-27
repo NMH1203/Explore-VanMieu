@@ -1,3 +1,4 @@
+"""Legacy journey schema retained for compatibility with main's database."""
 from datetime import datetime, timezone
 from typing import Optional
 

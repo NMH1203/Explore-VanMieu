@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { captureOptimizedFrame, fitImageSize } from '../src/services/imageProcessing.js'
+import { captureOptimizedFrame, fitImageSize } from '../src/utils/imageProcessing.js'
 
 test('fits landscape, portrait, and square frames without enlarging small images', () => {
   assert.deepEqual(fitImageSize(1280, 720), { width: 512, height: 288 })

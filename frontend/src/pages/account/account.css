@@ -75,8 +75,52 @@
   color: var(--stone);
 }
 
+.language-setting {
+  align-items: center;
+}
+
+.account-language-switch {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--paper);
+}
+
+.account-language-switch button {
+  min-width: 36px;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--stone);
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.account-language-switch button[aria-pressed='true'] {
+  color: white;
+  background: var(--lacquer);
+}
+
 .quick-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
+}
+
+.quick-panel {
+  padding: 26px 30px 28px;
+}
+
+.quick-panel h2 {
+  margin: 0 0 18px;
+}
+
+@media (max-width: 600px) {
+  .quick-panel {
+    padding: 22px 20px 24px;
+  }
 }
