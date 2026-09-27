@@ -1,6 +1,12 @@
 import { handleResponse } from '../../utils/response.js'
 
-export async function verifyCheckin({ imageDataUrl, locationId, latitude, longitude }) {
+export async function verifyCheckin({ imageDataUrl, locationId, latitude, longitude, testMode = false }) {
+  if (testMode) {
+    return handleResponse(await fetch('/api/camera-test/capture', {
+      method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ location_id: locationId }),
+    }), 'Unable to save test capture')
+  }
   const imageBlob = await fetch(imageDataUrl).then((response) => response.blob())
   const formData = new FormData()
   formData.append('location_id', locationId)

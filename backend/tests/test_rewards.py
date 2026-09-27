@@ -1,4 +1,5 @@
 import tempfile
+import os
 import unittest
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
@@ -15,6 +16,33 @@ from backend.src.models.checkin_log import CheckinLog
 
 
 class RewardTests(unittest.TestCase):
+    def test_camera_test_permissions_and_reward_flow(self):
+        from backend.src.routes.camera_test import capture, capability, TestCapture
+        from fastapi import HTTPException
+        with patch('backend.src.routes.camera_test.engine', self.engine), patch.dict(os.environ, {
+            'CAMERA_TEST_ENABLED': 'true', 'CAMERA_TEST_USER_ID': 'a',
+        }):
+            self.assertTrue(capability(self.user)['enabled'])
+            other = User(user_id='b', email='b@example.com', password_hash='unused')
+            with self.assertRaises(HTTPException) as denied:
+                capture(TestCapture(location_id='0'), other)
+            self.assertEqual(denied.exception.status_code, 403)
+            with self.assertRaises(HTTPException) as missing:
+                capture(TestCapture(location_id='missing'), self.user)
+            self.assertEqual(missing.exception.status_code, 404)
+            targets = self.status()['target_ids']
+            for target in targets:
+                capture(TestCapture(location_id=target), self.user)
+                capture(TestCapture(location_id=target), self.user)
+            self.assertTrue(self.status()['completed'])
+            self.assertTrue(claim_reward(self.user)['claimed'])
+            with Session(self.engine) as s:
+                self.assertEqual(len(s.exec(select(CheckinLog)).all()), 5)
+            with patch.dict(os.environ, {'CAMERA_TEST_ENABLED': 'false'}):
+                self.assertFalse(capability(self.user)['enabled'])
+                with self.assertRaises(HTTPException):
+                    capture(TestCapture(location_id=targets[0]), self.user)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.engine = create_engine('sqlite:///' + str(Path(self.temp.name) / 'test.db'), connect_args={'check_same_thread': False})

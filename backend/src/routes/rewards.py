@@ -10,6 +10,7 @@ from backend.src.models.checkin_log import CheckinLog
 from backend.src.models.reward import RewardClaim, RewardJourney
 from backend.src.models.heritage_location import HeritageLocation
 from random import SystemRandom
+from backend.src.services.camera_test import camera_test_allowed
 
 router = APIRouter(prefix="/api/rewards", tags=["Rewards"])
 
@@ -31,7 +32,7 @@ def reward_status(session, user):
             raise HTTPException(503, "Unable to assign journey.")
     verified = set(session.exec(select(CheckinLog.target_location_id).where(
         CheckinLog.user_id == user.user_id,
-        CheckinLog.verification_status == "verified",
+        CheckinLog.verification_status.in_(['verified', 'test_verified'] if camera_test_allowed(user) else ['verified']),
     )).all())
     completed_ids = [target for target in journey.target_ids
         if target in verified and (history := session.get(UserHistory, (user.user_id, target))) and history.status]

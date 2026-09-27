@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getRewards, claimReward } from './services/reward-service/index.js'
 import { RewardContext } from './store/RewardContext.jsx'
 import Navigation from './components/navigation/Navigation.jsx'
@@ -23,6 +23,7 @@ const protectedPages = new Set(['account', 'camera'])
 function App() {
   const [pathname, setPathname] = useState(window.location.pathname)
   const [user, setUser] = useState(undefined)
+  const authVersion = useRef(0)
   const [reward, setReward] = useState(null)
   const [rewardError, setRewardError] = useState('')
   useEffect(() => {
@@ -41,9 +42,12 @@ function App() {
   const isAuthenticated = Boolean(user)
   const route = getRoute(pathname)
   useEffect(() => {
+    let active = true
+    const version = authVersion.current
     getCurrentUser()
-      .then((account) => setUser(account))
-      .catch(() => setUser(null))
+      .then((account) => { if (active && version === authVersion.current) setUser(account) })
+      .catch(() => { if (active && version === authVersion.current) setUser(null) })
+    return () => { active = false }
   }, [])
 
   useEffect(() => {
@@ -126,6 +130,7 @@ function App() {
   }
 
   function handleAuthenticate(account) {
+    authVersion.current += 1
     setUser(account)
 
     const nextPath = new URLSearchParams(window.location.search).get('next')
@@ -146,6 +151,7 @@ function App() {
   async function handleLogout() {
     try {
       await logout()
+      authVersion.current += 1
       setUser(null)
       setUnlockedLocations(new Set())
       navigate(paths.explore, { replace: true })

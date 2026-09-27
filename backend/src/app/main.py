@@ -9,6 +9,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.src.routes.auth import router as auth_router
+from backend.src.routes.camera_test import router as camera_test_router
 from backend.src.routes.journey import router as journey_router
 from backend.src.routes.locations import create_location_router
 from backend.src.routes.chat import router as chat_router
@@ -55,6 +56,7 @@ def create_app() -> FastAPI:
     application.include_router(target_router)
     application.include_router(rewards_router)
     application.include_router(auth_router)
+    application.include_router(camera_test_router)
     application.include_router(journey_router)
 
     return application

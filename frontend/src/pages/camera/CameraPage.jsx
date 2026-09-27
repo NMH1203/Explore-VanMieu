@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import TestCamera from './components/TestCamera.jsx'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import { getLocationTranslationKey } from '../../i18n/locationKeys.js'
 import { Camera as CameraIcon } from 'lucide-react'
@@ -14,6 +15,7 @@ function CameraPage({ onVerifyCheckin }) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isScanStarted, setIsScanStarted] = useState(false)
   const [isScanComplete, setIsScanComplete] = useState(false)
+  const [verifiedSite, setVerifiedSite] = useState(null)
   const [scanError, setScanError] = useState('')
   const [hasConfirmedMatch, setHasConfirmedMatch] = useState(false)
 
@@ -73,6 +75,7 @@ function CameraPage({ onVerifyCheckin }) {
         longitude: userCoords.lng,
       })
       if (result.verified) {
+        setVerifiedSite({ location: MAP_LOCATIONS.find(item => item.id === result.location_id) || targetLocation, distance: result.distance_meters })
         setIsScanComplete(true)
       } else {
         setScanError(result.message)
@@ -88,6 +91,7 @@ function CameraPage({ onVerifyCheckin }) {
   const handleResetScan = () => {
     setCapturedImage(null)
     setIsScanComplete(false)
+    setVerifiedSite(null)
     setIsAnalyzing(false)
     setIsScanStarted(false)
     setHasConfirmedMatch(false)
@@ -201,8 +205,8 @@ function CameraPage({ onVerifyCheckin }) {
             </div>
           ) : (
             <ScanResultModal
-              location={displayedTargetLocation}
-              distanceMeters={distanceMeters}
+              location={verifiedSite?.location}
+              distanceMeters={verifiedSite?.distance}
               onResetScan={handleResetScan}
             />
           )}
@@ -212,4 +216,16 @@ function CameraPage({ onVerifyCheckin }) {
   )
 }
 
-export default CameraPage
+export default function CameraWithTest(props) {
+  const [allowed, setAllowed] = useState(false)
+  const [testing, setTesting] = useState(false)
+  const { lang } = useLanguage()
+  useEffect(() => {
+    let active = true
+    fetch('/api/camera-test', { credentials: 'include' }).then(r => r.ok ? r.json() : null)
+      .then(data => { if (active) setAllowed(Boolean(data?.enabled)) }).catch(() => {})
+    return () => { active = false }
+  }, [])
+  if (allowed && testing) return <TestCamera {...props} onExit={() => setTesting(false)} />
+  return <>{allowed && <button className="camera-test-toggle btn btn-gold" onClick={() => setTesting(true)}>{lang === 'vi' ? 'Test bằng ảnh có sẵn' : 'Test with sample images'}</button>}<CameraPage {...props} /></>
+}

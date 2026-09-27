@@ -6,7 +6,7 @@ import { useReward } from '../../store/RewardContext.jsx'
 import { heritageItems } from '../../data/heritageItems.js'
 
 function Detail({ item, unlocked }) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const { reward } = useReward()
   const isFeaturedStop = reward?.completed_ids.includes(item.id)
   if (!unlocked) {
@@ -51,6 +51,9 @@ function Detail({ item, unlocked }) {
                 </div>
               </div>
               <article className="article">
+                {item.kind !== 'figure' && <a className="btn btn-primary" href={paths.passport}>
+                  {lang === 'vi' ? 'Xem hộ chiếu thành tựu' : 'View passport achievements'}
+                </a>}
                 <span className="kicker">{t("detail.story")}</span>
                 <h2>{t("detail.items." + item.id + ".heading")}</h2>
                 <p>{t("detail.items." + item.id + ".story")}</p>
