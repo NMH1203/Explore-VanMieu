@@ -82,3 +82,16 @@ class RewardTests(unittest.TestCase):
         app.include_router(router)
         with TestClient(app) as client:
             self.assertEqual(client.post('/api/rewards/claim').status_code, 401)
+
+    def test_legacy_journey_uses_same_targets_and_rejects_other_accounts(self):
+        from backend.src.routes.journey import router as journey_router
+        from backend.src.dependencies.auth import get_current_user
+        app = FastAPI()
+        app.include_router(journey_router)
+        app.dependency_overrides[get_current_user] = lambda: self.user
+        expected = self.status()['target_ids']
+        with patch('backend.src.routes.journey.engine', self.engine), TestClient(app) as client:
+            response = client.get('/api/journey/a')
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual([item['location_id'] for item in response.json()['locations']], expected)
+            self.assertEqual(client.get('/api/journey/b').status_code, 403)

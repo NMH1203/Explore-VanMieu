@@ -156,8 +156,13 @@ function App() {
 
   let page
   switch (route.page) {
-    case 'explore':
-      page = <HomePage unlockedLocations={unlockedLocations} />
+   case 'explore':
+      page = (
+        <HomePage
+          userId={user?.user_id}
+          unlockedLocations={unlockedLocations}
+        />
+      )
       break
     case 'map':
       page = <MapPage unlockedLocations={unlockedLocations} />
@@ -172,7 +177,12 @@ function App() {
       page = <CameraPage onVerifyCheckin={handleVerifyCheckin} />
       break
     case 'passport':
-      page = <PassportPage unlockedLocations={unlockedLocations} />
+      page = (
+        <PassportPage
+          userId={user?.user_id}
+          unlockedLocations={unlockedLocations}
+        />
+      )
       break
     case 'account':
       page = (

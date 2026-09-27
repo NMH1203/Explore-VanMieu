@@ -2,7 +2,7 @@ import { Award, LockKeyhole, MapPin, Plus, ScanLine, Send, Sparkles } from 'luci
 import JourneyCard from '../../components/journey-card/JourneyCard.jsx'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
-function HomePage({ unlockedLocations }) {
+function HomePage({ userId, unlockedLocations }) {
   const { t } = useLanguage()
   const khueVanCacUnlocked = unlockedLocations.has('interpret')
   const daiTrungUnlocked = unlockedLocations.has('location-dai-trung-gate')
@@ -187,7 +187,10 @@ function HomePage({ unlockedLocations }) {
 
       <div className="container">
         <section className="section" id="journey">
-          <JourneyCard unlockedLocations={unlockedLocations} />
+          <JourneyCard
+            userId={userId}
+            unlockedLocations={unlockedLocations}
+          />
         </section>
 
         <section className="section">

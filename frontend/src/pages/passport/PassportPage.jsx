@@ -15,7 +15,7 @@ const stamps = [
   ['location-phuong-dinh', 'Phuong Dinh Pavilion', 'phuong-dinh.jpg'],
 ]
 
-function PassportPage({ unlockedLocations }) {
+function PassportPage({ userId, unlockedLocations }) {
   const { t } = useLanguage()
   const unlockedCount = stamps.filter(([id]) => unlockedLocations.has(id)).length
 
@@ -52,7 +52,10 @@ function PassportPage({ unlockedLocations }) {
           </div>
         </section>
         <section className="section" aria-label={t("passport.today")}>
-          <JourneyCard unlockedLocations={unlockedLocations} />
+          <JourneyCard
+            userId={userId}
+            unlockedLocations={unlockedLocations}
+          />
         </section>
         <section className="section">
           <h2>{t("passport.milestones")}</h2>
