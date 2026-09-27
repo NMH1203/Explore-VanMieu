@@ -1,0 +1,17 @@
+/* Account achievement palette: vermilion, antique gold, ivory. */
+body:has(#heritage-awakened:checked) .ai-guide {
+  background: var(--lacquer-dark);
+  border-color: var(--lacquer);
+}
+body:has(#heritage-awakened:checked) .ai-guide-header {
+  background: linear-gradient(115deg, var(--lacquer-dark), var(--lacquer));
+}
+body:has(#heritage-awakened:checked) .hero-logo,
+body:has(#heritage-awakened:checked) .hero .eyebrow {
+  background: color-mix(in srgb, var(--lacquer-dark) 88%, transparent);
+}
+.journey-copy > .btn + .btn { margin: 12px 0 0 12px; }
+.journey-copy > .btn:disabled { cursor: default; opacity: .75; }
+@media (max-width: 480px) {
+  .journey-copy > .btn + .btn { margin-left: 0; }
+}

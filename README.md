@@ -28,10 +28,11 @@ Explore-VanMieu/
 │   │   ├── i18n/            # Language configuration
 │   │   ├── locales/         # English and Vietnamese translations
 │   │   ├── pages/           # Pages and page-specific components
-│   │   ├── services/        # API requests and image processing
+│   │   ├── services/        # API requests grouped by capability
+│   │   ├── utils/           # Shared response and image processing helpers
 │   │   ├── styles/          # Shared styles
 │   │   ├── App.jsx
-│   │   └── routes.js
+│   │   └── routes/index.js
 │   ├── scripts/             # Translation checks
 │   └── tests/               # Frontend tests
 ├── backend/
@@ -40,15 +41,14 @@ Explore-VanMieu/
 │   │   ├── config/          # Database connection
 │   │   ├── dependencies/    # Shared authentication checks
 │   │   ├── models/          # Database and request/response models
-│   │   ├── repositories/    # Legacy JSON storage
 │   │   ├── routes/          # API endpoints
 │   │   └── services/        # Authentication, AI, and image processing
 │   ├── tests/               # Backend tests
 │   └── requirements.txt
 ├── database/
-│   ├── init_db.py           # Create database tables
-│   └── seed_locations.py    # Seed the ten heritage sites
-├── scripts/                 # Local HTTPS and load testing
+│   ├── schema/init_db.py    # Create database tables
+│   └── seeds/seed_locations.py # Seed the ten heritage sites
+├── deployment/scripts/      # Local HTTPS and load testing
 ├── reports/                 # Verification results
 └── README.md
 ```
@@ -80,8 +80,8 @@ Keep `.env` private. A valid YEScale key is needed for image recognition and AI 
 Initialize the database and start the API:
 
 ```powershell
-backend\.venv\Scripts\python.exe -m database.init_db
-backend\.venv\Scripts\python.exe -m database.seed_locations
+backend\.venv\Scripts\python.exe -m database.schema.init_db
+backend\.venv\Scripts\python.exe -m database.seeds.seed_locations
 backend\.venv\Scripts\python.exe -m uvicorn backend.src.app.main:app --reload --port 8000
 ```
 

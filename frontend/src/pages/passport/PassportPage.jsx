@@ -1,4 +1,4 @@
-import JourneyCard from '../../components/JourneyCard.jsx'
+import JourneyCard from '../../components/journey-card/JourneyCard.jsx'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
 const stampKeys = { interpret: 'khueVanCac', 'location-van-mieu-gate': 'vanMieuGate', 'location-dai-trung-gate': 'daiTrungGate', 'location-dai-thanh-gate': 'daiThanhGate', 'location-dien-dai-thanh': 'dienDaiThanh', 'location-thai-hoc-gate': 'thaiHocGate', 'location-thai-hoc-house': 'thaiHocHouse', 'location-bell-drum-tower': 'bellDrum', 'location-octagonal-house': 'octagonalHouse', 'location-phuong-dinh': 'phuongDinh' }
@@ -15,9 +15,20 @@ const stamps = [
   ['location-phuong-dinh', 'Phuong Dinh Pavilion', 'phuong-dinh.jpg'],
 ]
 
-function PassportPage({ unlockedLocations }) {
+function PassportPage({ userId, unlockedLocations }) {
   const { t } = useLanguage()
   const unlockedCount = stamps.filter(([id]) => unlockedLocations.has(id)).length
+
+  const milestone =
+    unlockedCount >= 10
+      ? 'platinum'
+      : unlockedCount >= 5
+        ? 'gold'
+        : unlockedCount >= 3
+          ? 'silver'
+          : unlockedCount >= 1
+            ? 'bronze'
+            : 'locked'
 
   return (
     <section className="screen" id="passport">
@@ -42,7 +53,7 @@ function PassportPage({ unlockedLocations }) {
               const unlocked = unlockedLocations.has(id)
               return (
                 <div className="stamp-wrap" key={id}>
-                  <div className={`stamp art-stamp${unlocked ? ' collected' : ''}`}>
+                  <div className={`stamp art-stamp${unlocked ? ` collected ${milestone}` : ''}`}>
                     <img src={`/images/passport/${image}`} alt={t("passport.stampAlt", { name: t("locations.names." + stampKeys[id]) })} />
                   </div>
                   <span>{t("locations.names." + stampKeys[id])}</span>
@@ -52,34 +63,37 @@ function PassportPage({ unlockedLocations }) {
           </div>
         </section>
         <section className="section" aria-label={t("passport.today")}>
-          <JourneyCard unlockedLocations={unlockedLocations} />
+          <JourneyCard
+            userId={userId}
+            unlockedLocations={unlockedLocations}
+          />
         </section>
         <section className="section">
           <h2>{t("passport.milestones")}</h2>
           <br />
           <div className="milestones">
-            <article className="milestone current">
-              <div className="milestone-icon">★</div>
+            <article className={`milestone ${unlockedCount >= 1 ? 'achieved' : ''}`}>
+              <div className="milestone-icon">○</div>
               <div>
                 <h3>{t("passport.first")}</h3>
                 <p>{t("passport.firstReward", { count: Math.min(unlockedCount, 1) })}</p>
               </div>
             </article>
-            <article className="milestone">
+            <article className={`milestone ${unlockedCount >= 3 ? 'achieved' : ''}`}>
               <div className="milestone-icon">○</div>
               <div>
                 <h3>{t("passport.seeker")}</h3>
                 <p>{t("passport.seekerReward", { count: Math.min(unlockedCount, 3) })}</p>
               </div>
             </article>
-            <article className="milestone">
+            <article className={`milestone ${unlockedCount >= 5 ? 'achieved' : ''}`}>
               <div className="milestone-icon">○</div>
               <div>
                 <h3>{t("passport.complete")}</h3>
                 <p>{t("passport.completeReward", { count: Math.min(unlockedCount, 5) })}</p>
               </div>
             </article>
-            <article className="milestone">
+            <article className={`milestone ${unlockedCount >= 10 ? 'achieved' : ''}`}>
               <div className="milestone-icon">○</div>
               <div>
                 <h3>{t("passport.scholar")}</h3>

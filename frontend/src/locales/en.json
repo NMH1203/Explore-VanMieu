@@ -64,9 +64,10 @@
     },
     "map": {
       "kicker": "Interactive map",
-      "title": "Heritage around you",
-      "description": "Find the nearest site and follow the stories waiting to be discovered.",
-      "open": "Open full map",
+      "title": "Explore the Temple of Literature map",
+      "description": "View the entire complex, locate key landmarks, and plan your route through the heritage site.",
+      "open": "Go to map page",
+      "imageAlt": "Site map of the Temple of Literature complex",
       "distance": "32 m away · Verify with GPS and camera to unlock content.",
       "verified": "✓ Camera verified",
       "verifiedState": "Verified",
@@ -181,6 +182,7 @@
     "overviewTitle": "View the Temple of Literature",
     "story": "Read the heritage story",
     "verify": "Open camera to verify ({{distance}} away)",
+    "verifySite": "Open camera to verify",
     "valid": "Unlocked",
     "locked": "Locked"
   },
@@ -230,6 +232,11 @@
     "defaultSite": "Khue Van Pavilion",
     "description": "AI will compare architectural features and GPS to verify your visit and award a heritage stamp.",
     "start": "Start scanning",
+    "captureNow": "Take photo",
+    "matchFailed": "The site could not be recognized",
+    "chooseMatch": "Select a site to compare again",
+    "confirmMatch": "Confirm and compare again",
+    "recognitionTarget": "Recognition target",
     "analyzing": "Analyzing image...",
     "noImage": "No image captured. Allow camera access and try again.",
     "noGps": "GPS location unavailable. Allow location access and try again.",
@@ -259,119 +266,164 @@
     "unlocked": "Heritage story unlocked",
     "materials": "Temple of Literature collection.",
     "story": "Heritage story",
+    "moreInformation": "History and significance",
+    "officialSource": "Read the official Van Mieu source",
     "featured": "Featured detail",
     "continue": "Continue your journey",
     "continueDescription": "Discover more layers of the site’s history and scholarly tradition.",
     "backToJourney": "Back to your journey",
-    "yourStamp": "Your stamp",
-    "recorded": "Story recorded",
-    "added": "This story has been added to your exploration journey.",
+    "yourStamp": "Featured-stop stamp",
+    "recorded": "Stamp collected",
+    "added": "This featured stop has been recorded in your Heritage Passport.",
     "viewPassport": "View passport",
     "aiLabel": "Ask AI about {{title}}",
     "askMore": "Ask more about {{title}}",
     "online": "● Online",
     "assistant": "Heritage guide",
     "question": "Would you like to learn about the history, architecture, or meaning of {{title}}?",
+    "figureQuestion": "Would you like to explore the life, ideas, or historical legacy of {{title}}?",
     "add": "Add",
     "inputLabel": "Question",
     "placeholder": "Ask AI about {{title}}...",
     "send": "Send",
+    "you": "You",
+    "loadingChat": "Loading chat history...",
+    "thinking": "Thinking...",
+    "suggestedQuestions": "Suggested questions",
+    "suggestionSignificance": "Why is this figure significant?",
+    "suggestionStudent": "Explain this briefly for a student.",
+    "suggestionHighlights": "What are the key historical highlights?",
+    "locationSuggestionSignificance": "Why is this site significant?",
+    "locationSuggestionHighlights": "What are the architectural highlights?",
+    "aiDisclaimer": "Answers are generated from the heritage information in the database.",
     "items": {
       "location-van-mieu-gate": {
         "title": "Temple of Literature Gate",
         "type": "Site",
         "heading": "Beginning of the scholarly axis",
-        "story": "The main entrance begins a journey through the complex’s five courtyards. Its three-part gate marks a solemn boundary between the city and the heritage grounds."
+        "story": "The main entrance begins a journey through the complex’s five courtyards. Its three-part gate marks a solemn boundary between the city and the heritage grounds.",
+        "fact1": "Van Mieu was established in 1070 under Emperor Ly Thanh Tong as a place to worship Confucius and distinguished Confucian scholars. Crown Prince Can Duc, later Emperor Ly Nhan Tong, also studied here.",
+        "fact2": "The gate opens onto the sacred central axis of the Inner Sanctuary, one of the three main parts of the 54,331-square-metre complex together with Van Lake and Giam Garden."
       },
       "location-dai-trung-gate": {
         "title": "Dai Trung Gate",
         "type": "Site",
         "heading": "Gateway to the heart of the complex",
-        "story": "Dai Trung Gate marks the transition into the inner grounds. The smaller Thanh Duc and Dat Tai gates evoke the cultivation of virtue and talent."
+        "story": "Dai Trung Gate marks the transition into the inner grounds. The smaller Thanh Duc and Dat Tai gates evoke the cultivation of virtue and talent.",
+        "fact1": "The gate has three bays and eight red-lacquered timber columns resting on stone pedestals. Its architecture reflects the Hau Le period, while the roof decoration bears features associated with the Nguyen court.",
+        "fact2": "Two carp flank a vase on the roof ridge. The image recalls the carp crossing the Dragon Gate, a metaphor encouraging students to persevere in study and succeed in the imperial examinations."
       },
       "interpret": {
         "title": "Khue Van Pavilion",
         "type": "Awakened heritage",
         "heading": "A symbol of literature and the light of knowledge",
-        "story": "Built in the early 19th century, the pavilion is known for its square tower, eight roofs, and four round windows. Its name refers to the star Khue, associated with literature."
+        "story": "Built in the early 19th century, the pavilion is known for its square tower, eight roofs, and four round windows. Its name refers to the star Khue, associated with literature.",
+        "fact1": "Governor-General Nguyen Van Thanh commissioned Khue Van Pavilion in 1805. Its square lower level and circular upper windows express a balanced and elegant architectural composition.",
+        "fact2": "The Khue constellation was traditionally believed to govern literature and scholarship. The pavilion became an emblem of Vietnam’s educational heritage and was selected as a symbol of Hanoi in 2012."
       },
       "location-dai-thanh-gate": {
         "title": "Dai Thanh Gate",
         "type": "Site",
         "heading": "Entrance to the sanctuary",
-        "story": "Dai Thanh Gate leads to the sanctuary of Confucius and other sages. Its name evokes great achievement in learning and virtue."
+        "story": "Dai Thanh Gate leads to the sanctuary of Confucius and other sages. Its name evokes great achievement in learning and virtue.",
+        "fact1": "On the official site map, Dai Thanh Gate marks the entrance to the Great Sacrifice Zone, the fourth major space along the central heritage axis.",
+        "fact2": "Beyond the gate lies the complex’s most sacred courtyard, where ceremonial and worship buildings are arranged symmetrically around the Dai Bai courtyard."
       },
       "location-dien-dai-thanh": {
         "title": "Dai Thanh Hall",
         "type": "Site",
         "heading": "The Temple of Literature’s main sanctuary",
-        "story": "Dai Thanh Hall is the central sanctuary, honoring Confucius and Confucian sages in a solemn lacquered timber setting."
+        "story": "Dai Thanh Hall is the central sanctuary, honoring Confucius and Confucian sages in a solemn lacquered timber setting.",
+        "fact1": "The ceremonial hall and sanctuary each have nine bays. Ironwood columns, curved tiles, lacquered and gilded framing, and dragon-and-cloud carvings preserve architectural features associated with the Le periods.",
+        "fact2": "The sanctuary is dedicated to Confucius, the Four Great Disciples and the Ten Distinguished Scholars. The statue of Confucius occupies the central position and faces south."
       },
       "location-thai-hoc-gate": {
         "title": "Thai Hoc Gate",
         "type": "Site",
         "heading": "Gateway to the Imperial Academy precinct",
-        "story": "The gate links the Dai Thanh and Thai Hoc precincts. Its three bays, traditional tiled roof, and broad courtyard extend the visitor’s view along the site axis."
+        "story": "The gate links the Dai Thanh and Thai Hoc precincts. Its three bays, traditional tiled roof, and broad courtyard extend the visitor’s view along the site axis.",
+        "fact1": "Thai Hoc Gate marks the transition from the sacred worship precinct to the area that interprets the educational legacy of Quoc Tu Giam. It follows traditional Vietnamese timber construction.",
+        "fact2": "Its three bays have double-leaf wooden doors lacquered in vermilion. A broad brick courtyard and two side gates create a restrained, balanced and dignified setting."
       },
       "location-thai-hoc-house": {
         "title": "Thai Hoc Hall",
         "type": "Site",
         "heading": "Continuing the national education tradition",
-        "story": "Built on the grounds of the former Imperial Academy, the Thai Hoc precinct presents the history of education and commemorates those who advanced learning."
+        "story": "Built on the grounds of the former Imperial Academy, the Thai Hoc precinct presents the history of education and commemorates those who advanced learning.",
+        "fact1": "The former academy buildings were destroyed in 1946. Construction of the present Thai Hoc precinct began in 1999 and was completed in 2000 for the 990th anniversary of Thang Long–Hanoi.",
+        "fact2": "The rear hall honors educator Chu Van An on the ground floor and Ly Thanh Tong, Ly Nhan Tong and Le Thanh Tong upstairs, linking the site’s royal and educational histories."
       },
       "location-bell-drum-tower": {
         "title": "Bell and Drum Towers",
         "type": "Site",
         "heading": "A balanced pair of buildings",
-        "story": "Standing on either side of the Thai Hoc precinct, the towers create a balanced composition and recall the rhythms of ceremony and daily life at a traditional academy."
+        "story": "Standing on either side of the Thai Hoc precinct, the towers create a balanced composition and recall the rhythms of ceremony and daily life at a traditional academy.",
+        "fact1": "The Bell House and Drum House form part of the reconstructed Thai Hoc precinct, whose buildings follow traditional Vietnamese architectural forms on the historic grounds of Quoc Tu Giam.",
+        "fact2": "Together with the front hall, rear hall and auxiliary houses, the paired towers frame a setting now used for exhibitions, academic activities and commemorative ceremonies."
       },
       "location-octagonal-house": {
         "title": "Octagonal Pavilion",
         "type": "Site",
         "heading": "An octagonal space rich in symbolism",
-        "story": "Its eight-sided plan and graceful roof make this pavilion a harmonious pause among the greenery and visitor paths."
+        "story": "Its eight-sided plan and graceful roof make this pavilion a harmonious pause among the greenery and visitor paths.",
+        "fact1": "The official site map identifies the Octagonal House as landmark 16 in the Academy Garden, north of the main inner sanctuary.",
+        "fact2": "Its position extends the visitor route beyond the five axial inner areas and into the landscaped grounds associated with the former academy."
       },
       "location-phuong-dinh": {
         "title": "Phuong Dinh Pavilion",
         "type": "Site",
         "heading": "A resting place by Van Lake",
-        "story": "The square pavilion links the landscape of Van Lake with the historic complex, offering a place to rest and take in the visitor route."
+        "story": "The square pavilion links the landscape of Van Lake with the historic complex, offering a place to rest and take in the visitor route.",
+        "fact1": "Phuong Dinh stands on Kim Chau Islet in Van Lake, which covers about 12,297 square metres. The islet once hosted a literary pavilion where scholars gathered to discuss poetry and writing.",
+        "fact2": "Hanoi approved the pavilion’s reconstruction in 2017 and it was completed in 2022. The two-storey timber structure has eight roofs and sixteen columns aligned with the complex’s sacred axis."
       },
       "figure-ly-thanh-tong": {
         "title": "Ly Thanh Tong",
         "type": "Historical figure",
         "heading": "The king who founded the Temple of Literature",
-        "story": "In 1070, Ly Thanh Tong founded the Temple of Literature in Thang Long, beginning a tradition of honoring learning and the sages of the past."
+        "story": "In 1070, Ly Thanh Tong founded the Temple of Literature in Thang Long, beginning a tradition of honoring learning and the sages of the past.",
+        "fact1": "Ly Thanh Tong (1023–1072), born Ly Nhat Ton, ruled from 1054 to 1072. The official account remembers him as a ruler who promoted agriculture, education and national defence.",
+        "fact2": "He ordered Van Mieu to be built in 1070 for the worship of Confucius and Confucian sages. His son, Crown Prince Ly Can Duc, studied there."
       },
       "figure-ly-nhan-tong": {
         "title": "Ly Nhan Tong",
         "type": "Historical figure",
         "heading": "Founder of the Imperial Academy",
-        "story": "He held the first royal examination in 1075 and established the Imperial Academy in 1076 to educate the country’s talent."
+        "story": "He held the first royal examination in 1075 and established the Imperial Academy in 1076 to educate the country’s talent.",
+        "fact1": "Ly Nhan Tong (1066–1128), born Ly Can Duc, became king at seven and ruled for 56 years. He was the son of Ly Thanh Tong and Queen Y Lan.",
+        "fact2": "He organized the Minh Kinh Bac Hoc examination in 1075 and founded Quoc Tu Giam in 1076, laying an institutional foundation for Confucian education in Vietnam."
       },
       "figure-le-thanh-tong": {
         "title": "Le Thanh Tong",
         "type": "Historical figure",
         "heading": "A king who championed talent and examinations",
-        "story": "In 1484, the king commissioned the first doctoral steles to honor distinguished scholars and encourage learning."
+        "story": "In 1484, the king commissioned the first doctoral steles to honor distinguished scholars and encourage learning.",
+        "fact1": "During the early Le dynasty, Le Thanh Tong expanded Quoc Tu Giam in 1483 as part of a broader effort to strengthen education and the examination system.",
+        "fact2": "In 1484 he ordered the erection of the Doctoral Steles. The surviving group of 82 steles was later recognized by UNESCO as documentary heritage and by Vietnam as National Treasures."
       },
       "figure-chu-van-an": {
         "title": "Chu Van An",
         "type": "Historical figure",
         "heading": "A teacher for the ages",
-        "story": "Chu Van An served as rector of the Imperial Academy. His integrity and upright character became an enduring model for teachers."
+        "story": "Chu Van An served as rector of the Imperial Academy. His integrity and upright character became an enduring model for teachers.",
+        "fact1": "Chu Van An (1292–1370) was invited to the capital during the Tran dynasty and served as Tu nghiep of Quoc Tu Giam, a position comparable to rector of the Imperial Academy.",
+        "fact2": "His statue is honored on the ground floor of the present Thai Hoc rear hall. The space presents him as an enduring model of integrity, teaching and respect for learning."
       },
       "figure-confucius": {
         "title": "Confucius",
         "type": "Historical figure",
         "heading": "The exemplary teacher for all generations",
-        "story": "Confucius was a major Eastern thinker and teacher. The Temple of Literature honors him and stands as a symbol of learning and moral cultivation."
+        "story": "Confucius was a major Eastern thinker and teacher. The Temple of Literature honors him and stands as a symbol of learning and moral cultivation.",
+        "fact1": "Van Mieu was founded in 1070 as a place to worship Confucius and distinguished Confucian scholars, making his educational and ethical legacy central to the monument’s identity.",
+        "fact2": "In Dai Thanh Sanctuary, the statue of Confucius occupies the central position, facing south, with an altar and spirit tablet behind it."
       },
       "figure-four-sages": {
         "title": "Four Sages",
         "type": "Historical figure",
         "heading": "Four sages honored alongside Confucius",
-        "story": "The Four Sages are Yan Hui, Zengzi, Zisi, and Mencius, who inherited and developed Confucius’s teachings."
+        "story": "The Four Sages are Yan Hui, Zengzi, Zisi, and Mencius, who inherited and developed Confucius’s teachings.",
+        "fact1": "Known in Vietnamese as Tu Phoi, the Four Sages are honored alongside Confucius in the Dai Thanh Sanctuary, together with the Ten Distinguished Scholars.",
+        "fact2": "Their presence represents the transmission and development of Confucian learning across generations, from direct disciples to later interpreters of the tradition."
       }
     }
   },

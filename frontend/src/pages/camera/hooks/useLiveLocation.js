@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { MAP_LOCATIONS } from '../../map/mapData.js'
+import { useReward } from '../../../store/RewardContext.jsx'
+import { MAP_LOCATIONS } from '../../../data/mapLocations.js'
 
 function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
   const R = 6371000 // Earth radius in meters
@@ -16,6 +17,8 @@ function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
 }
 
 export function useLiveLocation(selectedTargetId = null) {
+  const { reward } = useReward()
+  const nextTargetId = reward?.target_ids.find(id => !reward.completed_ids.includes(id))
   const [userCoords, setUserCoords] = useState(null)
   const [gpsStatus, setGpsStatus] = useState('locating')
   const [gpsAccuracy, setGpsAccuracy] = useState(null)
@@ -57,6 +60,7 @@ export function useLiveLocation(selectedTargetId = null) {
     : MAP_LOCATIONS[2]
   const targetLocation = manualTarget
     || MAP_LOCATIONS.find((location) => location.id === selectedTargetId)
+    || MAP_LOCATIONS.find((location) => location.id === nextTargetId)
     || nearest
   const distanceMeters = distanceTo(targetLocation)
 

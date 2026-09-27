@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { handleResponse } from '../src/services/response.js'
+import { handleResponse } from '../src/utils/response.js'
 
 test('returns successful API data', async () => {
   assert.deepEqual(await handleResponse(Response.json({ verified: true }), 'Failed'), { verified: true })

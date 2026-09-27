@@ -1,14 +1,22 @@
 import { useEffect, useState } from 'react'
 import { Send } from 'lucide-react'
-import { askHeritageGuide, getChatHistory } from '../../../services/chat.js'
+import { askHeritageGuide, getChatHistory } from '../../../services/chat-service/index.js'
+import { useLanguage } from '../../../i18n/LanguageContext.jsx'
 
-const suggestions = [
-  'What is the significance of this building?',
-  'Explain this briefly for a student.',
-  'What are the architectural highlights?',
-]
-
-export default function HeritageMessageBox({ locationId, locationName }) {
+export default function HeritageMessageBox({ locationId, locationName, subjectType = 'location' }) {
+  const { t } = useLanguage()
+  const isFigure = subjectType === 'figure'
+  const suggestions = isFigure
+    ? [
+        t('detail.suggestionSignificance'),
+        t('detail.suggestionStudent'),
+        t('detail.suggestionHighlights'),
+      ]
+    : [
+        t('detail.locationSuggestionSignificance'),
+        t('detail.suggestionStudent'),
+        t('detail.locationSuggestionHighlights'),
+      ]
   const [messages, setMessages] = useState([])
   const [question, setQuestion] = useState('')
   const [isLoadingHistory, setIsLoadingHistory] = useState(true)
@@ -74,12 +82,12 @@ export default function HeritageMessageBox({ locationId, locationName }) {
   }
 
   return (
-    <section className="ai-guide" aria-label={`Ask AI about ${locationName}`}>
+    <section className="ai-guide" aria-label={t('detail.aiLabel', { title: locationName })}>
       <header className="ai-guide-header">
         <div className="ai-avatar">AI</div>
         <div>
-          <span>AI Heritage Guide</span>
-          <h2>Learn more about {locationName}</h2>
+          <span>{t('detail.assistant')}</span>
+          <h2>{t('detail.askMore', { title: locationName })}</h2>
         </div>
         <span className="ai-status">● Heritage guide</span>
       </header>
@@ -88,31 +96,31 @@ export default function HeritageMessageBox({ locationId, locationName }) {
         <div className="ai-message">
           <div className="mini-avatar">AI</div>
           <div>
-            <span className="message-label">Heritage assistant</span>
+            <span className="message-label">{t('detail.assistant')}</span>
             <div className="bubble ai">
-              Would you like to explore the history, architecture, or meaning of {locationName}?
+              {t(isFigure ? 'detail.figureQuestion' : 'detail.question', { title: locationName })}
             </div>
           </div>
         </div>
 
         {isLoadingHistory && (
-          <p className="ai-chat-state">Loading chat history...</p>
+          <p className="ai-chat-state">{t('detail.loadingChat')}</p>
         )}
 
         {messages.map((message) => (
           <div className="chat-exchange" key={message.message_id}>
             <div className="ai-message user-message">
               <div>
-                <span className="message-label">You</span>
+                <span className="message-label">{t('detail.you')}</span>
                 <div className="bubble user">{message.question}</div>
               </div>
             </div>
             <div className="ai-message">
               <div className="mini-avatar">AI</div>
               <div>
-                <span className="message-label">Heritage assistant</span>
+                <span className="message-label">{t('detail.assistant')}</span>
                 <div className="bubble ai">
-                  {message.answer || 'Thinking...'}
+                  {message.answer || t('detail.thinking')}
                 </div>
               </div>
             </div>
@@ -121,7 +129,7 @@ export default function HeritageMessageBox({ locationId, locationName }) {
 
         {messages.length === 0 && !isLoadingHistory && (
           <>
-            <p className="suggestion-label">Suggested questions</p>
+            <p className="suggestion-label">{t('detail.suggestedQuestions')}</p>
             <div className="question-row">
               {suggestions.map((suggestion) => (
                 <button
@@ -140,26 +148,26 @@ export default function HeritageMessageBox({ locationId, locationName }) {
 
       <form className="ai-composer" onSubmit={handleSubmit}>
         <label>
-          <span className="sr-only">Question</span>
+          <span className="sr-only">{t('detail.inputLabel')}</span>
           <input
             value={question}
             maxLength={500}
             onChange={(event) => setQuestion(event.target.value)}
-            placeholder={`Ask AI about ${locationName}...`}
+            placeholder={t('detail.placeholder', { title: locationName })}
             disabled={isSending}
           />
         </label>
         <button
           type="submit"
           className="send-button"
-          aria-label="Send"
+          aria-label={t('detail.send')}
           disabled={isSending || !question.trim()}
         >
           <Send size={18} />
         </button>
       </form>
       {error && <p className="ai-chat-error" role="alert">{error}</p>}
-      <p className="ai-note">Answers are generated from the site information in the database.</p>
+      <p className="ai-note">{t('detail.aiDisclaimer')}</p>
     </section>
   )
 }
