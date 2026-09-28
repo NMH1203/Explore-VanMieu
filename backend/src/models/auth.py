@@ -13,6 +13,7 @@ class UserResponse(SQLModel):
     user_id: str
     email: str
     username: str | None
+    is_admin: bool = False
     target_location_id: str | None = None
 
 class LoginRequest(SQLModel):
