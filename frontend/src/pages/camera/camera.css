@@ -320,31 +320,6 @@
   gap: 16px;
 }
 
-.camera-target-label {
-  max-width: 190px;
-  padding: 9px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 12px;
-  color: white;
-  background: rgba(6, 16, 29, 0.86);
-  text-align: left;
-}
-
-.camera-target-label small,
-.camera-target-label strong {
-  display: block;
-}
-
-.camera-target-label small {
-  margin-bottom: 3px;
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 9px;
-}
-
-.camera-target-label strong {
-  font-size: 12px;
-}
-
 .camera-shutter {
   width: 70px;
   height: 70px;
@@ -389,8 +364,7 @@
   text-align: left;
 }
 
-.scan-failure-panel > strong,
-.scan-failure-panel label {
+.scan-failure-panel > strong {
   display: block;
   margin-bottom: 7px;
   font-size: 11px;
@@ -398,16 +372,6 @@
 
 .scan-failure-panel p {
   margin-bottom: 10px;
-}
-
-.scan-failure-panel select {
-  width: 100%;
-  min-height: 40px;
-  padding: 0 10px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 9px;
-  color: white;
-  background: #172337;
 }
 
 .retry-match-button {
@@ -557,11 +521,3 @@
     justify-content: center;
   }
 }
-.camera-test-toggle { position: fixed; top: 62px; right: 16px; z-index: 40; }
-.camera-test-page { padding: 24px 20px calc(var(--nav) + 32px); max-width: 800px; margin: auto; }
-.camera-test-page header { margin-bottom: 20px; }
-.camera-test-page select { display: block; width: 100%; padding: 12px; margin: 10px 0 18px; }
-.camera-test-page > img { width: 100%; max-height: 45vh; object-fit: contain; border-radius: 16px; background: var(--lacquer-dark); }
-.test-camera-actions { padding: 18px; text-align: center; background: var(--lacquer-dark); color: white; border-radius: 16px; }
-.test-camera-actions .camera-shutter { margin: auto; }
-.test-camera-actions p { margin: 12px 0; }

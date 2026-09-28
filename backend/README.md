@@ -25,7 +25,7 @@ backend\.venv\Scripts\python.exe -m uvicorn backend.src.app.main:app --reload --
 ```
 
 Open `https://localhost:8443/docs` to confirm that the TLS endpoint responds.
-The self-signed certificate is only for local testing and will show a browser
+The self-signed certificate is only for local use and will show a browser
 trust warning. Use a trusted certificate for a deployed site. HTTPS login
 cookies are marked `Secure` automatically; HTTP localhost development keeps
 the cookie usable.
@@ -108,20 +108,7 @@ backend\.venv\Scripts\python.exe -m uvicorn backend.src.app.web:app --host 127.0
 ```
 
 Use the local certificate setup described above. Open `https://localhost:8443`.
-A self-signed certificate must be trusted on the testing device for normal browser
-use; the automated test below trusts its certificate only inside its HTTP client.
+A self-signed certificate must be trusted on the device for normal browser use.
 For a public deployment, supply a certificate trusted by users' browsers. If TLS
 terminates at a reverse proxy, configure trusted forwarded headers for that proxy
 so secure login cookies reflect the original HTTPS request.
-
-Run the isolated HTTPS/concurrency verification without changing the development
-database or certificate files:
-
-```powershell
-backend\.venv\Scripts\python.exe deployment/scripts/test_https_load.py --users 10,25,50 --seconds 10
-```
-
-The script starts and stops its own HTTPS server. It writes the measured results
-to `reports/https-load-local.json`. Read `reports/verification-2026-09-26.md` for
-the scenarios, limits, and image-token settings. `DATABASE_URL` can select a
-separate database; the default remains the repository's development SQLite file.
