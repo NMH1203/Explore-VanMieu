@@ -33,8 +33,7 @@ Explore-VanMieu/
 │   │   ├── styles/          # Shared styles
 │   │   ├── App.jsx
 │   │   └── routes/index.js
-│   ├── scripts/             # Translation checks
-│   └── tests/               # Frontend tests
+│   └── scripts/             # Translation checks
 ├── backend/
 │   ├── src/
 │   │   ├── app/             # API and production web entry points
@@ -43,13 +42,11 @@ Explore-VanMieu/
 │   │   ├── models/          # Database and request/response models
 │   │   ├── routes/          # API endpoints
 │   │   └── services/        # Authentication, AI, and image processing
-│   ├── tests/               # Backend tests
 │   └── requirements.txt
 ├── database/
 │   ├── schema/init_db.py    # Create database tables
 │   ├── seeds/seed_locations.py # Seed the ten heritage sites
 │   └── seeds/seed_demo_admin.py # Create/update the development admin
-├── deployment/scripts/      # Local HTTPS and load testing
 ├── reports/                 # Verification results
 └── README.md
 ```
@@ -108,22 +105,6 @@ Open the URL printed by Vite, usually [http://localhost:5173](http://localhost:5
 
 Camera and location access require HTTPS or localhost. See the [backend guide](backend/README.md) for local HTTPS setup.
 
-## Tests
-
-Run backend tests from the repository root:
-
-```powershell
-backend\.venv\Scripts\python.exe -m unittest discover -s backend/tests
-```
-
-Run frontend checks from `frontend`:
-
-```powershell
-npm test
-npm run check:locales
-npm run build
-```
-
 ## Production build
 
 Build the frontend, then serve the website and API together from the repository root:
@@ -133,7 +114,7 @@ npm --prefix frontend run build
 backend\.venv\Scripts\python.exe -m uvicorn backend.src.app.web:app --host 127.0.0.1 --port 8000
 ```
 
-Use HTTPS for public access. Local HTTPS and load-test instructions are in the [backend guide](backend/README.md); measured results are in [reports](reports/verification-2026-09-26.md).
+Use HTTPS for public access. Local HTTPS setup instructions are in the [backend guide](backend/README.md).
 
 ## Team
 

@@ -2,8 +2,7 @@
 
 This route connects the API request to the check-in response and log models,
 the heritage-location catalog, authenticated users, user progress history, and
-the image-recognition service. Related behavior is covered by
-``backend/tests/test_checkin_routes.py``.
+the image-recognition service.
 """
 
 import math
@@ -48,7 +47,6 @@ def calculate_distance_meters(lat1: float, lon1: float, lat2: float, lon2: float
 
 @router.post("/verify", response_model=CheckinVerificationResponse)
 async def verify_checkin(
-    location_id: str = Form(...),
     latitude: float = Form(...),
     longitude: float = Form(...),
     image: UploadFile = File(...),
@@ -71,39 +69,29 @@ async def verify_checkin(
         raise HTTPException(status_code=413, detail="The image exceeds the 5 MB limit.")
 
     with Session(engine) as session:
-        location = session.get(HeritageLocation, location_id)
-        if location is None:
-            raise HTTPException(status_code=404, detail="Location not found.")
-
-        distance = calculate_distance_meters(
-            latitude,
-            longitude,
-            location.latitude,
-            location.longitude,
+        locations = list(
+            session.exec(
+                select(HeritageLocation).order_by(HeritageLocation.sequence_order)
+            ).all()
         )
-        checkin_log = CheckinLog(
-            user_id=current_user.user_id,
-            target_location_id=location.location_id,
-            submitted_lat=latitude,
-            submitted_lon=longitude,
-            distance_meters=round(distance, 2),
-        )
+        if not locations:
+            raise HTTPException(status_code=503, detail="No heritage locations are configured.")
 
-        if distance > location.geofence_radius:
-            checkin_log.verification_status = "rejected_gps"
-            session.add(checkin_log)
-            session.commit()
-            return CheckinVerificationResponse(
-                verified=False,
-                location_id=location.location_id,
-                distance_meters=round(distance, 2),
-                message=(
-                    f"You are {round(distance)} m away from this location, "
-                    "outside the check-in area."
+        distances = [
+            (
+                location,
+                calculate_distance_meters(
+                    latitude,
+                    longitude,
+                    location.latitude,
+                    location.longitude,
                 ),
             )
+            for location in locations
+        ]
+        location, distance = min(distances, key=lambda item: item[1])
 
-        labels = list(session.exec(select(HeritageLocation.yolo_label)).all())
+        labels = [location.yolo_label for location in locations]
         try:
             result = await recognize_heritage_image(
                 image_bytes,
@@ -117,14 +105,49 @@ async def verify_checkin(
         except VisionProviderError as error:
             raise HTTPException(status_code=502, detail=str(error)) from error
 
-        checkin_log.yolo_detected_label = result.label
-        checkin_log.yolo_confidence = result.confidence
-        minimum_confidence = float(os.getenv("YESCALE_MIN_CONFIDENCE", "0.70"))
-        verified = (
-            result.label == location.yolo_label
-            and result.confidence >= minimum_confidence
+        detected_location = next(
+            (
+                candidate
+                for candidate in locations
+                if candidate.yolo_label == result.label
+            ),
+            None,
         )
-        checkin_log.verification_status = "verified" if verified else "rejected_image"
+
+        try:
+            minimum_confidence = float(os.getenv("YESCALE_MIN_CONFIDENCE", "0.70"))
+        except ValueError as error:
+            raise HTTPException(
+                status_code=503,
+                detail="YESCALE_MIN_CONFIDENCE must be a number between 0 and 1.",
+            ) from error
+        if not math.isfinite(minimum_confidence) or not 0 <= minimum_confidence <= 1:
+            raise HTTPException(
+                status_code=503,
+                detail="YESCALE_MIN_CONFIDENCE must be a number between 0 and 1.",
+            )
+
+        label_matches = result.label == location.yolo_label
+        image_matches = label_matches and result.confidence >= minimum_confidence
+        gps_matches = distance <= location.geofence_radius
+        verified = image_matches and gps_matches
+
+        checkin_log = CheckinLog(
+            user_id=current_user.user_id,
+            target_location_id=location.location_id,
+            submitted_lat=latitude,
+            submitted_lon=longitude,
+            distance_meters=round(distance, 2),
+            yolo_detected_label=result.label,
+            yolo_confidence=result.confidence,
+            verification_status=(
+                "verified"
+                if verified
+                else "rejected_image"
+                if not image_matches
+                else "rejected_gps"
+            ),
+        )
         session.add(checkin_log)
 
         if verified:
@@ -142,12 +165,24 @@ async def verify_checkin(
             session.add(history)
 
         session.commit()
-        message = (
-            f"{location.name} has been verified and its heritage stamp saved."
-            if verified
-            else "The image does not match the selected location. "
-            "Capture a clear image of the site and try again."
-        )
+        if verified:
+            message = f"{location.name} has been verified and its heritage stamp saved."
+        elif not label_matches:
+            detected_name = detected_location.name if detected_location else "an unknown site"
+            message = (
+                f"GPS places you nearest to {location.name}, but the image was recognized as "
+                f"{detected_name}. Capture a clear view of the nearest site and try again."
+            )
+        elif not image_matches:
+            message = (
+                f"The image may show {location.name}, but the recognition confidence is too low. "
+                "Capture a clear, unobstructed view and try again."
+            )
+        else:
+            message = (
+                f"{location.name} is the nearest site, but you are {round(distance)} m away from "
+                "it, outside the check-in area."
+            )
         return CheckinVerificationResponse(
             verified=verified,
             location_id=location.location_id,

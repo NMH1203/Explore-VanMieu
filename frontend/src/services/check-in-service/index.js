@@ -9,7 +9,6 @@ export async function verifyCheckin({ imageDataUrl, locationId, latitude, longit
   }
   const imageBlob = await fetch(imageDataUrl).then((response) => response.blob())
   const formData = new FormData()
-  formData.append('location_id', locationId)
   formData.append('latitude', String(latitude))
   formData.append('longitude', String(longitude))
   formData.append('image', imageBlob, 'checkin.jpg')
