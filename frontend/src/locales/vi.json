@@ -83,23 +83,6 @@
       "viewFigures": "Xem thêm tất cả danh nhân →",
       "unlockStory": "Nội dung câu chuyện sẽ hiển thị sau khi công trình được mở khóa."
     },
-    "ai": {
-      "title": "Hỏi để hiểu sâu hơn",
-      "online": "● Đang trực tuyến",
-      "assistant": "Trợ lý di sản",
-      "greeting": "Xin chào! Bạn đang đứng trước Khuê Văn Các. Tôi có thể kể về kiến trúc, ý nghĩa biểu tượng hoặc lịch sử của công trình này.",
-      "sampleQuestion": "Vì sao hình ảnh Khuê Văn Các được in trên tiền Việt Nam?",
-      "suggestions": "Bạn có thể hỏi tiếp",
-      "architecture": "Kiến trúc có gì đặc biệt?",
-      "shortStory": "Nghe câu chuyện 2 phút",
-      "relatedFigures": "Nhân vật liên quan",
-      "inputLabel": "Câu hỏi dành cho AI",
-      "placeholder": "Hỏi AI về di sản bạn đang khám phá...",
-      "send": "Gửi câu hỏi",
-      "notice": "AI có thể mắc lỗi. Hãy kiểm chứng những thông tin lịch sử quan trọng.",
-      "you": "Bạn",
-      "add": "Thêm nội dung"
-    },
     "passport": {
       "eyebrow": "Hộ chiếu Di sản số",
       "title": "Hộ chiếu Di sản",

@@ -83,23 +83,6 @@
       "viewFigures": "See all figures →",
       "unlockStory": "The story will appear once this site is unlocked."
     },
-    "ai": {
-      "title": "Ask to learn more",
-      "online": "● Online",
-      "assistant": "Heritage guide",
-      "greeting": "Hello! You are standing before Khue Van Pavilion. I can tell you about its architecture, symbolism, or history.",
-      "sampleQuestion": "Why is Khue Van Pavilion shown on Vietnamese banknotes?",
-      "suggestions": "You could also ask",
-      "architecture": "What makes its architecture special?",
-      "shortStory": "Hear a 2-minute story",
-      "relatedFigures": "Related figures",
-      "inputLabel": "Ask AI a question",
-      "placeholder": "Ask AI about the heritage you are exploring...",
-      "send": "Send question",
-      "notice": "AI can make mistakes. Verify important historical information.",
-      "you": "You",
-      "add": "Add content"
-    },
     "passport": {
       "eyebrow": "Digital Heritage Passport",
       "title": "Heritage Passport",
