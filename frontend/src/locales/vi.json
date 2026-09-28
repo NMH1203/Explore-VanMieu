@@ -185,6 +185,7 @@
     "completeReward": "{{count}}/5 · Chứng nhận Đại sứ Văn hóa",
     "scholar": "Bậc hiếu học",
     "scholarReward": "{{count}}/10 · Danh hiệu Học giả Di sản",
+    "milestoneArtAlt": "Minh họa cột mốc {{name}}",
     "continue": "Tiếp tục khám phá",
     "stampAlt": "Dấu ấn {{name}}"
   },

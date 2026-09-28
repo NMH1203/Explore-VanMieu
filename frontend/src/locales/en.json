@@ -185,6 +185,7 @@
     "completeReward": "{{count}}/5 · Cultural Ambassador certificate",
     "scholar": "Dedicated scholar",
     "scholarReward": "{{count}}/10 · Heritage Scholar title",
+    "milestoneArtAlt": "{{name}} milestone illustration",
     "continue": "Continue exploring",
     "stampAlt": "{{name}} stamp"
   },
