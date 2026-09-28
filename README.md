@@ -47,7 +47,8 @@ Explore-VanMieu/
 │   └── requirements.txt
 ├── database/
 │   ├── schema/init_db.py    # Create database tables
-│   └── seeds/seed_locations.py # Seed the ten heritage sites
+│   ├── seeds/seed_locations.py # Seed the ten heritage sites
+│   └── seeds/seed_demo_admin.py # Create/update the development admin
 ├── deployment/scripts/      # Local HTTPS and load testing
 ├── reports/                 # Verification results
 └── README.md
@@ -82,8 +83,14 @@ Initialize the database and start the API:
 ```powershell
 backend\.venv\Scripts\python.exe -m database.schema.init_db
 backend\.venv\Scripts\python.exe -m database.seeds.seed_locations
+backend\.venv\Scripts\python.exe -m database.seeds.seed_demo_admin
 backend\.venv\Scripts\python.exe -m uvicorn backend.src.app.main:app --reload --port 8000
 ```
+
+The development seed creates `root@example.com` as an administrator using the
+credentials documented in `.env.example`. The password is hashed before it is
+stored. This shared account is for local/test environments only; the SQLite
+database itself remains private and is not committed to Git.
 
 API documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 

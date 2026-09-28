@@ -13,6 +13,7 @@ class User(SQLModel, table=True):
     email: str = Field(max_length=255, unique=True, index=True)
     password_hash: str = Field(max_length= 255)
     username: str | None = Field(default=None, max_length= 64)
+    is_admin: bool = Field(default=False, index=True)
     target_location_id: str | None = Field(default=None, max_length=32, index=True)
     unlocked_location_ids: list[str] = Field(
         default_factory=list,

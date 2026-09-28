@@ -20,7 +20,7 @@ class RewardTests(unittest.TestCase):
         from backend.src.routes.camera_test import capture, capability, TestCapture
         from fastapi import HTTPException
         with patch('backend.src.routes.camera_test.engine', self.engine), patch.dict(os.environ, {
-            'CAMERA_TEST_ENABLED': 'true', 'CAMERA_TEST_USER_ID': 'a',
+            'CAMERA_TEST_ENABLED': 'true',
         }):
             self.assertTrue(capability(self.user)['enabled'])
             other = User(user_id='b', email='b@example.com', password_hash='unused')
@@ -52,7 +52,7 @@ class RewardTests(unittest.TestCase):
         with Session(self.engine) as s:
             for i in range(10):
                 s.add(HeritageLocation(location_id=str(i), name=str(i), yolo_label=str(i), sequence_order=i, latitude=0, longitude=0, geofence_radius=30, story_summary='test'))
-            self.user = User(user_id='a', email='a@example.com', password_hash='unused')
+            self.user = User(user_id='a', email='a@example.com', password_hash='unused', is_admin=True)
             s.add(self.user)
             s.add(User(user_id='b', email='b@example.com', password_hash='unused'))
             s.commit()
