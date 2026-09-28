@@ -15,6 +15,13 @@ const stamps = [
   ['location-phuong-dinh', 'Phuong Dinh Pavilion', 'phuong-dinh.jpg'],
 ]
 
+const milestones = [
+  { threshold: 1, titleKey: 'passport.first', rewardKey: 'passport.firstReward', image: 'first-steps.png' },
+  { threshold: 3, titleKey: 'passport.seeker', rewardKey: 'passport.seekerReward', image: 'heritage-seeker.png' },
+  { threshold: 5, titleKey: 'passport.complete', rewardKey: 'passport.completeReward', image: 'journey-complete.png' },
+  { threshold: 10, titleKey: 'passport.scholar', rewardKey: 'passport.scholarReward', image: 'dedicated-scholar.png' },
+]
+
 function PassportPage({ userId, unlockedLocations }) {
   const { t } = useLanguage()
   const unlockedCount = stamps.filter(([id]) => unlockedLocations.has(id)).length
@@ -72,34 +79,24 @@ function PassportPage({ userId, unlockedLocations }) {
           <h2>{t("passport.milestones")}</h2>
           <br />
           <div className="milestones">
-            <article className={`milestone ${unlockedCount >= 1 ? 'achieved' : ''}`}>
-              <div className="milestone-icon">○</div>
-              <div>
-                <h3>{t("passport.first")}</h3>
-                <p>{t("passport.firstReward", { count: Math.min(unlockedCount, 1) })}</p>
-              </div>
-            </article>
-            <article className={`milestone ${unlockedCount >= 3 ? 'achieved' : ''}`}>
-              <div className="milestone-icon">○</div>
-              <div>
-                <h3>{t("passport.seeker")}</h3>
-                <p>{t("passport.seekerReward", { count: Math.min(unlockedCount, 3) })}</p>
-              </div>
-            </article>
-            <article className={`milestone ${unlockedCount >= 5 ? 'achieved' : ''}`}>
-              <div className="milestone-icon">○</div>
-              <div>
-                <h3>{t("passport.complete")}</h3>
-                <p>{t("passport.completeReward", { count: Math.min(unlockedCount, 5) })}</p>
-              </div>
-            </article>
-            <article className={`milestone ${unlockedCount >= 10 ? 'achieved' : ''}`}>
-              <div className="milestone-icon">○</div>
-              <div>
-                <h3>{t("passport.scholar")}</h3>
-                <p>{t("passport.scholarReward", { count: unlockedCount })}</p>
-              </div>
-            </article>
+            {milestones.map(({ threshold, titleKey, rewardKey, image }) => {
+              const achieved = unlockedCount >= threshold
+              const title = t(titleKey)
+              return (
+                <article className={`milestone ${achieved ? 'achieved' : ''}`} key={threshold}>
+                  <div className="milestone-icon">
+                    <img
+                      src={`/images/milestones/${image}`}
+                      alt={t('passport.milestoneArtAlt', { name: title })}
+                    />
+                  </div>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{t(rewardKey, { count: Math.min(unlockedCount, threshold) })}</p>
+                  </div>
+                </article>
+              )
+            })}
           </div>
         </section>
         <a className="btn btn-primary btn-block" href="/Explore">
