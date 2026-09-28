@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CircleHelp } from 'lucide-react'
+import { CircleHelp, Eye, EyeOff } from 'lucide-react'
 import './register.css'
 import { login, register } from '../../services/auth-service/index.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
@@ -8,6 +8,7 @@ function RegisterPage({ onAuthenticate }) {
   const { t } = useLanguage()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [mode, setMode] = useState('login')
@@ -25,6 +26,7 @@ function RegisterPage({ onAuthenticate }) {
         await register(email, password, username)
         setMode('login')
         setPassword('')
+        setShowPassword(false)
         return
       }
 
@@ -74,16 +76,27 @@ function RegisterPage({ onAuthenticate }) {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
-          <input
-            aria-label={t("auth.password")}
-            type="password"
-            placeholder={t("auth.password")}
-            autoComplete={signup ? 'new-password' : 'current-password'}
-            minLength={signup ? 8 : undefined}
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
+          <div className="register__password">
+            <input
+              aria-label={t("auth.password")}
+              type={showPassword ? 'text' : 'password'}
+              placeholder={t("auth.password")}
+              autoComplete={signup ? 'new-password' : 'current-password'}
+              minLength={signup ? 8 : undefined}
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <button
+              className="register__password-toggle"
+              type="button"
+              aria-label={t(showPassword ? 'auth.hidePassword' : 'auth.showPassword')}
+              aria-pressed={showPassword}
+              onClick={() => setShowPassword((visible) => !visible)}
+            >
+              {showPassword ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
+            </button>
+          </div>
           <button
             className="register__submit"
             type="submit"

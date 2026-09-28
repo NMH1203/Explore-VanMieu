@@ -417,6 +417,8 @@
     "fullName": "Họ và tên",
     "email": "Email",
     "password": "Mật khẩu",
+    "showPassword": "Hiện mật khẩu",
+    "hidePassword": "Ẩn mật khẩu",
     "busy": "Đang đăng nhập...",
     "continueGuest": "← Tiếp tục khám phá với tư cách khách",
     "notice": "Duyệt Thư viện, Danh mục và Trải nghiệm số miễn phí — bạn chỉ cần tài khoản để quét mã QR và thu thập dấu ấn di sản."

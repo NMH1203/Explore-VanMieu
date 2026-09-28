@@ -106,6 +106,45 @@
   box-shadow: 0 0 0 3px #d4a37340;
 }
 
+.register__password {
+  position: relative;
+}
+
+.register__password input {
+  padding-right: 56px;
+}
+
+.register__password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  color: var(--stone);
+  background: transparent;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.register__password-toggle:hover {
+  color: var(--wood);
+}
+
+.register__password-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.register__password-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
 .register__submit {
   min-height: 52px;
   margin-top: 1px;

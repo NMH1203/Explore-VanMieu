@@ -417,6 +417,8 @@
     "fullName": "Full name",
     "email": "Email",
     "password": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
     "busy": "Signing in...",
     "continueGuest": "← Continue exploring as a guest",
     "notice": "Browse the Library, Catalog, and digital experiences for free. You only need an account to scan QR codes and collect heritage stamps."
