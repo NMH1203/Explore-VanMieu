@@ -424,58 +424,6 @@ function HomePage({ userId, unlockedLocations }) {
           </div>
         </section>
 
-        <section className="section">
-          <div className="ai-guide ai-guide-home" aria-label={t("home.ai.title")}>
-            <header className="ai-guide-header">
-              <div className="ai-avatar">AI</div>
-              <div>
-                <span>AI Heritage Guide</span>
-                <h2>{t("home.ai.title")}</h2>
-              </div>
-              <span className="ai-status">{t("home.ai.online")}</span>
-            </header>
-            <div className="ai-chat-body">
-              <div className="ai-message">
-                <div className="mini-avatar">AI</div>
-                <div>
-                  <span className="message-label">{t("home.ai.assistant")}</span>
-                  <div className="bubble ai">
-                    {t("home.ai.greeting")}
-                  </div>
-                </div>
-              </div>
-              <div className="ai-message user-message">
-                <div>
-                  <span className="message-label">{t("home.ai.you")}</span>
-                  <div className="bubble user">
-                    {t("home.ai.sampleQuestion")}
-                  </div>
-                </div>
-              </div>
-              <p className="suggestion-label">{t("home.ai.suggestions")}</p>
-              <div className="question-row">
-                <button className="chip">{t("home.ai.architecture")}</button>
-                <button className="chip">{t("home.ai.shortStory")}</button>
-                <button className="chip">{t("home.ai.relatedFigures")}</button>
-              </div>
-            </div>
-            <div className="ai-composer">
-              <button className="composer-tool" aria-label={t("home.ai.add")}>
-                <Plus size={19} aria-hidden="true" />
-              </button>
-              <label>
-                <span className="sr-only">{t("home.ai.inputLabel")}</span>
-                <input type="text" placeholder={t("home.ai.placeholder")} />
-              </label>
-              <button className="send-button" aria-label={t("home.ai.send")}>
-                <Send size={18} aria-hidden="true" />
-              </button>
-            </div>
-            <p className="ai-note">
-              {t("home.ai.notice")}
-            </p>
-          </div>
-        </section>
       </div>
       <footer className="footer">
         <strong>Explore Van Mieu</strong>{t("home.footer")}
