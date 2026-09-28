@@ -16,7 +16,6 @@ function CameraPage({ onVerifyCheckin }) {
   const [isScanComplete, setIsScanComplete] = useState(false)
   const [verifiedSite, setVerifiedSite] = useState(null)
   const [scanError, setScanError] = useState('')
-  const [hasConfirmedMatch, setHasConfirmedMatch] = useState(false)
 
   // 1. Manage the device camera
   const {
@@ -34,18 +33,15 @@ function CameraPage({ onVerifyCheckin }) {
   const {
     userCoords,
     targetLocation,
-    setTargetLocation,
-    distanceMeters,
   } = useLiveLocation()
 
   const targetLocationKey = getLocationTranslationKey(targetLocation?.id)
   const displayedTargetLocation = targetLocation ? { ...targetLocation, name: t('locations.names.' + targetLocationKey) } : null
-  const isChoosingMatch = Boolean(scanError && capturedImage)
+  const hasScanFailure = Boolean(scanError && capturedImage)
 
   const handleBeginScan = async () => {
     setScanError('')
     setCapturedImage(null)
-    setHasConfirmedMatch(false)
     setIsScanStarted(true)
     await startCamera()
   }
@@ -69,12 +65,11 @@ function CameraPage({ onVerifyCheckin }) {
     try {
       const result = await onVerifyCheckin({
         imageDataUrl,
-        locationId: targetLocation.id,
         latitude: userCoords.lat,
         longitude: userCoords.lng,
       })
       if (result.verified) {
-        setVerifiedSite({ location: MAP_LOCATIONS.find(item => item.id === result.location_id) || targetLocation, distance: result.distance_meters })
+        setVerifiedSite({ location: MAP_LOCATIONS.find(item => item.id === result.location_id), distance: result.distance_meters })
         setIsScanComplete(true)
       } else {
         setScanError(result.message)
@@ -93,15 +88,13 @@ function CameraPage({ onVerifyCheckin }) {
     setVerifiedSite(null)
     setIsAnalyzing(false)
     setIsScanStarted(false)
-    setHasConfirmedMatch(false)
     setScanError('')
   }
 
-  const handleConfirmMatch = () => {
+  const handleRetryCapture = () => {
     setCapturedImage(null)
     setScanError('')
     setIsScanStarted(true)
-    setHasConfirmedMatch(true)
   }
 
   return (
@@ -139,11 +132,11 @@ function CameraPage({ onVerifyCheckin }) {
 
           {/* Bottom controls */}
           {!isScanComplete ? (
-            <div className={`camera-bottom scan-ready ${isScanStarted ? 'capture-active' : ''} ${isChoosingMatch ? 'match-active' : ''}`}>
+            <div className={`camera-bottom scan-ready ${isScanStarted ? 'capture-active' : ''} ${hasScanFailure ? 'match-active' : ''}`}>
               {!isScanStarted && (
                 <>
                   <span className="camera-kicker">{t("camera.kicker")}</span>
-                  <h2>{t("camera.pointCamera", { name: displayedTargetLocation?.name || t("camera.defaultSite") })}</h2>
+                  <h2>{t("camera.pointCamera")}</h2>
                   <p>{t("camera.description")}</p>
                 </>
               )}
@@ -157,7 +150,7 @@ function CameraPage({ onVerifyCheckin }) {
                   <CameraIcon size={16} />
                   <span>{t("camera.start")}</span>
                 </button>
-              ) : !isChoosingMatch && (
+              ) : !hasScanFailure && (
                 <div className="camera-capture-controls">
                   <button
                     type="button"
@@ -169,35 +162,15 @@ function CameraPage({ onVerifyCheckin }) {
                   >
                     <span />
                   </button>
-                  {hasConfirmedMatch && (
-                    <div className="camera-target-label">
-                      <small>{t('camera.recognitionTarget')}</small>
-                      <strong>{displayedTargetLocation?.name || t('camera.defaultSite')}</strong>
-                    </div>
-                  )}
                 </div>
               )}
-              {isChoosingMatch && (
+              {hasScanFailure && (
                 <div className="scan-failure-panel" role="alert">
                   <strong>{t('camera.matchFailed')}</strong>
                   <p>{scanError}</p>
-                  <label htmlFor="camera-location-confirm">{t('camera.chooseMatch')}</label>
-                  <select
-                    id="camera-location-confirm"
-                    value={targetLocation?.id || ''}
-                    onChange={(event) => {
-                      const location = MAP_LOCATIONS.find((item) => item.id === event.target.value)
-                      if (location) setTargetLocation(location)
-                    }}
-                  >
-                    {MAP_LOCATIONS.map((location) => (
-                      <option value={location.id} key={location.id}>
-                        {t('locations.names.' + getLocationTranslationKey(location.id))}
-                      </option>
-                    ))}
-                  </select>
-                  <button type="button" className="retry-match-button" onClick={handleConfirmMatch}>
-                    {t('camera.confirmMatch')}
+                  <p>{t('camera.captureGuidance')}</p>
+                  <button type="button" className="retry-match-button" onClick={handleRetryCapture}>
+                    {t('camera.retryCapture')}
                   </button>
                 </div>
               )}
