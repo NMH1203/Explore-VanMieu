@@ -11,7 +11,7 @@ from backend.src.models.user import User
 
 
 def ensure_target_column() -> None:
-    """Add the target column to an existing SQLite database without data loss."""
+    """Add current user columns to an existing SQLite database without data loss."""
     inspector = inspect(engine)
     if "users" not in inspector.get_table_names():
         return
@@ -24,6 +24,14 @@ def ensure_target_column() -> None:
             connection.execute(text(
                 "CREATE INDEX IF NOT EXISTS ix_users_target_location_id "
                 "ON users (target_location_id)"
+            ))
+    if "is_admin" not in columns:
+        with engine.begin() as connection:
+            connection.execute(text(
+                "ALTER TABLE users ADD COLUMN is_admin BOOLEAN NOT NULL DEFAULT 0"
+            ))
+            connection.execute(text(
+                "CREATE INDEX IF NOT EXISTS ix_users_is_admin ON users (is_admin)"
             ))
 
 
