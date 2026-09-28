@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import TestCamera from './components/TestCamera.jsx'
+import { useState } from 'react'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import { getLocationTranslationKey } from '../../i18n/locationKeys.js'
 import { Camera as CameraIcon } from 'lucide-react'
@@ -189,16 +188,4 @@ function CameraPage({ onVerifyCheckin }) {
   )
 }
 
-export default function CameraWithTest(props) {
-  const [allowed, setAllowed] = useState(false)
-  const [testing, setTesting] = useState(false)
-  const { lang } = useLanguage()
-  useEffect(() => {
-    let active = true
-    fetch('/api/camera-test', { credentials: 'include' }).then(r => r.ok ? r.json() : null)
-      .then(data => { if (active) setAllowed(Boolean(data?.enabled)) }).catch(() => {})
-    return () => { active = false }
-  }, [])
-  if (allowed && testing) return <TestCamera {...props} onExit={() => setTesting(false)} />
-  return <>{allowed && <button className="camera-test-toggle btn btn-gold" onClick={() => setTesting(true)}>{lang === 'vi' ? 'Test bằng ảnh có sẵn' : 'Test with sample images'}</button>}<CameraPage {...props} /></>
-}
+export default CameraPage
