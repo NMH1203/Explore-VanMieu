@@ -31,6 +31,12 @@ export function useCameraStream() {
     const requestId = requestRef.current
     setCameraError(null)
 
+    if (!window.isSecureContext) {
+      setHasPermission(false)
+      setCameraError('Camera access on mobile requires HTTPS. Open the secure HTTPS address and try again.')
+      return
+    }
+
     // Check browser support
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       setHasPermission(false)
@@ -76,6 +82,8 @@ export function useCameraStream() {
         setCameraError('Camera access was denied. Allow camera access to scan artifacts.')
       } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
         setCameraError('No camera was found on this device.')
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        setCameraError('The camera is already in use. Close Camera, Zoom, or video-call apps and try again.')
       } else {
         setCameraError('Unable to start the camera: ' + (err.message || 'Unknown error'))
       }

@@ -167,7 +167,14 @@
     "verify": "Mở camera xác minh (Cách {{distance}})",
     "verifySite": "Mở camera xác minh",
     "valid": "Đã mở khóa",
-    "locked": "Chưa mở khóa"
+    "locked": "Chưa mở khóa",
+    "youAreHere": "Bạn đang ở đây",
+    "centerOnMe": "Vị trí của tôi",
+    "gps": {
+      "locating": "Đang tìm vị trí...",
+      "denied": "Chưa cấp quyền vị trí",
+      "unavailable": "Không lấy được vị trí"
+    }
   },
   "passport": {
     "eyebrow": "Hộ chiếu Di sản",

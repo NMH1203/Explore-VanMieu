@@ -14,3 +14,11 @@ export async function verifyCheckin({ imageDataUrl, locationId, latitude, longit
   })
   return handleResponse(response, 'Unable to verify check-in')
 }
+
+export async function getCheckinHistory(limit = 20) {
+  const response = await fetch(
+    `/api/checkins/history?limit=${encodeURIComponent(limit)}`,
+    { credentials: 'include' },
+  )
+  return handleResponse(response, 'Unable to load check-in history')
+}
