@@ -167,7 +167,14 @@
     "verify": "Open camera to verify ({{distance}} away)",
     "verifySite": "Open camera to verify",
     "valid": "Unlocked",
-    "locked": "Locked"
+    "locked": "Locked",
+    "youAreHere": "You are here",
+    "centerOnMe": "My location",
+    "gps": {
+      "locating": "Locating...",
+      "denied": "Location permission denied",
+      "unavailable": "Location unavailable"
+    }
   },
   "passport": {
     "eyebrow": "Heritage Passport",

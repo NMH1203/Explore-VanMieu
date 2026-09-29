@@ -9,12 +9,15 @@ import math
 import os
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
 from sqlmodel import Session, select
 
 from backend.src.config.db import engine
 from backend.src.dependencies.auth import get_current_user
-from backend.src.models.checkin import CheckinVerificationResponse
+from backend.src.models.checkin import (
+    CheckinHistoryResponse,
+    CheckinVerificationResponse,
+)
 from backend.src.models.checkin_log import CheckinLog
 from backend.src.models.heritage_location import HeritageLocation
 from backend.src.models.user import User
@@ -29,6 +32,40 @@ from backend.src.services.vision import (
 router = APIRouter(prefix="/api/checkins", tags=["checkins"])
 MAX_IMAGE_BYTES = 5 * 1024 * 1024
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
+
+
+@router.get("/history", response_model=list[CheckinHistoryResponse])
+def list_checkin_history(
+    limit: int = Query(default=50, ge=1, le=100),
+    current_user: User = Depends(get_current_user),
+):
+    with Session(engine) as session:
+        rows = session.exec(
+            select(CheckinLog, HeritageLocation.name)
+            .join(
+                HeritageLocation,
+                CheckinLog.target_location_id == HeritageLocation.location_id,
+            )
+            .where(CheckinLog.user_id == current_user.user_id)
+            .order_by(CheckinLog.logged_at.desc())
+            .limit(limit)
+        ).all()
+
+        return [
+            CheckinHistoryResponse(
+                log_id=log.log_id,
+                location_id=log.target_location_id,
+                location_name=location_name,
+                submitted_lat=log.submitted_lat,
+                submitted_lon=log.submitted_lon,
+                distance_meters=log.distance_meters,
+                detected_label=log.yolo_detected_label,
+                confidence=log.yolo_confidence,
+                verification_status=log.verification_status,
+                logged_at=log.logged_at,
+            )
+            for log, location_name in rows
+        ]
 
 
 def calculate_distance_meters(lat1: float, lon1: float, lat2: float, lon2: float) -> float:

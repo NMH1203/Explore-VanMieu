@@ -1,4 +1,5 @@
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
+import CheckinHistory from './components/CheckinHistory.jsx'
 
 function AccountPage({ user, onLogout, unlockedLocations }) {
   const { t, lang, setLang } = useLanguage()
@@ -51,6 +52,7 @@ function AccountPage({ user, onLogout, unlockedLocations }) {
             </a>
           </div>
         </section>
+        <CheckinHistory />
         <section className="panel settings section">
           <h2>{t('account.settings')}</h2>
           <div className="setting language-setting">

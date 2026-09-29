@@ -33,6 +33,12 @@ def ensure_target_column() -> None:
             connection.execute(text(
                 "CREATE INDEX IF NOT EXISTS ix_users_is_admin ON users (is_admin)"
             ))
+    if "unlocked_location_ids" not in columns:
+        with engine.begin() as connection:
+            connection.execute(text(
+                "ALTER TABLE users ADD COLUMN unlocked_location_ids "
+                "JSON NOT NULL DEFAULT '[]'"
+            ))
 
 
 def assign_target_location(session: Session, user: User) -> str | None:

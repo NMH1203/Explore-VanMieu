@@ -1,14 +1,19 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import { getLocationTranslationKey } from '../../i18n/locationKeys.js'
 import { MAP_LOCATIONS } from '../../data/mapLocations.js'
 import InteractiveMap from '../../components/map-view/InteractiveMap.jsx'
 import LocationSidebar from '../../components/map-view/LocationSidebar.jsx'
+import { useLiveLocation } from '../camera/hooks/useLiveLocation.js'
 import './map.css'
 
 function MapPage({ unlockedLocations }) {
   const { t } = useLanguage()
   const [selectedLocationId, setSelectedLocationId] = useState(MAP_LOCATIONS[0].id)
+  const { userCoords, gpsStatus, gpsAccuracy } = useLiveLocation()
+  const handleSelectLocation = useCallback((location) => {
+    setSelectedLocationId(location.id)
+  }, [])
   const locations = useMemo(() => MAP_LOCATIONS.map((location) => {
     const key = getLocationTranslationKey(location.id)
     return { ...location, name: t('locations.names.' + key), description: t('locations.descriptions.' + key), tagline: t('locations.descriptions.' + key) }
@@ -25,7 +30,15 @@ function MapPage({ unlockedLocations }) {
       </div></header>
       <div className="container"><div className="map-page-grid">
         <div className="map-main-column">
-          <InteractiveMap locations={locations} unlockedLocations={unlockedLocations} selectedLocation={selectedLocation} onSelectLocation={(location) => setSelectedLocationId(location.id)} />
+          <InteractiveMap
+            locations={locations}
+            unlockedLocations={unlockedLocations}
+            selectedLocation={selectedLocation}
+            onSelectLocation={handleSelectLocation}
+            userCoords={userCoords}
+            gpsStatus={gpsStatus}
+            gpsAccuracy={gpsAccuracy}
+          />
           {selectedLocation && <div className="map-selected-card">
             <img src={selectedLocation.image} alt={selectedLocation.name} className="selected-card-thumb" />
             <div className="selected-card-body">
@@ -43,7 +56,7 @@ function MapPage({ unlockedLocations }) {
           </div>}
         </div>
         <div className="map-sidebar-column">
-          <LocationSidebar locations={locations} unlockedLocations={unlockedLocations} selectedLocation={selectedLocation} onSelectLocation={(location) => setSelectedLocationId(location.id)} />
+          <LocationSidebar locations={locations} unlockedLocations={unlockedLocations} selectedLocation={selectedLocation} onSelectLocation={handleSelectLocation} />
         </div>
       </div></div>
     </section>

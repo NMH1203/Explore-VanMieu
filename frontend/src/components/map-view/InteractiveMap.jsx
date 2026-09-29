@@ -9,11 +9,17 @@ export default function InteractiveMap({
   unlockedLocations,
   selectedLocation,
   onSelectLocation,
+  userCoords,
+  gpsStatus,
+  gpsAccuracy,
 }) {
   const { t } = useLanguage()
   const mapContainerRef = useRef(null)
   const mapInstanceRef = useRef(null)
   const markersRef = useRef({})
+  const userMarkerRef = useRef(null)
+  const accuracyCircleRef = useRef(null)
+  const centeredOnUserRef = useRef(false)
 
   // Initialize the Leaflet map
   useEffect(() => {
@@ -27,8 +33,6 @@ export default function InteractiveMap({
       zoom: VAN_MIEU_BOUNDS.defaultZoom,
       minZoom: VAN_MIEU_BOUNDS.minZoom,
       maxZoom: VAN_MIEU_BOUNDS.maxZoom,
-      maxBounds: VAN_MIEU_BOUNDS.maxBounds,
-      maxBoundsViscosity: 0.8,
       zoomControl: false,
     })
 
@@ -100,12 +104,76 @@ export default function InteractiveMap({
     })
   }, [selectedLocation])
 
+  // Keep one live marker and its GPS accuracy circle in sync with watchPosition.
+  useEffect(() => {
+    const map = mapInstanceRef.current
+    if (!map) return
+
+    if (!userCoords) {
+      userMarkerRef.current?.remove()
+      accuracyCircleRef.current?.remove()
+      userMarkerRef.current = null
+      accuracyCircleRef.current = null
+      centeredOnUserRef.current = false
+      return
+    }
+
+    const position = [userCoords.lat, userCoords.lng]
+    if (!userMarkerRef.current) {
+      const userIcon = L.divIcon({
+        className: 'user-location-marker-wrapper',
+        html: '<span class="user-location-pulse"><i></i></span>',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+      })
+      userMarkerRef.current = L.marker(position, {
+        icon: userIcon,
+        title: t('map.youAreHere'),
+        zIndexOffset: 2000,
+      }).addTo(map)
+      userMarkerRef.current.bindTooltip(t('map.youAreHere'), {
+        direction: 'top',
+        offset: [0, -12],
+      })
+    } else {
+      userMarkerRef.current.setLatLng(position)
+    }
+
+    if (!accuracyCircleRef.current) {
+      accuracyCircleRef.current = L.circle(position, {
+        radius: gpsAccuracy || 0,
+        color: '#2563eb',
+        fillColor: '#60a5fa',
+        fillOpacity: 0.12,
+        weight: 1,
+        interactive: false,
+      }).addTo(map)
+    } else {
+      accuracyCircleRef.current.setLatLng(position)
+      accuracyCircleRef.current.setRadius(gpsAccuracy || 0)
+    }
+
+    if (!centeredOnUserRef.current) {
+      map.flyTo(position, Math.max(map.getZoom(), 18), { duration: 0.8 })
+      centeredOnUserRef.current = true
+    }
+  }, [userCoords, gpsAccuracy, t])
+
   function handleResetView() {
     if (mapInstanceRef.current) {
       mapInstanceRef.current.setView(VAN_MIEU_BOUNDS.center, VAN_MIEU_BOUNDS.defaultZoom, {
         animate: true,
       })
     }
+  }
+
+  function handleCenterOnUser() {
+    if (!mapInstanceRef.current || !userCoords) return
+    mapInstanceRef.current.flyTo(
+      [userCoords.lat, userCoords.lng],
+      Math.max(mapInstanceRef.current.getZoom(), 18),
+      { duration: 0.8 },
+    )
   }
 
   return (
@@ -120,6 +188,9 @@ export default function InteractiveMap({
         <span>
           <i className="dot stone"></i> {t("common.locked")}
         </span>
+        {gpsStatus === 'ready' && <span>
+          <i className="dot user"></i> {t('map.youAreHere')}
+        </span>}
       </div>
 
       {/* Map controls */}
@@ -131,6 +202,15 @@ export default function InteractiveMap({
           onClick={handleResetView}
         >
           ⌖ {t("map.overview")}
+        </button>
+        <button
+          type="button"
+          className="map-control-btn"
+          title={t('map.centerOnMe')}
+          onClick={handleCenterOnUser}
+          disabled={!userCoords}
+        >
+          ● {userCoords ? t('map.centerOnMe') : t(`map.gps.${gpsStatus}`)}
         </button>
       </div>
     </div>
