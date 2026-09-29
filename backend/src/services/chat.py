@@ -40,17 +40,18 @@ async def answer_heritage_question(
         "model": model,
         "temperature": 0.2,
         "max_tokens": 500,
-        "messages": [
+               "messages": [
             {
                 "role": "system",
                 "content": (
                     "You are a historical guide at the Temple of Literature in Hanoi. "
-                    "Answer clearly and warmly in English. "
+                    "Answer clearly and warmly in the same language that the user uses to ask you (If the user asks in Vietnamese, respond in Vietnamese). "
                     "Use only the information in the supplied reference material. "
                     "If the material does not contain enough information, say so; "
                     "never invent events or dates."
                 ),
             },
+
             {
                 "role": "user",
                 "content": f"REFERENCE MATERIAL:\n{context}\n\nQUESTION:\n{question}",
