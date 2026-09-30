@@ -48,7 +48,9 @@ Explore-VanMieu-Team/
 │   │   ├── routes/               # Các endpoint /api/...
 │   │   └── services/             # Nghiệp vụ dùng lại và kết nối AI
 │   └── tests/
-│       └── test_checkin_routes.py
+│       ├── support.py              # Test-only configuration
+│       ├── test_checkin_routes.py
+│       └── test_location_unlocks.py # Ten-site database/API regressions
 ├── database/
 │   ├── explore_van_mieu.db       # SQLite cục bộ, không commit
 │   ├── schema/init_db.py         # Tạo bảng
@@ -60,6 +62,10 @@ Explore-VanMieu-Team/
 │   ├── package.json              # Thư viện và lệnh npm
 │   ├── vite.config.js            # Vite, HTTPS và proxy /api
 │   ├── public/images/            # Ảnh tĩnh
+│   ├── tests/                     # Run with npm test
+│   │   ├── cameraPreview.test.js
+│   │   ├── locationDetail.test.js
+│   │   └── locationProgress.test.js
 │   └── src/
 │       ├── main.jsx              # Điểm bắt đầu React
 │       ├── App.jsx               # Trạng thái toàn ứng dụng và chọn trang
@@ -225,12 +231,12 @@ CameraPage
   → useLiveLocation lấy GPS
   → check-in-service.verifyCheckin()
   → POST /api/checkins/verify
-  → tìm địa điểm gần nhất
-  → vision.py gửi ảnh đến YEScale
-  → so sánh GPS + nhãn + confidence
-  → ghi checkin_logs
-  → nếu đạt: ghi user_history
-  → frontend cập nhật hộ chiếu và phần thưởng
+  → load the database location catalog
+  → vision.py recognizes the image using the catalog labels
+  → validate confidence and GPS against the recognized site's geofence
+  → write checkin_logs and call services/unlocks.py on success
+  → commit user_history and the audit log together
+  → useLocationProgress updates the shared ten-site UI state
 ```
 
 ### 6.3 Hỏi đáp AI
@@ -285,10 +291,15 @@ khác.
 ## 9. Điểm cần chú ý khi tiếp tục phát triển
 
 - Database đang dùng SQLite và chưa có Alembic; thay đổi cột cần migration thủ công.
-- `User.unlocked_location_ids` và `user_history` cùng lưu thông tin liên quan mở
-  khóa; cần xác định nguồn dữ liệu chính để tránh lệch nhau.
+- `user_history` is the authoritative unlock source. `User.unlocked_location_ids`
+  remains for schema compatibility only and must not grant access.
 - `ChatMessage.gemini_answer` là tên cũ, trong khi provider hiện tại là YEScale.
 - `UserJourney` được đánh dấu legacy; tránh phát triển mới dựa vào bảng này nếu
   chưa thống nhất với nhóm.
 - Nội dung i18n nên thêm đồng thời vào `vi.json` và `en.json`.
 - Camera trên điện thoại cần HTTPS và chứng chỉ được thiết bị tin cậy.
+
+## Unlock and test reference
+
+See [UNLOCK_FLOW.md](UNLOCK_FLOW.md) for the English file-to-file unlock sequence
+and [TESTING.md](TESTING.md) for test commands, isolation, and coverage.

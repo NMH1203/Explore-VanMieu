@@ -1,10 +1,19 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { captureOptimizedFrame } from '../../../utils/imageProcessing.js'
+import { startCameraPreview } from '../../../utils/cameraPreview.js'
 
+// CameraPage.jsx owns user actions; this hook owns the device stream lifetime.
+// utils/cameraPreview.js waits for drawable video before enabling capture, then
+// utils/imageProcessing.js produces the JPEG uploaded by check-in-service.
+// requestRef prevents an older permission/playback request from reviving a
+// stopped stream after retry or navigation. stopCamera releases every track.
 export function useCameraStream() {
   const videoRef = useRef(null)
   const streamRef = useRef(null)
   const requestRef = useRef(0)
+  const previewAbortRef = useRef(null)
+  const startingRef = useRef(false)
+  const [isStarting, setIsStarting] = useState(false)
   const [isStreaming, setIsStreaming] = useState(false)
   const [hasPermission, setHasPermission] = useState(null)
   const [cameraError, setCameraError] = useState(null)
@@ -13,6 +22,10 @@ export function useCameraStream() {
 
   const stopCamera = useCallback(() => {
     requestRef.current += 1
+    previewAbortRef.current?.abort()
+    previewAbortRef.current = null
+    startingRef.current = false
+    setIsStarting(false)
     setIsTorchOn(false)
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => {
@@ -27,23 +40,26 @@ export function useCameraStream() {
   }, [])
 
   const startCamera = useCallback(async () => {
+    if (startingRef.current) return
     stopCamera()
     const requestId = requestRef.current
     setCameraError(null)
 
     if (!window.isSecureContext) {
       setHasPermission(false)
-      setCameraError('Camera access on mobile requires HTTPS. Open the secure HTTPS address and try again.')
+      setCameraError('insecureCamera')
       return
     }
 
     // Check browser support
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       setHasPermission(false)
-      setCameraError('Your browser does not support live camera access. Use HTTPS or localhost.')
+      setCameraError('unsupportedCamera')
       return
     }
 
+    startingRef.current = true
+    setIsStarting(true)
     try {
       // Prefer the rear camera for scanning heritage sites
       const constraints = {
@@ -62,30 +78,36 @@ export function useCameraStream() {
       }
       streamRef.current = stream
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream
-        videoRef.current.onloadedmetadata = () => {
-          videoRef.current?.play().then(() => {
-            if (requestId !== requestRef.current) return
-            setIsStreaming(true)
-            setHasPermission(true)
-          }).catch((e) => {
-            console.warn('Video autoplay failed:', e)
-          })
-        }
-      }
+      if (!videoRef.current) throw new Error('Camera preview is unavailable.')
+      const controller = new AbortController()
+      previewAbortRef.current = controller
+      await startCameraPreview(videoRef.current, stream, { signal: controller.signal })
+      if (requestId !== requestRef.current) return
+      setIsStreaming(true)
+      setHasPermission(true)
+      stream.getVideoTracks().forEach(track => track.addEventListener('ended', () => {
+        if (requestId !== requestRef.current) return
+        stopCamera()
+        setCameraError('cameraInterrupted')
+      }, { once: true }))
     } catch (err) {
       if (requestId !== requestRef.current) return
       console.warn('Unable to access the camera:', err)
+      stopCamera()
       setHasPermission(false)
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        setCameraError('Camera access was denied. Allow camera access to scan artifacts.')
+        setCameraError('cameraDenied')
       } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-        setCameraError('No camera was found on this device.')
+        setCameraError('cameraNotFound')
       } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
-        setCameraError('The camera is already in use. Close Camera, Zoom, or video-call apps and try again.')
+        setCameraError('cameraBusy')
       } else {
-        setCameraError('Unable to start the camera: ' + (err.message || 'Unknown error'))
+        setCameraError('cameraStartFailed')
+      }
+    } finally {
+      if (requestId === requestRef.current) {
+        startingRef.current = false
+        setIsStarting(false)
       }
     }
   }, [stopCamera])
@@ -115,7 +137,7 @@ export function useCameraStream() {
 
   // Capture the current video frame as a data URL
   const captureSnapshot = useCallback(() => {
-    if (!videoRef.current || !isStreaming) return null
+    if (!videoRef.current || !isStreaming || videoRef.current.readyState < 2) return null
 
     try {
       const dataUrl = captureOptimizedFrame(videoRef.current)
@@ -138,6 +160,7 @@ export function useCameraStream() {
   return {
     videoRef,
     isStreaming,
+    isStarting,
     hasPermission,
     cameraError,
     capturedImage,

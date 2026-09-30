@@ -16,6 +16,7 @@ from backend.src.models.heritage_location import HeritageLocation
 from backend.src.models.location import LocationStatus
 from backend.src.models.user import User
 from backend.src.models.user_history import UserHistory
+from backend.src.services.unlocks import save_verified_unlock
 
 
 def create_location_router() -> APIRouter:
@@ -64,14 +65,10 @@ def create_location_router() -> APIRouter:
                     detail="A verified GPS and image check-in is required to unlock this location.",
                 )
 
-            history = session.get(UserHistory, (current_user.user_id, location_id))
-            if history is None:
-                session.add(UserHistory(user_id=current_user.user_id, location_id=location_id))
-                session.commit()
-            elif not history.status:
-                history.status = True
-                session.add(history)
-                session.commit()
+            # Reuse the same atomic write as routes/checkins.py, but only after
+            # finding this user's verified log for this exact database location.
+            save_verified_unlock(session, current_user.user_id, location_id)
+            session.commit()
             return LocationStatus(id=location_id, unlocked=True)
 
     return router

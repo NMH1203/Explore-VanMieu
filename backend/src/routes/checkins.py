@@ -3,11 +3,14 @@
 This route connects the API request to the check-in response and log models,
 the heritage-location catalog, authenticated users, user progress history, and
 the image-recognition service.
+
+Caller: frontend/src/services/check-in-service/index.js. Site IDs, labels, and
+geofences originate in database/seeds/seed_locations.py. services/unlocks.py
+persists successful stamps; routes/progress.py restores them after a reload.
 """
 
 import math
 import os
-from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
 from sqlmodel import Session, select
@@ -21,7 +24,7 @@ from backend.src.models.checkin import (
 from backend.src.models.checkin_log import CheckinLog
 from backend.src.models.heritage_location import HeritageLocation
 from backend.src.models.user import User
-from backend.src.models.user_history import UserHistory
+from backend.src.services.unlocks import save_verified_unlock
 from backend.src.services.image_processing import InvalidImageError
 from backend.src.services.vision import (
     VisionConfigurationError,
@@ -126,7 +129,7 @@ async def verify_checkin(
             )
             for location in locations
         ]
-        location, distance = min(distances, key=lambda item: item[1])
+        nearest_location, nearest_distance = min(distances, key=lambda item: item[1])
 
         labels = [location.yolo_label for location in locations]
         try:
@@ -151,6 +154,16 @@ async def verify_checkin(
             None,
         )
 
+        # The seeded sites can have overlapping geofences. Match GPS against the
+        # site recognized by services/vision.py, not whichever neighbour happens
+        # to be nearest. An unknown label uses the nearest site only for logging
+        # a rejected attempt; it can never grant an unlock.
+        location = detected_location or nearest_location
+        distance = (
+            calculate_distance_meters(latitude, longitude, location.latitude, location.longitude)
+            if detected_location else nearest_distance
+        )
+
         try:
             minimum_confidence = float(os.getenv("YESCALE_MIN_CONFIDENCE", "0.70"))
         except ValueError as error:
@@ -164,8 +177,7 @@ async def verify_checkin(
                 detail="YESCALE_MIN_CONFIDENCE must be a number between 0 and 1.",
             )
 
-        label_matches = result.label == location.yolo_label
-        image_matches = label_matches and result.confidence >= minimum_confidence
+        image_matches = detected_location is not None and result.confidence >= minimum_confidence
         gps_matches = distance <= location.geofence_radius
         verified = image_matches and gps_matches
 
@@ -188,27 +200,17 @@ async def verify_checkin(
         session.add(checkin_log)
 
         if verified:
-            history = session.get(
-                UserHistory,
-                (current_user.user_id, location.location_id),
-            )
-            if history is None:
-                history = UserHistory(
-                    user_id=current_user.user_id,
-                    location_id=location.location_id,
-                )
-            history.status = True
-            history.unlocked_at = datetime.now(timezone.utc)
-            session.add(history)
+            # services/unlocks.py writes user_history in this same transaction.
+            # GET /api/progress then restores these stamps in frontend/src/App.jsx.
+            save_verified_unlock(session, current_user.user_id, location.location_id)
 
         session.commit()
         if verified:
             message = f"{location.name} has been verified and its heritage stamp saved."
-        elif not label_matches:
-            detected_name = detected_location.name if detected_location else "an unknown site"
+        elif detected_location is None:
             message = (
-                f"GPS places you nearest to {location.name}, but the image was recognized as "
-                f"{detected_name}. Capture a clear view of the nearest site and try again."
+                "The image was not recognized as a supported heritage site. "
+                "Capture a clear view of the site and try again."
             )
         elif not image_matches:
             message = (
@@ -217,7 +219,7 @@ async def verify_checkin(
             )
         else:
             message = (
-                f"{location.name} is the nearest site, but you are {round(distance)} m away from "
+                f"The image shows {location.name}, but you are {round(distance)} m away from "
                 "it, outside the check-in area."
             )
         return CheckinVerificationResponse(

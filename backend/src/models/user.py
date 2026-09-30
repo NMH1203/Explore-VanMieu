@@ -15,6 +15,8 @@ class User(SQLModel, table=True):
     username: str | None = Field(default=None, max_length= 64)
     is_admin: bool = Field(default=False, index=True)
     target_location_id: str | None = Field(default=None, max_length=32, index=True)
+    # Legacy schema compatibility only. services/unlocks.py writes UserHistory;
+    # routes/progress.py and routes/chat.py must never authorize from this list.
     unlocked_location_ids: list[str] = Field(
         default_factory=list,
         sa_column=Column(JSON, nullable=False),

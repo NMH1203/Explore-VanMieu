@@ -13,7 +13,7 @@ import PassportPage from './pages/passport/PassportPage.jsx'
 import RegisterPage from './pages/register/RegisterPage.jsx'
 import { getRoute, normalizeInitialUrl, paths } from './routes/index.js'
 import { getCurrentUser, logout } from './services/auth-service/index.js'
-import { getProgress } from './services/passport-service/index.js'
+import { useLocationProgress } from './hooks/useLocationProgress.js'
 import { verifyCheckin } from './services/check-in-service/index.js'
 import { useLanguage } from './i18n/LanguageContext.jsx'
 
@@ -37,7 +37,7 @@ function App() {
   async function handleClaimReward() {
     setReward(await claimReward())
   }
-  const [unlockedLocations, setUnlockedLocations] = useState(new Set())
+  const { unlockedLocations, recordVerifiedCheckin } = useLocationProgress(user?.user_id)
   const { t } = useLanguage()
   const isAuthenticated = Boolean(user)
   const route = getRoute(pathname)
@@ -50,32 +50,6 @@ function App() {
     return () => { active = false }
   }, [])
 
-  useEffect(() => {
-    let ignoreResult = false
-
-    if (!user) {
-      setUnlockedLocations(new Set())
-      return undefined
-    }
-
-    getProgress()
-      .then((progress) => {
-        if (ignoreResult) return
-        setUnlockedLocations(new Set(
-          progress
-            .filter((item) => item.status)
-            .map((item) => item.location_id),
-        ))
-      })
-      .catch((error) => {
-        console.error('Unable to load progress:', error)
-        if (!ignoreResult) setUnlockedLocations(new Set())
-      })
-
-    return () => {
-      ignoreResult = true
-    }
-  }, [user])
   useEffect(() => {
     function handlePopState() {
       setPathname(window.location.pathname)
@@ -139,11 +113,19 @@ function App() {
   }
 
   async function handleVerifyCheckin(checkinData) {
+    const version = authVersion.current
     const result = await verifyCheckin(checkinData)
+    // The request may finish after logout or an account switch. Its database
+    // write belongs to the original session, never to the new account's UI.
+    if (version !== authVersion.current) return result
     if (result.verified) {
-      setUnlockedLocations((current) => new Set(current).add(result.location_id))
-      try { setReward(await getRewards()); setRewardError('') }
-      catch (error) { setRewardError(error.message) }
+      recordVerifiedCheckin(result)
+      try {
+        const nextReward = await getRewards()
+        if (version === authVersion.current) { setReward(nextReward); setRewardError('') }
+      } catch (error) {
+        if (version === authVersion.current) setRewardError(error.message)
+      }
     }
     return result
   }
@@ -153,7 +135,6 @@ function App() {
       await logout()
       authVersion.current += 1
       setUser(null)
-      setUnlockedLocations(new Set())
       navigate(paths.explore, { replace: true })
     } catch (error) {
       alert(error.message)

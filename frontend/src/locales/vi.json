@@ -213,6 +213,17 @@
     "english": "English ›"
   },
   "camera": {
+    "insecureCamera": "Camera cần kết nối HTTPS. Hãy mở địa chỉ HTTPS rồi thử lại.",
+    "unsupportedCamera": "Trình duyệt này không hỗ trợ truy cập camera.",
+    "cameraDenied": "Bạn chưa cho phép truy cập camera. Hãy cấp quyền rồi chọn Mở lại camera.",
+    "cameraNotFound": "Không tìm thấy camera trên thiết bị.",
+    "cameraBusy": "Camera đang được sử dụng. Hãy đóng ứng dụng chụp ảnh hoặc gọi video khác rồi thử lại.",
+    "cameraStartFailed": "Không khởi động được hình ảnh camera. Hãy chọn Mở lại camera để thử lại.",
+    "cameraInterrupted": "Camera đã dừng. Hãy chọn Mở lại camera để tiếp tục.",
+    "cameraUnavailable": "Camera chưa sẵn sàng",
+    "retryCamera": "Mở lại camera",
+    "verifyPhoto": "Xác nhận ảnh đã chụp",
+    "sessionExpired": "Phiên đăng nhập bị thiếu hoặc đã hết hạn. Hãy đăng nhập lại để xác nhận lượt tham quan.",
     "scan": "Quét",
     "recognition": "Nhận diện AI",
     "discover": "Khám phá",

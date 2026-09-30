@@ -1,4 +1,5 @@
 import unittest
+from backend.tests import support  # Configure test-only secrets before route imports.
 from datetime import datetime, timedelta, timezone
 from io import BytesIO
 from unittest.mock import AsyncMock, patch

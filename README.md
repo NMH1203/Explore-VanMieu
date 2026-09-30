@@ -25,6 +25,7 @@ Explore-VanMieu/
 │   ├── public/images/       # Site photos and visual assets
 │   ├── src/
 │   │   ├── components/      # Shared UI components
+│   │   ├── hooks/           # Shared database-backed progress state
 │   │   ├── i18n/            # Language configuration
 │   │   ├── locales/         # English and Vietnamese translations
 │   │   ├── pages/           # Pages and page-specific components
@@ -33,6 +34,10 @@ Explore-VanMieu/
 │   │   ├── styles/          # Shared styles
 │   │   ├── App.jsx
 │   │   └── routes/index.js
+│   ├── tests/               # Run with npm test
+│   │   ├── cameraPreview.test.js   # Camera readiness and HTTP errors
+│   │   ├── locationDetail.test.js  # Locked/unlocked pages for all ten sites
+│   │   └── locationProgress.test.js # Ten-site contract and progress races
 │   └── scripts/             # Translation checks
 ├── backend/
 │   ├── src/
@@ -42,16 +47,26 @@ Explore-VanMieu/
 │   │   ├── models/          # Database and request/response models
 │   │   ├── routes/          # API endpoints
 │   │   └── services/        # Authentication, AI, and image processing
+│   ├── tests/               # Isolated SQLite and API regression tests
+│   │   ├── support.py       # Test-only configuration
+│   │   ├── test_checkin_routes.py
+│   │   └── test_location_unlocks.py
 │   └── requirements.txt
 ├── database/
 │   ├── schema/init_db.py    # Create database tables
 │   ├── seeds/seed_locations.py # Seed the ten heritage sites
 │   └── seeds/seed_demo_admin.py # Create/update the development admin
+├── docs/
+│   ├── UNLOCK_FLOW.md        # English file map and ten-site unlock rules
+│   └── TESTING.md            # Test commands, coverage, and isolation
 ├── reports/                 # Verification results
 └── README.md
 ```
 
 ## Setup
+
+For the database-to-UI unlock sequence, see [Unlock flow](docs/UNLOCK_FLOW.md).
+For test commands and coverage, see [Testing](docs/TESTING.md).
 
 Requires Python 3.12+, Node.js 20.19+ or 22.12+, npm, and Git. The commands below use Windows PowerShell, starting from the repository root.
 

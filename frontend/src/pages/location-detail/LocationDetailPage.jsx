@@ -2,13 +2,14 @@ import { Award, Check, LockKeyhole } from 'lucide-react'
 import { paths } from '../../routes/index.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import HeritageMessageBox from './components/HeritageMessageBox.jsx'
-import { useReward } from '../../store/RewardContext.jsx'
 import { heritageItems } from '../../data/heritageItems.js'
 
 function Detail({ item, unlocked }) {
-  const { t, lang } = useLanguage()
-  const { reward } = useReward()
-  const isFeaturedStop = reward?.completed_ids.includes(item.id)
+  const { t } = useLanguage()
+  // App.jsx passes the persisted unlock set from hooks/useLocationProgress.js.
+  // Every verified site earns a stamp, including sites outside the five reward
+  // targets returned by backend/src/routes/rewards.py. Figures are not sites.
+  const hasHeritageStamp = unlocked && item.kind !== 'figure'
   if (!unlocked) {
     return (
       <section className="screen" id={item.id}>
@@ -52,7 +53,7 @@ function Detail({ item, unlocked }) {
               </div>
               <article className="article">
                 {item.kind !== 'figure' && <a className="btn btn-primary" href={paths.passport}>
-                  {lang === 'vi' ? 'Xem hộ chiếu thành tựu' : 'View passport achievements'}
+                  {t('detail.viewPassport')}
                 </a>}
                 <span className="kicker">{t("detail.story")}</span>
                 <h2>{t("detail.items." + item.id + ".heading")}</h2>
@@ -80,7 +81,7 @@ function Detail({ item, unlocked }) {
                   </a>
                 </div>
               </div>
-              {isFeaturedStop && (
+              {hasHeritageStamp && (
                 <article className="article heritage-stamp">
                   <span className="kicker">{t("detail.yourStamp")}</span>
                   <h2>{t("detail.recorded")}</h2>

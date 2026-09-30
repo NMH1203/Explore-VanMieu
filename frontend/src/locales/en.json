@@ -213,6 +213,17 @@
     "english": "English ›"
   },
   "camera": {
+    "insecureCamera": "Camera access requires HTTPS. Open the secure address and try again.",
+    "unsupportedCamera": "This browser does not support camera access.",
+    "cameraDenied": "Camera access was denied. Allow camera access, then select Open camera again.",
+    "cameraNotFound": "No camera was found on this device.",
+    "cameraBusy": "The camera is in use. Close other camera or video-call apps and try again.",
+    "cameraStartFailed": "The camera preview could not start. Select Open camera again to retry.",
+    "cameraInterrupted": "The camera stopped. Select Open camera again to continue.",
+    "cameraUnavailable": "Camera unavailable",
+    "retryCamera": "Open camera again",
+    "verifyPhoto": "Verify captured photo",
+    "sessionExpired": "Your sign-in session is missing or has expired. Sign in again to verify your visit.",
     "scan": "Scan",
     "recognition": "AI recognition",
     "discover": "Explore",

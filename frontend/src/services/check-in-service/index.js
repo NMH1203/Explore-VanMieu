@@ -1,6 +1,9 @@
 import { handleResponse } from '../../utils/response.js'
 
-export async function verifyCheckin({ imageDataUrl, locationId, latitude, longitude }) {
+// App.jsx calls this after CameraPage.jsx captures a frame. Send the session
+// cookie plus image/GPS to backend/src/routes/checkins.py; the client never
+// chooses or grants the unlock. The server returns the verified database ID.
+export async function verifyCheckin({ imageDataUrl, latitude, longitude }) {
   const imageBlob = await fetch(imageDataUrl).then((response) => response.blob())
   const formData = new FormData()
   formData.append('latitude', String(latitude))

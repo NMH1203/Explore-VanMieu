@@ -19,7 +19,6 @@ export default function CameraViewfinder({
       {/* 1. Live video or fallback layer */}
       <video
           ref={videoRef}
-          style={{ display: isStreaming ? undefined : 'none' }}
           playsInline
           autoPlay
           muted
@@ -35,7 +34,7 @@ export default function CameraViewfinder({
           <div className="fallback-badge">
             {cameraError ? (
               <span>
-                <AlertCircle size={14} /> {t("camera.simulation")}
+                <AlertCircle size={14} /> {t("camera.cameraUnavailable")}
               </span>
             ) : (
               <span>
