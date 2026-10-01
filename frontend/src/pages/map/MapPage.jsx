@@ -1,24 +1,37 @@
 import { useCallback, useMemo, useState } from 'react'
+// the language for UI components (header , titles, messages)
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
+// get the translation key for each location 
 import { getLocationTranslationKey } from '../../i18n/locationKeys.js'
+// mapData :all location in the map
 import { MAP_LOCATIONS } from '../../data/mapLocations.js'
+// the interactive map component
 import InteractiveMap from '../../components/map-view/InteractiveMap.jsx'
+// sidebar for location
 import LocationSidebar from '../../components/map-view/LocationSidebar.jsx'
 import { useLiveLocation } from '../camera/hooks/useLiveLocation.js'
 import './map.css'
 
+// selectedLocationId :To Manage the location are Chosing and show in the card
 function MapPage({ unlockedLocations }) {
   const { t } = useLanguage()
+  // useLiveLocation : hooks to get the user's location and accuracy and gps status 
+
   const [selectedLocationId, setSelectedLocationId] = useState(MAP_LOCATIONS[0].id)
   const { userCoords, gpsStatus, gpsAccuracy } = useLiveLocation()
+
+  // handleSelectLocation :To Manage the location are Chosing and show in the card
   const handleSelectLocation = useCallback((location) => {
     setSelectedLocationId(location.id)
   }, [])
+  //  locations :To Manage the location are Chosing and show in the card
   const locations = useMemo(() => MAP_LOCATIONS.map((location) => {
     const key = getLocationTranslationKey(location.id)
     return { ...location, name: t('locations.names.' + key), description: t('locations.descriptions.' + key), tagline: t('locations.descriptions.' + key) }
   }), [t])
+  // selectedLocation :To Manage the location are Chosing and show in the card
   const selectedLocation = locations.find(({ id }) => id === selectedLocationId)
+  // unlockedCount :To Manage the location are Chosing and show in the card
   const unlockedCount = locations.filter(({ id }) => unlockedLocations.has(id)).length
 
   return (
