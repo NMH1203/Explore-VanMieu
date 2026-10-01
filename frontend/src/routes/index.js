@@ -1,3 +1,8 @@
+
+// Routing System (Static) -Using library HTML5 History API 
+// block of const definition : paths & detail paths 
+// this depenning on the Single Source of Truth
+//  ta gom tất cả URL into object paths to manage
 export const paths = {
   explore: '/Explore',
   map: '/Explore/Ban-Do',
@@ -9,6 +14,10 @@ export const paths = {
   figures: '/Explore/Danh-Nhan',
 }
 
+
+//  detailPaths : block of detail paths 500ms delay
+// deplay the ID  with URL Path of the heritage for each other 
+// 
 export const detailPaths = {
   'location-van-mieu-gate': '/Explore/Cong-Van-Mieu',
   'location-dai-trung-gate': '/Explore/Cong-Dai-Trung',
@@ -27,7 +36,7 @@ export const detailPaths = {
   'figure-confucius': '/Explore/Danh-Nhan/Khong-Tu',
   'figure-four-sages': '/Explore/Danh-Nhan/Tu-Phoi',
 }
-
+// pathToDetailId to get the ID from the URL Path of the heritage , used for deep linking
 const pathToDetailId = Object.fromEntries(
   Object.entries(detailPaths).map(([id, path]) => [path, id]),
 )
@@ -73,5 +82,6 @@ export function getRoute(pathname) {
   if (pathname === paths.locations) return { page: 'locations' }
   if (pathname === paths.figures) return { page: 'figures' }
   if (pathToDetailId[pathname]) return { page: 'detail', id: pathToDetailId[pathname] }
-  return { page: 'not-found' }
+  return { page: 'not-found' }Working...
+
 }
