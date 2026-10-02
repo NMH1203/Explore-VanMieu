@@ -19,14 +19,18 @@ from backend.src.services.vision import VisionResult
 
 class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
+        # Create an in-memory SQLite database engine isolated for each test execution.
         self.engine = create_engine(
             "sqlite://",
             connect_args={"check_same_thread": False},
             poolclass=StaticPool,
         )
+        # Register automatic database engine cleanup upon test completion.
         self.addCleanup(self.engine.dispose)
+        # Initialize schema tables in the in-memory database.
         SQLModel.metadata.create_all(self.engine)
 
+        # Instantiate user models and a test heritage location entity.
         user = User(email="visitor@example.com", password_hash="unused")
         other_user = User(email="other-visitor@example.com", password_hash="unused")
         location = HeritageLocation(
@@ -39,6 +43,8 @@ class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
             geofence_radius=30,
             story_summary="Test location",
         )
+
+        # Seed test instances into the database session.
         with Session(self.engine) as session:
             session.add(user)
             session.add(other_user)
@@ -49,11 +55,13 @@ class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
             self.user_id = user.user_id
             self.other_user_id = other_user.user_id
 
+        # Retain user reference instances for route parameter passing.
         self.user = User(
             user_id=self.user_id,
             email="visitor@example.com",
             password_hash="unused",
         )
+        # Patch the checkins route engine to use the isolated test database instance.
         self.other_user = User(
             user_id=self.other_user_id,
             email="other-visitor@example.com",
@@ -65,6 +73,7 @@ class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
 
     @staticmethod
     def image_upload():
+        # Helper function to construct a dummy file upload object.
         return UploadFile(
             filename="checkin.jpg",
             file=BytesIO(b"fake-jpeg-content"),
@@ -72,6 +81,7 @@ class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
         )
 
     async def test_matching_image_unlocks_location_and_writes_log(self):
+        # Test verifying check-in with matching image labels and GPS coordinates.
         ai_result = VisionResult("khue_van_cac", 0.93, "matched")
         with patch(
             "backend.src.routes.checkins.recognize_heritage_image",
@@ -84,6 +94,7 @@ class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
                 current_user=self.user,
             )
 
+        # Assert successful verification and ensure user history & logs are persisted.
         self.assertTrue(result.verified)
         with Session(self.engine) as session:
             history = session.get(UserHistory, (self.user_id, "interpret"))
@@ -92,6 +103,7 @@ class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(logs[0].verification_status, "verified")
 
     async def test_far_location_is_rejected_and_logged(self):
+        # Test GPS geofence rejection when coordinates are beyond threshold.
         recognize = AsyncMock(return_value=VisionResult("khue_van_cac", 0.93, "matched"))
         with patch(
             "backend.src.routes.checkins.recognize_heritage_image",
@@ -104,6 +116,7 @@ class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
                 current_user=self.user,
             )
 
+        # Assert rejection status and verify log records rejection reason.
         self.assertFalse(result.verified)
         recognize.assert_awaited_once()
         with Session(self.engine) as session:
@@ -112,6 +125,7 @@ class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(logs[0].verification_status, "rejected_gps")
 
     async def test_history_is_scoped_to_user_and_newest_first(self):
+        # Test that history querying is filtered by user ID and correctly ordered by time.
         now = datetime.now(timezone.utc)
         with Session(self.engine) as session:
             session.add(
@@ -150,7 +164,7 @@ class CheckinRouteTests(unittest.IsolatedAsyncioTestCase):
                 )
             )
             session.commit()
-
+        # Execute target function and verify returning results belong only to caller in reverse-chronological order.
         history = list_checkin_history(limit=20, current_user=self.user)
         self.assertEqual(len(history), 2)
         self.assertEqual(history[0].verification_status, "verified")

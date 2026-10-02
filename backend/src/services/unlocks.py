@@ -27,7 +27,7 @@ def save_verified_unlock(session: Session, user_id: str, location_id: str) -> No
         status=True,
         unlocked_at=datetime.now(timezone.utc),
     )
-    session.execute(statement.on_conflict_do_update(
+    session.exec(statement.on_conflict_do_update(
         index_elements=["user_id", "location_id"],
         set_={
             "status": True,

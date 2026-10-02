@@ -49,7 +49,17 @@ def register(data: RegisterRequest):
         return user
 
 
-@router.post("/login", response_model=UserResponse)
+@router.post(
+    "/login",
+    response_model=UserResponse,
+    summary="Sign in and create a session",
+    description=(
+        "Signs in and sets the HttpOnly `session` cookie used by protected endpoints. "
+        "When trying protected endpoints in `/docs`, call this operation first "
+        "from the same browser and the same host (for example, always use "
+        "`127.0.0.1`, not a mix of `localhost` and `127.0.0.1`)."
+    ),
+)
 def login(data: LoginRequest, request: Request, response: Response):
     email = str(data.email).strip().lower()
 

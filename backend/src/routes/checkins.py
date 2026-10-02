@@ -85,7 +85,17 @@ def calculate_distance_meters(lat1: float, lon1: float, lat2: float, lon2: float
     return earth_radius * 2 * math.atan2(math.sqrt(value), math.sqrt(1 - value))
 
 
-@router.post("/verify", response_model=CheckinVerificationResponse)
+@router.post(
+    "/verify",
+    response_model=CheckinVerificationResponse,
+    summary="Verify a check-in photo",
+    description=(
+        "Requires a valid signed-in session. In `/docs`, first call "
+        "POST `/api/auth/login` using this same browser and host. If this "
+        "returns 401, sign in again; the session cookie is missing or expired."
+    ),
+    responses={401: {"description": "Sign in first, or sign in again if the session expired."}},
+)
 async def verify_checkin(
     latitude: float = Form(...),
     longitude: float = Form(...),

@@ -30,6 +30,16 @@ trust warning. Use a trusted certificate for a deployed site. HTTPS login
 cookies are marked `Secure` automatically; HTTP localhost development keeps
 the cookie usable.
 
+### Test authenticated endpoints in Swagger
+
+In `/docs`, expand `POST /api/auth/login`, click **Try it out**, enter your
+account email and password, and execute the request. Then try the protected
+check-in endpoint in the same browser. The login response sets the `session`
+cookie. If check-in returns `401` with “The token is invalid or has expired,”
+sign in again and retry. Cookies are scoped to the host, so use one hostname
+consistently (for example, `127.0.0.1` for both `/docs` and the frontend); a
+session created on `localhost` is not sent to `127.0.0.1`.
+
 The Vite configuration in `frontend/vite.config.js` automatically enables
 HTTPS when it finds `backend-local.key` and `backend-local.crt` in the
 repository root. It serves the page at `https://localhost:5173` for local

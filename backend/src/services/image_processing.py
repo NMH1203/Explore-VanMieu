@@ -22,7 +22,6 @@ class PreparedImage:
     height: int
     mime_type: str = "image/jpeg"
 
-
 def prepare_vision_image(image_bytes: bytes) -> PreparedImage:
     """Fit within 512 x 512 without cropping/upscaling; remove metadata.
 

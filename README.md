@@ -106,6 +106,24 @@ database itself remains private and is not committed to Git.
 
 API documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 
+To try protected endpoints such as check-in in Swagger, first call
+`POST /api/auth/login` from `/docs` and provide your account email and password.
+Swagger's browser session then sends the `session` cookie with subsequent
+requests. If you get `401` with “The token is invalid or has expired,” log in
+again and retry. Always use the same host for both sign-in and API requests:
+`localhost` and `127.0.0.1` have separate browser cookies. A successful sign-in
+in the frontend only carries over when it used the same host as `/docs`.
+
+If `/api/checkins/verify` returns **502**, inspect the response's `detail` field
+in Swagger. The backend reached the image recognition step, but YEScale failed
+to return a usable result. The detail distinguishes a timeout, connection
+failure, provider HTTP error, or invalid AI response. Check your key, quota,
+and image-capable model. Start with `YESCALE_VISION_MODEL=gpt-4o-mini` as above.
+Restart the backend after editing `.env`; Python reload does not reliably reload
+environment-file changes. An existing `YESCALE_*` shell environment variable
+takes precedence over `.env`. A 502 does not save a successful check-in; retry
+after resolving the provider error.
+
 ### Frontend
 
 Open a second terminal from the repository root:

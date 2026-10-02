@@ -32,6 +32,8 @@ class VisionResult:
 
 
 def _extract_json(content: str) -> dict:
+    if not isinstance(content, str) or not content.strip():
+        raise VisionProviderError("YEScale returned no image analysis. Retry or check YESCALE_VISION_MODEL.")
     start = content.find("{")
     end = content.rfind("}")
     if start == -1 or end == -1 or end < start:
@@ -97,15 +99,33 @@ async def recognize_heritage_image(
             response.raise_for_status()
             content = response.json()["choices"][0]["message"]["content"]
     except httpx.TimeoutException as error:
-        raise VisionProviderError("The YEScale image request timed out.") from error
+        raise VisionProviderError(
+            f"The YEScale image request timed out after 90 seconds (model: {model}). "
+            "Retry or set YESCALE_VISION_MODEL=gpt-4o-mini in .env and restart the backend."
+        ) from error
     except httpx.HTTPStatusError as error:
         logger.warning(
             "YEScale returned HTTP %s: %s",
             error.response.status_code,
             error.response.text[:500],
         )
+        status = error.response.status_code
+        hint = (
+            "Check YESCALE_API_KEY and its permissions."
+            if status in (401, 403) else
+            "Check your YEScale quota and request limits."
+            if status in (402, 429) else
+            "Check YESCALE_BASE_URL and whether YESCALE_VISION_MODEL supports images and is available to your key."
+            if status in (400, 404, 422) else
+            "The YEScale service is temporarily unavailable; retry shortly."
+        )
         raise VisionProviderError(
-            f"YEScale rejected the image request (HTTP {error.response.status_code})."
+            f"YEScale rejected the image request (HTTP {status}, model: {model}). {hint}"
+        ) from error
+    except httpx.RequestError as error:
+        logger.warning("YEScale image connection failed: %s", type(error).__name__)
+        raise VisionProviderError(
+            "Could not connect to YEScale. Check YESCALE_BASE_URL, internet access, proxy and TLS certificates."
         ) from error
     except (httpx.HTTPError, KeyError, IndexError, TypeError, ValueError) as error:
         raise VisionProviderError("Could not retrieve a result from YEScale.") from error

@@ -63,3 +63,30 @@ On the HTTPS deployment, check these flows:
 5. Sign out and use another account: the first account's stamps must not appear.
 6. Expire the session before sending a scan: show a sign-in action rather than a
    recognition failure or a silent shutter.
+
+## Local performance measurements
+
+`scripts/benchmark.py` starts the production web entry point with a separate
+SQLite database and generated test accounts. It measures three pages in headless
+Chrome/Edge, then runs authenticated HTTP requests at increasing concurrency.
+It does not call the paid AI provider or touch the visitor database.
+
+```powershell
+npm --prefix frontend run build
+backend\.venv\Scripts\python.exe scripts/benchmark.py --duration 10 --repeats 3 --levels 1 5 10 25 50 100
+```
+
+Requires the backend dependencies, Python `websockets` (with sync client and
+proxy support), and Chrome or Edge. Set `BENCHMARK_BROWSER` to the executable
+path if it is not installed in the default Windows location. The browser must
+be permitted to start child processes.
+
+Each run writes a Vietnamese Markdown report and per-request JSON evidence in
+`reports/performance-<timestamp>/`. Temporary databases, browser profiles and
+server logs stay in ignored `.local-test/` directories. The runner stops its
+server and browser after measurement. Browser measurement failures are reported
+explicitly, never replaced with HTML response time.
+
+These are short local closed-loop load tests, not a production capacity claim.
+Page timings are collected without simultaneous API load; upload, AI, login
+hashing, mobile-network latency and long-duration stability are not measured.
