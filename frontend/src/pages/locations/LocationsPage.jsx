@@ -3,9 +3,11 @@ import { detailPaths, paths } from '../../routes/index.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import { LOCATION_TRANSLATION_KEYS } from '../../i18n/locationKeys.js'
 
+// Master list of all 10 heritage locations with metadata and distance estimates
 const locations = [
   {
     id: 'location-van-mieu-gate',
+
     name: 'Temple of Literature Gate',
     image: 'van-mieu-gate.webp',
     description: 'The first entrance opens onto the architectural axis and scholarly grounds.',
@@ -76,6 +78,7 @@ const locations = [
   },
 ]
 
+// Single location card component rendering thumbnail, lock status badge, and story link
 function LocationCard({ location, unlocked, t }) {
   return (
     <article className={`location-card${unlocked ? '' : ' locked'}`}>
@@ -95,9 +98,6 @@ function LocationCard({ location, unlocked, t }) {
           {unlocked ? <a href={detailPaths[location.id]}>{t('locations.names.' + LOCATION_TRANSLATION_KEYS[location.id])}</a> : t('locations.names.' + LOCATION_TRANSLATION_KEYS[location.id])}
         </h3>
         <p>{t('locations.descriptions.' + LOCATION_TRANSLATION_KEYS[location.id])}</p>
-        <div className="meta">
-          <span>⌖ {location.distance}</span>
-        </div>
         {unlocked ? (
           <a className="btn btn-outline btn-block" href={detailPaths[location.id]}>
             {t('common.readStory')}
@@ -113,6 +113,7 @@ function LocationCard({ location, unlocked, t }) {
   )
 }
 
+// Complete heritage relics catalog page displaying all 10 locations in a grid
 function LocationsPage({ unlockedLocations }) {
   const { t } = useLanguage()
   const unlockedCount = locations.filter((location) => unlockedLocations.has(location.id)).length
@@ -120,6 +121,7 @@ function LocationsPage({ unlockedLocations }) {
   return (
     <section className="screen" id="all-locations">
       <header className="topbar">
+
         <div className="inner">
           <div className="catalog-back">
             <a className="btn btn-light" href={paths.explore}>

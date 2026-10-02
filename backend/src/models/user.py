@@ -3,6 +3,8 @@ from uuid import uuid4
 from sqlalchemy import Column, JSON
 from sqlmodel import Field, SQLModel
 
+
+# SQLModel entity representing the 'users' table in the database
 class User(SQLModel, table=True):
     __tablename__="users"
     user_id: str = Field(
@@ -10,6 +12,7 @@ class User(SQLModel, table=True):
         primary_key=True,
         max_length=32,
     )
+
     email: str = Field(max_length=255, unique=True, index=True)
     password_hash: str = Field(max_length= 255)
     username: str | None = Field(default=None, max_length= 64)

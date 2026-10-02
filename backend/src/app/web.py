@@ -5,22 +5,24 @@ Uvicorn locally or a trusted reverse proxy on the deployment host.
 """
 
 from pathlib import Path
-
 from fastapi import HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-
 from backend.src.app.main import create_app
 
+# Path to compiled frontend distribution build
 DIST = Path(__file__).resolve().parents[3] / "frontend" / "dist"
 if not (DIST / "index.html").is_file():
     raise RuntimeError("Frontend build is missing. Run npm run build in frontend first.")
 
 app = create_app()
+
+# Mount static asset folders built by Vite
 app.mount("/assets", StaticFiles(directory=DIST / "assets"), name="assets")
 app.mount("/images", StaticFiles(directory=DIST / "images"), name="images")
 
 
+# Add security headers and static caching headers
 @app.middleware("http")
 async def web_headers(request: Request, call_next):
     response = await call_next(request)
@@ -33,6 +35,7 @@ async def web_headers(request: Request, call_next):
     return response
 
 
+# Fallback SPA handler: serve index.html for frontend routes while keeping API 404s intact
 @app.get("/{path:path}", include_in_schema=False)
 def frontend_page(path: str):
     # Only application routes receive the SPA shell. Missing API/assets stay 404.

@@ -1,7 +1,7 @@
 """Application entry point for the Explore Van Mieu API.
 
-This file assembles the route modules under ``backend/src/routes``. Database
-sessions come from ``backend/src/config/db.py`` and route behavior is
+This file assembles the route modules under backend/src/routes. Database
+sessions come from backend/src/config/db.py and route behavior is
 implemented in the corresponding route and service modules.
 """
 
@@ -21,12 +21,16 @@ from backend.src.models.reward import RewardClaim, RewardJourney
 from backend.src.config.db import engine
 
 
+# Factory function to build and configure the FastAPI application instance
 def create_app() -> FastAPI:
+    # Ensure existing accounts have assigned target locations and ensure tables exist
     assign_targets_to_existing_users()
     RewardClaim.__table__.create(engine, checkfirst=True)
     RewardJourney.__table__.create(engine, checkfirst=True)
+
     application = FastAPI(title="Explore Van Mieu Backend")
 
+    # Configure CORS middleware to permit frontend Vite dev server origin
     application.add_middleware(
         CORSMiddleware,
         allow_origins=[
@@ -40,6 +44,7 @@ def create_app() -> FastAPI:
         allow_credentials=True,
     )
 
+    # Disable HTTP caching for all API endpoints to guarantee fresh check-in status
     @application.middleware("http")
     async def disable_progress_cache(request: Request, call_next):
         response = await call_next(request)
@@ -47,7 +52,7 @@ def create_app() -> FastAPI:
             response.headers["Cache-Control"] = "no-store"
         return response
 
-    # Register the SQLite-backed location API implemented in routes/locations.py.
+    # Mount all functional API routers
     application.include_router(create_location_router())
     application.include_router(progress_router)
     application.include_router(checkins_router)
@@ -60,4 +65,5 @@ def create_app() -> FastAPI:
     return application
 
 
+# Global FastAPI application instance used by Uvicorn server
 app = create_app()

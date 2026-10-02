@@ -1,6 +1,8 @@
+# Database Schema Initialization Script
+# Creates all required SQLite tables defined by SQLModel models
+
 from sqlmodel import SQLModel
 from backend.src.models.reward import RewardClaim, RewardJourney
-
 from backend.src.config.db import engine
 from backend.src.models.chat_message import ChatMessage
 from backend.src.models.checkin_log import CheckinLog
@@ -10,6 +12,7 @@ from backend.src.models.user_history import UserHistory
 from backend.src.models.user_journey import UserJourney
 
 
+# Create all tables registered in SQLModel metadata on the configured database engine
 def create_database_and_tables():
     SQLModel.metadata.create_all(engine)
 
@@ -17,3 +20,4 @@ def create_database_and_tables():
 if __name__ == "__main__":
     create_database_and_tables()
     print("Database tables created.")
+

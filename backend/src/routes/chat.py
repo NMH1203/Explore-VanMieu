@@ -1,9 +1,7 @@
 from datetime import datetime, timezone
 from uuid import uuid4
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
-
 from backend.src.config.db import engine
 from backend.src.dependencies.auth import get_current_user
 from backend.src.models.chat import ChatRequest, ChatResponse
@@ -17,11 +15,14 @@ from backend.src.services.chat import (
     answer_heritage_question,
 )
 
+# Router for AI chat queries and message history (/api/chat)
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
+# Historical context knowledge base for prominent figures honored at Văn Miếu
 FIGURE_CONTEXTS = {
     "figure-ly-thanh-tong": {
         "name": "Ly Thanh Tong",
+
         "summary": "The king who founded the Temple of Literature in Thang Long in 1070.",
         "history": "His foundation established a lasting place for honoring Confucius, learning, and Vietnamese scholarly tradition.",
     },

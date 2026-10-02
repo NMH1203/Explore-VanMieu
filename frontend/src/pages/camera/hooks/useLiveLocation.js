@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useReward } from '../../../store/RewardContext.jsx'
 import { MAP_LOCATIONS } from '../../../data/mapLocations.js'
 
+// Calculate the great-circle distance between two GPS coordinates in meters using the Haversine formula
 function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
   const R = 6371000 // Earth radius in meters
   const dLat = ((lat2 - lat1) * Math.PI) / 180
@@ -16,6 +17,7 @@ function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
   return Math.round(R * c)
 }
 
+// Custom hook to track real-time device GPS position and compute proximity to the nearest or targeted heritage site
 export function useLiveLocation(selectedTargetId = null) {
   const { reward } = useReward()
   const nextTargetId = reward?.target_ids.find(id => !reward.completed_ids.includes(id))
@@ -23,6 +25,7 @@ export function useLiveLocation(selectedTargetId = null) {
   const [gpsStatus, setGpsStatus] = useState('locating')
   const [gpsAccuracy, setGpsAccuracy] = useState(null)
   const [manualTarget, setTargetLocation] = useState(null)
+
 
   useEffect(() => {
     if (!navigator.geolocation) {

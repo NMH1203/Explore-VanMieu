@@ -1,6 +1,7 @@
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import CheckinHistory from './components/CheckinHistory.jsx'
 
+// Account / Profile page: displays user profile, progress stats, settings, language picker, and logout
 function AccountPage({ user, onLogout, unlockedLocations }) {
   const { t, lang, setLang } = useLanguage()
   const unlockedCount = unlockedLocations.size
@@ -9,6 +10,7 @@ function AccountPage({ user, onLogout, unlockedLocations }) {
 
   return (
     <section className="screen" id="account">
+      {/* Profile hero header */}
       <div className="profile-hero">
         <div className="profile">
           <div className="avatar">{avatarText}</div>
@@ -21,11 +23,13 @@ function AccountPage({ user, onLogout, unlockedLocations }) {
         </div>
       </div>
       <div className="container passport-page">
+        {/* Statistical overview grid */}
         <div className="account-grid section">
           <div className="stat-card">
             <strong>{unlockedCount}</strong>
             <span>{t('account.locations')}</span>
           </div>
+
           <div className="stat-card">
             <strong>{unlockedCount}</strong>
             <span>{t('account.stamps')}</span>

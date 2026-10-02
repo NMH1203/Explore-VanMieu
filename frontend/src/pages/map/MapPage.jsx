@@ -7,23 +7,30 @@ import LocationSidebar from '../../components/map-view/LocationSidebar.jsx'
 import { useLiveLocation } from '../camera/hooks/useLiveLocation.js'
 import './map.css'
 
+// Fullscreen interactive map view combining Leaflet map with location sidebar and detail preview card
 function MapPage({ unlockedLocations }) {
   const { t } = useLanguage()
+
+  // Track currently selected location ID
   const [selectedLocationId, setSelectedLocationId] = useState(MAP_LOCATIONS[0].id)
   const { userCoords, gpsStatus, gpsAccuracy } = useLiveLocation()
   const handleSelectLocation = useCallback((location) => {
     setSelectedLocationId(location.id)
   }, [])
+
+  // Memoize localized location models based on current active language
   const locations = useMemo(() => MAP_LOCATIONS.map((location) => {
     const key = getLocationTranslationKey(location.id)
     return { ...location, name: t('locations.names.' + key), description: t('locations.descriptions.' + key), tagline: t('locations.descriptions.' + key) }
   }), [t])
+
   const selectedLocation = locations.find(({ id }) => id === selectedLocationId)
   const unlockedCount = locations.filter(({ id }) => unlockedLocations.has(id)).length
 
   return (
     <section className="screen" id="map">
       <header className="topbar"><div className="inner">
+
         <div className="eyebrow">{t('map.eyebrow')}</div>
         <h1>{t('map.title')}</h1>
         <p>{t('map.description', { count: unlockedCount })}</p>

@@ -3,6 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
+# API response schema for /api/checkins/verify returning verification status and match diagnostics
 class CheckinVerificationResponse(BaseModel):
     verified: bool
     location_id: str | None = None
@@ -10,7 +11,6 @@ class CheckinVerificationResponse(BaseModel):
     confidence: float | None = None
     distance_meters: float | None = None
     message: str
-
 
 class CheckinHistoryResponse(BaseModel):
     log_id: str

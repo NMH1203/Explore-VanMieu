@@ -1,5 +1,6 @@
 import { handleResponse } from '../../utils/response.js'
 
+// Send user credentials to login endpoint and establish a session cookie
 export async function login(email, password) {
   const response = await fetch('/api/auth/login', {
     method: 'POST',
@@ -10,6 +11,8 @@ export async function login(email, password) {
 
   return handleResponse(response, 'Unable to sign in')
 }
+
+// Register a new user account with email, password, and username
 export async function register(email, password, username) {
   const response = await fetch('/api/auth/register', {
     method: 'POST',
@@ -20,6 +23,8 @@ export async function register(email, password, username) {
 
   return handleResponse(response, 'Unable to register')
 }
+
+// Retrieve currently authenticated user profile from backend session
 export async function getCurrentUser() {
   const response = await fetch('/api/auth/me', { credentials: 'include' })
 
@@ -30,6 +35,7 @@ export async function getCurrentUser() {
   return handleResponse(response, 'Unable to load your account')
 }
 
+// Log out the current user session and invalidate session cookie
 export async function logout() {
   const response = await fetch('/api/auth/logout', {
     method: 'POST',
@@ -40,3 +46,4 @@ export async function logout() {
     throw new Error('Unable to sign out')
   }
 }
+

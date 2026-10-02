@@ -1,9 +1,9 @@
 from datetime import datetime, timezone
 from uuid import uuid4
-
 from sqlmodel import Field, SQLModel
 
 
+# SQLModel entity representing the 'checkin_logs' table (audit trail of all verification attempts)
 class CheckinLog(SQLModel, table=True):
     __tablename__ = "checkin_logs"
 
@@ -12,6 +12,7 @@ class CheckinLog(SQLModel, table=True):
         primary_key=True,
         max_length=32,
     )
+
     user_id: str = Field(
         foreign_key="users.user_id",
         index=True,

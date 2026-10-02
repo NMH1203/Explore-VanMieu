@@ -4,8 +4,11 @@ import './register.css'
 import { login, register } from '../../services/auth-service/index.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
+// Authentication screen supporting both Sign In and Sign Up modes
 function RegisterPage({ onAuthenticate }) {
   const { t } = useLanguage()
+
+  // Form input states
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -15,6 +18,7 @@ function RegisterPage({ onAuthenticate }) {
   const signup = mode === 'signup'
   const [username, setUsername] = useState('')
 
+  // Submit handler: registers a new account or signs in existing user
   async function handleSubmit(event) {
     event.preventDefault()
 
@@ -22,6 +26,7 @@ function RegisterPage({ onAuthenticate }) {
     setBusy(true)
 
     try {
+      // In signup mode, register and switch tab back to login
       if (signup) {
         await register(email, password, username)
         setMode('login')
@@ -30,6 +35,7 @@ function RegisterPage({ onAuthenticate }) {
         return
       }
 
+      // In login mode, authenticate and trigger parent handler
       const user = await login(email, password)
       onAuthenticate(user)
     } catch (caught) {
@@ -40,6 +46,7 @@ function RegisterPage({ onAuthenticate }) {
   }
 
   return <section className="screen register" id="register">
+
     <header className="topbar">
       <div className="inner">
         <div className="eyebrow">{t("auth.eyebrow")}</div>

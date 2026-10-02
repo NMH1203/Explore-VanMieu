@@ -5,10 +5,13 @@ import HeritageMessageBox from './components/HeritageMessageBox.jsx'
 import { useReward } from '../../store/RewardContext.jsx'
 import { heritageItems } from '../../data/heritageItems.js'
 
+// Detailed story and historical background screen for a single location or figure
 function Detail({ item, unlocked }) {
   const { t, lang } = useLanguage()
   const { reward } = useReward()
   const isFeaturedStop = reward?.completed_ids.includes(item.id)
+
+  // Locked fallback view if user hasn't visited/checked into this location yet
   if (!unlocked) {
     return (
       <section className="screen" id={item.id}>
@@ -23,6 +26,7 @@ function Detail({ item, unlocked }) {
       </section>
     )
   }
+
 
   return (
     <section className="screen" id={item.id}>

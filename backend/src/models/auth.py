@@ -3,12 +3,15 @@
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
 
+
+# Request body schema for user registration
 class RegisterRequest(SQLModel):
     email: EmailStr
     password: str = Field(min_length=8)
     username: str | None = None
 
 
+# Response schema returning sanitized public user profile
 class UserResponse(SQLModel):
     user_id: str
     email: str
@@ -16,6 +19,9 @@ class UserResponse(SQLModel):
     is_admin: bool = False
     target_location_id: str | None = None
 
+
+# Request body schema for user login
 class LoginRequest(SQLModel):
     email: EmailStr
     password: str
+

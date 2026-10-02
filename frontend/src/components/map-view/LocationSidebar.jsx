@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Check, LockKeyhole, ArrowRight, Camera } from 'lucide-react'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
+// Sidebar component displaying a scrollable list of all 10 heritage locations next to the map
 export default function LocationSidebar({
   locations,
   unlockedLocations,
@@ -11,7 +12,7 @@ export default function LocationSidebar({
   const { t } = useLanguage()
   const itemRefs = useRef({})
 
-  // Scroll to the corresponding card when a map marker is selected
+  // Auto-scroll to the corresponding card in the list when a marker is clicked on the map
   useEffect(() => {
     if (selectedLocation && itemRefs.current[selectedLocation.id]) {
       itemRefs.current[selectedLocation.id].scrollIntoView({
@@ -23,6 +24,7 @@ export default function LocationSidebar({
 
   return (
     <aside className="map-locations-sidebar">
+      {/* Header showing total unlocked locations counter */}
       <div className="sidebar-header">
         <div>
           <h3>{t("map.sites")}</h3>
@@ -33,6 +35,7 @@ export default function LocationSidebar({
         </span>
       </div>
 
+      {/* List of location cards */}
       <div className="sidebar-items-list">
         {locations.map((loc) => {
           const isUnlocked = unlockedLocations.has(loc.id)
@@ -49,6 +52,7 @@ export default function LocationSidebar({
               }`}
               onClick={() => onSelectLocation(loc)}
             >
+              {/* Thumbnail image and checkmark/order badge */}
               <div className="card-thumb-wrapper">
                 <img
                   src={loc.image}
@@ -61,6 +65,7 @@ export default function LocationSidebar({
                 </span>
               </div>
 
+              {/* Title, tagline, and contextual action buttons */}
               <div className="card-content">
                 <div className="card-top-row">
                   <h4 className="card-title">{loc.name}</h4>
@@ -88,3 +93,4 @@ export default function LocationSidebar({
     </aside>
   )
 }
+

@@ -1,7 +1,10 @@
 import JourneyCard from '../../components/journey-card/JourneyCard.jsx'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
+// Mapping location IDs to i18n translation key names
 const stampKeys = { interpret: 'khueVanCac', 'location-van-mieu-gate': 'vanMieuGate', 'location-dai-trung-gate': 'daiTrungGate', 'location-dai-thanh-gate': 'daiThanhGate', 'location-dien-dai-thanh': 'dienDaiThanh', 'location-thai-hoc-gate': 'thaiHocGate', 'location-thai-hoc-house': 'thaiHocHouse', 'location-bell-drum-tower': 'bellDrum', 'location-octagonal-house': 'octagonalHouse', 'location-phuong-dinh': 'phuongDinh' }
+
+// List of stamp badges and their image asset filenames
 const stamps = [
   ['interpret', 'Khue Van Pavilion', 'khue-van-cac.jpg'],
   ['location-van-mieu-gate', 'Temple of Literature Gate', 'cong-van-mieu.jpg'],
@@ -15,6 +18,7 @@ const stamps = [
   ['location-phuong-dinh', 'Phuong Dinh Pavilion', 'phuong-dinh.jpg'],
 ]
 
+// Milestone progression tiers (1, 3, 5, 10 locations visited)
 const milestones = [
   { threshold: 1, titleKey: 'passport.first', rewardKey: 'passport.firstReward', image: 'first-steps.png' },
   { threshold: 3, titleKey: 'passport.seeker', rewardKey: 'passport.seekerReward', image: 'heritage-seeker.png' },
@@ -22,9 +26,11 @@ const milestones = [
   { threshold: 10, titleKey: 'passport.scholar', rewardKey: 'passport.scholarReward', image: 'dedicated-scholar.png' },
 ]
 
+// Digital cultural passport page displaying collected stamps and milestone badges
 function PassportPage({ userId, unlockedLocations }) {
   const { t } = useLanguage()
   const unlockedCount = stamps.filter(([id]) => unlockedLocations.has(id)).length
+
 
   const milestone =
     unlockedCount >= 10

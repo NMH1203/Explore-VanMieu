@@ -1,3 +1,5 @@
+// Root Component Tree & Central Application Controller
+
 import { useEffect, useRef, useState } from 'react'
 import { getRewards, claimReward } from './services/reward-service/index.js'
 import { RewardContext } from './store/RewardContext.jsx'
@@ -17,15 +19,25 @@ import { getProgress } from './services/passport-service/index.js'
 import { verifyCheckin } from './services/check-in-service/index.js'
 import { useLanguage } from './i18n/LanguageContext.jsx'
 
+// Fix initial URL on startup (e.g., redirect '/' to '/Explore')
 normalizeInitialUrl()
+
+// Define pages that require login
 const protectedPages = new Set(['account', 'camera'])
 
 function App() {
+  // Current active URL pathname for custom client-side routing
   const [pathname, setPathname] = useState(window.location.pathname)
+
+  // Authenticated user state: undefined = loading, null = guest, object = logged in
   const [user, setUser] = useState(undefined)
-  const authVersion = useRef(0)
+  const authVersion = useRef(0) // Counter to prevent race conditions on async auth calls
+
+  // Reward state and error handling
   const [reward, setReward] = useState(null)
   const [rewardError, setRewardError] = useState('')
+
+  // Load reward data whenever user changes
   useEffect(() => {
     let active = true
     setReward(null)
@@ -34,13 +46,19 @@ function App() {
       .catch(error => { if (active) setRewardError(error.message) })
     return () => { active = false }
   }, [user])
+
+  // Handler to claim an unlocked reward certificate/theme
   async function handleClaimReward() {
     setReward(await claimReward())
   }
+
+  // Set of location IDs unlocked/checked in by the current user
   const [unlockedLocations, setUnlockedLocations] = useState(new Set())
   const { t } = useLanguage()
   const isAuthenticated = Boolean(user)
   const route = getRoute(pathname)
+
+  // Check current session on app startup
   useEffect(() => {
     let active = true
     const version = authVersion.current
@@ -48,8 +66,10 @@ function App() {
       .then((account) => { if (active && version === authVersion.current) setUser(account) })
       .catch(() => { if (active && version === authVersion.current) setUser(null) })
     return () => { active = false }
+
   }, [])
 
+  // Fetch checked-in heritage progress for the logged-in user
   useEffect(() => {
     let ignoreResult = false
 
@@ -76,6 +96,8 @@ function App() {
       ignoreResult = true
     }
   }, [user])
+
+  // Listen to browser Back/Forward navigation buttons
   useEffect(() => {
     function handlePopState() {
       setPathname(window.location.pathname)
@@ -85,6 +107,7 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
+  // Programmatic client-side navigation without full-page reloads
   function navigate(destination, { replace = false } = {}) {
     const url = new URL(destination, window.location.origin)
     window.history[replace ? 'replaceState' : 'pushState'](null, '', url.pathname + url.search + url.hash)
@@ -92,6 +115,7 @@ function App() {
     window.scrollTo(0, 0)
   }
 
+  // Route protection guard: redirect unauthenticated users away from protected pages
   useEffect(() => {
     if (user === undefined) return
 
@@ -101,6 +125,7 @@ function App() {
     }
   }, [user, isAuthenticated, route.page])
 
+  // Intercept click events on internal <a> links to enable SPA client-side routing
   function handleNavigation(event) {
     const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null
     if (
@@ -121,6 +146,7 @@ function App() {
     const destinationRoute = getRoute(destination.pathname)
     const requiresAuthentication = protectedPages.has(destinationRoute.page)
 
+    // Redirect to login if user clicks a link to a protected page while logged out
     if (!isAuthenticated && requiresAuthentication) {
       navigate(`${paths.register}?next=${encodeURIComponent(destination.pathname)}`)
       return
@@ -129,6 +155,7 @@ function App() {
     navigate(destination.pathname + destination.search + destination.hash)
   }
 
+  // Handle successful login/registration and redirect to target page
   function handleAuthenticate(account) {
     authVersion.current += 1
     setUser(account)
@@ -138,6 +165,7 @@ function App() {
     navigate(safeNextPath, { replace: true })
   }
 
+  // Handle successful scan & check-in verification at a heritage location
   async function handleVerifyCheckin(checkinData) {
     const result = await verifyCheckin(checkinData)
     if (result.verified) {
@@ -148,6 +176,7 @@ function App() {
     return result
   }
 
+  // Handle user logout: clear session, reset progress, redirect home
   async function handleLogout() {
     try {
       await logout()
@@ -160,6 +189,7 @@ function App() {
     }
   }
 
+  // Render active page view according to current route
   let page
   switch (route.page) {
    case 'explore':
@@ -214,9 +244,11 @@ function App() {
       )
   }
 
+  // Render top-level shell layout with hidden theme toggles and global navigation
   return (
     <div className="heritage-app" onClick={handleNavigation}>
       <RewardContext.Provider value={{ reward, error: rewardError, claim: handleClaimReward, signedIn: Boolean(user) }}>
+      {/* Hidden checkbox inputs to trigger CSS theme and scanning animations */}
       <input
         className="theme-toggle"
         type="checkbox"
@@ -239,3 +271,4 @@ function App() {
 }
 
 export default App
+

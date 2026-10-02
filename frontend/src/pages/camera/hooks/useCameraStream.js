@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { captureOptimizedFrame } from '../../../utils/imageProcessing.js'
 
+// Custom React hook managing HTML5 MediaDevices camera stream, torch flashlight, and frame snapshots
 export function useCameraStream() {
   const videoRef = useRef(null)
   const streamRef = useRef(null)
@@ -11,6 +12,7 @@ export function useCameraStream() {
   const [capturedImage, setCapturedImage] = useState(null)
   const [isTorchOn, setIsTorchOn] = useState(false)
 
+  // Stop camera tracks and release hardware video stream
   const stopCamera = useCallback(() => {
     requestRef.current += 1
     setIsTorchOn(false)
@@ -25,6 +27,7 @@ export function useCameraStream() {
     }
     setIsStreaming(false)
   }, [])
+
 
   const startCamera = useCallback(async () => {
     stopCamera()

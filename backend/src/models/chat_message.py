@@ -1,10 +1,10 @@
 from datetime import datetime, timezone
 from uuid import uuid4
-
 from sqlalchemy import Column, Text
 from sqlmodel import Field, SQLModel
 
 
+# SQLModel entity representing the 'chat_messages' table (stores Q&A pairs for heritage locations)
 class ChatMessage(SQLModel, table=True):
     __tablename__ = "chat_messages"
 
@@ -13,6 +13,7 @@ class ChatMessage(SQLModel, table=True):
         primary_key=True,
         max_length=32,
     )
+
     user_id: str = Field(
         foreign_key="users.user_id",
         index=True,

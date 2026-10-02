@@ -3,9 +3,12 @@ import { Send } from 'lucide-react'
 import { askHeritageGuide, getChatHistory } from '../../../services/chat-service/index.js'
 import { useLanguage } from '../../../i18n/LanguageContext.jsx'
 
+// AI Heritage Guide interactive Q&A chat box embedded inside the location/figure story page
 export default function HeritageMessageBox({ locationId, locationName, subjectType = 'location' }) {
   const { t } = useLanguage()
   const isFigure = subjectType === 'figure'
+
+  // Pre-configured question suggestion prompts tailored for figures or locations
   const suggestions = isFigure
     ? [
         t('detail.suggestionSignificance'),
@@ -17,16 +20,20 @@ export default function HeritageMessageBox({ locationId, locationName, subjectTy
         t('detail.suggestionStudent'),
         t('detail.locationSuggestionHighlights'),
       ]
+
+  // Chat conversation state
   const [messages, setMessages] = useState([])
   const [question, setQuestion] = useState('')
   const [isLoadingHistory, setIsLoadingHistory] = useState(true)
   const [isSending, setIsSending] = useState(false)
   const [error, setError] = useState('')
 
+  // Load prior chat history for this location when mounted or when locationId changes
   useEffect(() => {
     let ignoreResult = false
     setIsLoadingHistory(true)
     setError('')
+
 
     getChatHistory(locationId)
       .then((history) => {

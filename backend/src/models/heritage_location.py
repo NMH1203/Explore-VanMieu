@@ -1,9 +1,9 @@
 from datetime import datetime, timezone
-
 from sqlalchemy import Column, Text
 from sqlmodel import Field, SQLModel
 
 
+# SQLModel entity representing the 'heritage_locations' table (Văn Miếu historical sites)
 class HeritageLocation(SQLModel, table=True):
     __tablename__ = "heritage_locations"
 
@@ -11,6 +11,7 @@ class HeritageLocation(SQLModel, table=True):
         primary_key=True,
         max_length=32,
     )
+
     yolo_label: str = Field(
         unique=True,
         index=True,

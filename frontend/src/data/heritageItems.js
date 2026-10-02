@@ -1,15 +1,18 @@
+// Factory helper to construct a heritage location item object
 const location = (id, file) => ({
   id,
   kind: 'location',
   image: `/images/heritage/${file}`,
 })
 
+// Factory helper to construct a historical figure item object
 const figure = (id, file) => ({
   id,
   kind: 'figure',
   image: `/images/heritage/${file}`,
 })
 
+// Combined registry of all heritage locations (10 sites) and historical figures (6 figures)
 export const heritageItems = [
   location('location-van-mieu-gate', 'van-mieu-gate.webp'),
   location('location-dai-trung-gate', 'dai-trung-gate.webp'),
@@ -28,3 +31,4 @@ export const heritageItems = [
   figure('figure-confucius', 'confucius-statue.jpg'),
   figure('figure-four-sages', 'nhan-tu.webp'),
 ]
+

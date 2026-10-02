@@ -1,8 +1,11 @@
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
+
+// Historical figures catalog page showcasing key scholar emperors, teachers, and sages of Văn Miếu
 function FiguresPage() {
   const { t } = useLanguage()
   return (
     <section className="screen" id="all-figures">
+      {/* Header bar */}
       <header className="topbar">
         <div className="inner">
           <div className="catalog-back">
@@ -17,6 +20,7 @@ function FiguresPage() {
           </p>
         </div>
       </header>
+
       <div className="container">
         <div className="catalog-summary">
           <span>{t("figures.count")}</span>

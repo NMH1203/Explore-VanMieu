@@ -4,11 +4,9 @@ import logging
 import os
 from dataclasses import dataclass
 from pathlib import Path
-
 import httpx
 from dotenv import load_dotenv
 from starlette.concurrency import run_in_threadpool
-
 from backend.src.services.image_processing import prepare_vision_image
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -16,14 +14,17 @@ load_dotenv(PROJECT_ROOT / ".env")
 logger = logging.getLogger(__name__)
 
 
+# Exception raised when Vision AI configuration or credentials are missing
 class VisionConfigurationError(Exception):
     pass
 
 
+# Exception raised when Vision AI provider returns an error or invalid response
 class VisionProviderError(Exception):
     pass
 
 
+# Data structure containing the result of heritage computer vision recognition
 @dataclass(frozen=True)
 class VisionResult:
     label: str
@@ -31,6 +32,7 @@ class VisionResult:
     reason: str
 
 
+# Helper to parse JSON substring from model text response
 def _extract_json(content: str) -> dict:
     start = content.find("{")
     end = content.rfind("}")
@@ -43,11 +45,13 @@ def _extract_json(content: str) -> dict:
         raise VisionProviderError("Could not parse the AI result.") from error
 
 
+# Send optimized image bytes to multimodal vision model to identify heritage landmark
 async def recognize_heritage_image(
     image_bytes: bytes,
     mime_type: str,
     allowed_labels: list[str],
 ) -> VisionResult:
+
     api_key = os.getenv("YESCALE_API_KEY", "").strip()
     if not api_key:
         raise VisionConfigurationError("YESCALE_API_KEY is missing from the .env file.")

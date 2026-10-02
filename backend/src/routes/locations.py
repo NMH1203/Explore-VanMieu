@@ -1,14 +1,7 @@
-"""Read database locations and expose only verified user unlocks.
-
-This router is registered by ``backend/src/app/main.py``. Location data comes
-from ``backend/src/models/heritage_location.py`` and user unlock state comes
-from ``backend/src/models/user_history.py``. Verified evidence is written by
-``backend/src/routes/checkins.py`` to ``backend/src/models/checkin_log.py``.
-"""
+"""Read database locations and expose only verified user unlocks."""
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
-
 from backend.src.config.db import engine
 from backend.src.dependencies.auth import get_current_user
 from backend.src.models.checkin_log import CheckinLog
@@ -18,12 +11,15 @@ from backend.src.models.user import User
 from backend.src.models.user_history import UserHistory
 
 
+# Factory to create the /api/locations router with list and unlock endpoints
 def create_location_router() -> APIRouter:
     """Build location endpoints backed by SQLite and the signed-in user's history."""
     router = APIRouter(prefix="/api/locations", tags=["Locations"])
 
+    # GET /api/locations: Return list of all 10 locations with boolean unlocked flags for current user
     @router.get("", response_model=list[LocationStatus])
     def list_locations(current_user: User = Depends(get_current_user)):
+
         """Return the seeded locations with unlock flags from user_history."""
         with Session(engine) as session:
             locations = session.exec(

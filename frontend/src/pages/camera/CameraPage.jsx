@@ -9,15 +9,18 @@ import ScanResultModal from './components/ScanResultModal.jsx'
 import { MAP_LOCATIONS } from '../../data/mapLocations.js'
 import './camera.css'
 
+// AR Camera check-in page combining live camera stream, GPS coordinates, and server verification
 function CameraPage({ onVerifyCheckin }) {
   const { t } = useLanguage()
+
+  // Scanning workflow state
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isScanStarted, setIsScanStarted] = useState(false)
   const [isScanComplete, setIsScanComplete] = useState(false)
   const [verifiedSite, setVerifiedSite] = useState(null)
   const [scanError, setScanError] = useState('')
 
-  // 1. Manage the device camera
+  // 1. Manage the device camera stream and frame capture
   const {
     videoRef,
     isStreaming,
@@ -28,6 +31,7 @@ function CameraPage({ onVerifyCheckin }) {
     startCamera,
     captureSnapshot,
   } = useCameraStream()
+
 
   // 2. Manage GPS coordinates and the ten heritage sites
   const {

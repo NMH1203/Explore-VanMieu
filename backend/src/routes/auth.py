@@ -3,7 +3,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
-
 from backend.src.config.db import engine
 from backend.src.dependencies.auth import get_current_user
 from backend.src.models.auth import LoginRequest, RegisterRequest, UserResponse
@@ -12,10 +11,11 @@ from backend.src.services.passwords import hash_password, verify_password
 from backend.src.services.targets import assign_target_location
 from backend.src.services.tokens import create_access_token
 
-
+# Router for authentication operations (/api/auth)
 router = APIRouter(prefix="/api/auth", tags=["Auth"])
 
 
+# POST /api/auth/register: Create a new account with hashed password and assign initial journey target
 @router.post(
     "/register",
     response_model=UserResponse,
@@ -23,6 +23,7 @@ router = APIRouter(prefix="/api/auth", tags=["Auth"])
 )
 def register(data: RegisterRequest):
     email = str(data.email).strip().lower()
+
 
     with Session(engine) as session:
         existing_user = session.exec(select(User).where(User.email == email)).first()

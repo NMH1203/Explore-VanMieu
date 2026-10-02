@@ -1,10 +1,10 @@
 """Legacy journey schema retained for compatibility with main's database."""
 from datetime import datetime, timezone
 from typing import Optional
-
 from sqlmodel import Field, SQLModel
 
 
+# SQLModel entity representing the legacy 'user_journeys' table for backwards database compatibility
 class UserJourney(SQLModel, table=True):
     __tablename__ = "user_journeys"
 

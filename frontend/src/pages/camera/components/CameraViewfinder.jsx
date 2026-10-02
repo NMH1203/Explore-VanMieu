@@ -2,6 +2,7 @@ import { Camera, Image as ImageIcon, AlertCircle } from 'lucide-react'
 import { useLanguage } from '../../../i18n/LanguageContext.jsx'
 import { getLocationTranslationKey } from '../../../i18n/locationKeys.js'
 
+// AR Viewfinder overlay showing live camera stream, framing brackets, analysis scanning beam, and simulation fallbacks
 export default function CameraViewfinder({
   videoRef,
   isStreaming,
@@ -18,6 +19,7 @@ export default function CameraViewfinder({
     <div className="camera-viewfinder-container">
       {/* 1. Live video or fallback layer */}
       <video
+
           ref={videoRef}
           style={{ display: isStreaming ? undefined : 'none' }}
           playsInline

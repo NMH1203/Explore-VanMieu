@@ -3,6 +3,7 @@
 from pydantic import BaseModel, ConfigDict
 
 
+# Response model returning a location's ID and boolean unlock status for API consumers
 class LocationStatus(BaseModel):
     """Keep the existing frontend identifier and an explicit unlock flag."""
 
@@ -10,3 +11,4 @@ class LocationStatus(BaseModel):
 
     id: str
     unlocked: bool
+

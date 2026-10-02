@@ -3,6 +3,7 @@ import { paths } from '../../routes/index.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import LanguageSwitch from './LanguageSwitch.jsx'
 
+// Primary navigation links configuration with icons and translation keys
 const navigationItems = [
   { href: paths.explore, Icon: Compass, key: 'common.explore' },
   { href: paths.map, Icon: Map, key: 'common.map' },
@@ -11,6 +12,7 @@ const navigationItems = [
   { href: paths.account, Icon: UserRound, key: 'common.account' },
 ]
 
+// Render link list for both desktop sidebar and mobile bottom bar
 function NavigationLinks({ mobile = false, t }) {
   return navigationItems.map(({ href, Icon, key }) => (
     <a href={href} key={href}>
@@ -20,10 +22,12 @@ function NavigationLinks({ mobile = false, t }) {
   ))
 }
 
+// Global responsive navigation component: desktop sidebar + mobile bottom navigation bar
 function Navigation({ showLanguageSwitch = false }) {
   const { t } = useLanguage()
   return (
     <>
+      {/* Desktop sidebar navigation */}
       <aside className="sidebar">
         <a className="brand" href={paths.explore}>
           <img className="brand-icon" src="/images/brand-khue-van-cac.jpg" alt="" />
@@ -32,10 +36,15 @@ function Navigation({ showLanguageSwitch = false }) {
         <nav className="side-links" aria-label={t('nav.main')}><NavigationLinks t={t} /></nav>
         <div className="side-note">{t('nav.version')}</div>
       </aside>
+
+      {/* Mobile bottom navigation bar */}
       <nav className="bottom-nav" aria-label={t('nav.main')}><NavigationLinks mobile t={t} /></nav>
+
+      {/* Optional language toggle in top bar */}
       {showLanguageSwitch && <LanguageSwitch />}
     </>
   )
 }
 
 export default Navigation
+

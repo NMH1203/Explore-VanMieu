@@ -2,17 +2,17 @@
 
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
-
 from backend.src.config.db import engine
 from backend.src.dependencies.auth import get_current_user
 from backend.src.models.progress import ProgressResponse
 from backend.src.models.user import User
 from backend.src.models.user_history import UserHistory
 
-
+# Router for user check-in progress and unlocked stamp history (/api/progress)
 router = APIRouter(prefix="/api/progress", tags=["Progress"])
 
 
+# GET /api/progress: Return all unlocked heritage location records for the authenticated user
 @router.get("", response_model=list[ProgressResponse])
 def list_progress(current_user: User = Depends(get_current_user)):
     """Return unlocked locations belonging to the signed-in user."""
@@ -23,3 +23,4 @@ def list_progress(current_user: User = Depends(get_current_user)):
             .order_by(UserHistory.unlocked_at)
         )
         return session.exec(statement).all()
+

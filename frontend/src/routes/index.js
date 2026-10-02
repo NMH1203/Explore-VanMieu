@@ -1,3 +1,4 @@
+// Define top-level application URL paths
 export const paths = {
   explore: '/Explore',
   map: '/Explore/Ban-Do',
@@ -9,6 +10,7 @@ export const paths = {
   figures: '/Explore/Danh-Nhan',
 }
 
+// Map individual location IDs and figure IDs to their dedicated friendly URL paths
 export const detailPaths = {
   'location-van-mieu-gate': '/Explore/Cong-Van-Mieu',
   'location-dai-trung-gate': '/Explore/Cong-Dai-Trung',
@@ -28,10 +30,12 @@ export const detailPaths = {
   'figure-four-sages': '/Explore/Danh-Nhan/Tu-Phoi',
 }
 
+// Reverse mapping: look up an ID by its URL path (e.g., '/Explore/Cong-Van-Mieu' -> 'location-van-mieu-gate')
 const pathToDetailId = Object.fromEntries(
   Object.entries(detailPaths).map(([id, path]) => [path, id]),
 )
 
+// Legacy hash-based paths mapping for backwards compatibility (e.g., '/#camera' -> '/Explore/Camera')
 const legacyPaths = {
   explore: paths.explore,
   map: paths.map,
@@ -43,6 +47,7 @@ const legacyPaths = {
   ...detailPaths,
 }
 
+// Normalize initial browser URL on page load (redirects '/' to '/Explore' and upgrades old hash links)
 export function normalizeInitialUrl() {
   const { pathname, hash } = window.location
   if (pathname === '/camera') {
@@ -63,6 +68,7 @@ export function normalizeInitialUrl() {
   }
 }
 
+// Parse pathname and return route metadata (page name and optional resource ID)
 export function getRoute(pathname) {
   if (pathname === paths.explore) return { page: 'explore' }
   if (pathname === paths.map) return { page: 'map' }
@@ -75,3 +81,4 @@ export function getRoute(pathname) {
   if (pathToDetailId[pathname]) return { page: 'detail', id: pathToDetailId[pathname] }
   return { page: 'not-found' }
 }
+

@@ -4,14 +4,19 @@ import { useReward } from '../../store/RewardContext.jsx'
 import { getLocationTranslationKey } from '../../i18n/locationKeys.js'
 import { useState } from 'react'
 
+// Personalized exploration journey card showing 5 required heritage check-in targets and completion progress
 function JourneyCard() {
   const { t, lang } = useLanguage()
   const { reward, error, claim, signedIn } = useReward()
   const [busy, setBusy] = useState(false)
   const [claimError, setClaimError] = useState('')
   const vi = lang === 'vi'
+
+  // Map assigned journey target IDs to localized name keys
   const journeyLocations = (reward?.target_ids || []).map(id => [id, 'locations.names.' + getLocationTranslationKey(id)])
   const journeyCount = reward?.completed_ids.length || 0
+
+  // Handle claiming the reward once all 5 targets are checked in
   async function receive() {
     if (busy) return
     setBusy(true); setClaimError('')
@@ -27,6 +32,8 @@ function JourneyCard() {
         <p>
           {vi ? 'Khám phá và check-in 5 điểm quan trọng của bạn để nhận quà di sản và mở bảng màu Đỏ son.' : 'Visit and verify your five heritage targets to claim your reward and unlock the Vermilion theme.'}
         </p>
+
+        {/* Progress bar calculating completion percentage (5 targets total = 20% each) */}
         <div className="progress-label">
           <span>{t("journey.progress")}</span>
           <strong>{t("journey.count", { count: journeyCount })}</strong>
@@ -35,6 +42,8 @@ function JourneyCard() {
           <i style={{ width: `${journeyCount * 20}%` }}></i>
         </div>
         <br />
+
+        {/* Status messages and claim button */}
         {reward?.completed && <p role="status">{vi ? 'Đã hoàn thành 5/5 điểm quan trọng. Bảng màu Đỏ son đã mở khóa!' : 'All 5 targets complete. The Vermilion theme is unlocked!'}</p>}
         {!reward && <p role="status">{error || (signedIn ? (vi ? 'Đang tải hành trình…' : 'Loading journey…') : (vi ? 'Đăng nhập để nhận hành trình riêng.' : 'Sign in for your own journey.'))}</p>}
         {(claimError || (reward && error)) && <p role="alert">{claimError || error}</p>}
@@ -45,6 +54,8 @@ function JourneyCard() {
           {t("journey.continue")}
         </a>
       </div>
+
+      {/* Target locations list showing checkmark or index number */}
       <div className="journey-list">
         {journeyLocations.map(([id, name], index) => (
           <div className="journey-stop" key={id}>
@@ -58,3 +69,4 @@ function JourneyCard() {
 }
 
 export default JourneyCard
+

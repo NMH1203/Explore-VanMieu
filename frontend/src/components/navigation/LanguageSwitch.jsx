@@ -1,6 +1,7 @@
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 import { LANGUAGES } from '../../i18n/config.js'
 
+// Language toggle button group allowing users to switch between Vietnamese and English
 export default function LanguageSwitch() {
   const { lang, setLang, t } = useLanguage()
   const entries = Object.entries(LANGUAGES)
@@ -23,4 +24,5 @@ export default function LanguageSwitch() {
     </div>
   )
 }
+
 

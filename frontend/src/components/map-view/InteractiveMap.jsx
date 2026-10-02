@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import { VAN_MIEU_BOUNDS } from '../../data/mapLocations.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
+// Interactive Leaflet map component rendering custom location pins and status indicators
 export default function InteractiveMap({
   locations,
   unlockedLocations,
@@ -21,7 +22,7 @@ export default function InteractiveMap({
   const accuracyCircleRef = useRef(null)
   const centeredOnUserRef = useRef(false)
 
-  // Initialize the Leaflet map
+  // Initialize the Leaflet map instance and add OpenStreetMap tile layers
   useEffect(() => {
     if (!mapContainerRef.current) return
 
@@ -47,13 +48,14 @@ export default function InteractiveMap({
 
     mapInstanceRef.current = map
 
+    // Cleanup Leaflet instance on unmount
     return () => {
       map.remove()
       mapInstanceRef.current = null
     }
   }, [])
 
-  // Update markers when locations or unlock status change
+  // Create or refresh custom HTML map markers when locations or unlock status change
   useEffect(() => {
     const map = mapInstanceRef.current
     if (!map) return
@@ -66,6 +68,7 @@ export default function InteractiveMap({
       const isUnlocked = unlockedLocations.has(loc.id)
       const isSelected = selectedLocation?.id === loc.id
 
+      // Custom HTML marker showing checkmark if unlocked or location sequence number if locked
       const iconHtml = `
         <div class="custom-map-pin ${isUnlocked ? 'unlocked' : 'locked'} ${isSelected ? 'selected' : ''}">
           <span class="pin-badge">${isUnlocked ? '✓' : loc.order}</span>
@@ -93,7 +96,7 @@ export default function InteractiveMap({
     })
   }, [locations, unlockedLocations, selectedLocation, onSelectLocation])
 
-  // Pan to the selected location
+  // Smoothly pan map camera to the selected location
   useEffect(() => {
     const map = mapInstanceRef.current
     if (!map || !selectedLocation) return
@@ -158,7 +161,7 @@ export default function InteractiveMap({
       centeredOnUserRef.current = true
     }
   }, [userCoords, gpsAccuracy, t])
-
+  // Reset map view back to default central coordinates and zoom level
   function handleResetView() {
     if (mapInstanceRef.current) {
       mapInstanceRef.current.setView(VAN_MIEU_BOUNDS.center, VAN_MIEU_BOUNDS.defaultZoom, {
@@ -178,6 +181,7 @@ export default function InteractiveMap({
 
   return (
     <div className="interactive-map-wrapper">
+      {/* Map DOM canvas */}
       <div ref={mapContainerRef} className="interactive-map-canvas" />
 
       {/* Status legend */}
@@ -193,7 +197,7 @@ export default function InteractiveMap({
         </span>}
       </div>
 
-      {/* Map controls */}
+      {/* Map controls overlay */}
       <div className="map-overlay-controls">
         <button
           type="button"
@@ -216,3 +220,4 @@ export default function InteractiveMap({
     </div>
   )
 }
+

@@ -1,17 +1,10 @@
-"""Verify visitor check-ins and record successful location unlocks.
-
-This route connects the API request to the check-in response and log models,
-the heritage-location catalog, authenticated users, user progress history, and
-the image-recognition service.
-"""
+"""Verify visitor check-ins and record successful location unlocks."""
 
 import math
 import os
 from datetime import datetime, timezone
-
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
 from sqlmodel import Session, select
-
 from backend.src.config.db import engine
 from backend.src.dependencies.auth import get_current_user
 from backend.src.models.checkin import (
@@ -29,6 +22,7 @@ from backend.src.services.vision import (
     recognize_heritage_image,
 )
 
+# Router for check-in verification (/api/checkins)
 router = APIRouter(prefix="/api/checkins", tags=["checkins"])
 MAX_IMAGE_BYTES = 5 * 1024 * 1024
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
@@ -66,8 +60,7 @@ def list_checkin_history(
             )
             for log, location_name in rows
         ]
-
-
+# Calculate distance in meters between two GPS coordinates using the Haversine formula
 def calculate_distance_meters(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """Return the great-circle distance between two latitude/longitude pairs."""
     earth_radius = 6_371_000
@@ -82,7 +75,9 @@ def calculate_distance_meters(lat1: float, lon1: float, lat2: float, lon2: float
     return earth_radius * 2 * math.atan2(math.sqrt(value), math.sqrt(1 - value))
 
 
+# POST /api/checkins/verify: Validates GPS proximity + image recognition, and updates user progress history
 @router.post("/verify", response_model=CheckinVerificationResponse)
+
 async def verify_checkin(
     latitude: float = Form(...),
     longitude: float = Form(...),

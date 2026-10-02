@@ -1,7 +1,11 @@
 import { handleResponse } from '../../utils/response.js'
 
+// Send captured photo and current GPS coordinates to verify location check-in
 export async function verifyCheckin({ imageDataUrl, locationId, latitude, longitude }) {
+  // Convert captured base64 data URL into a binary Blob
   const imageBlob = await fetch(imageDataUrl).then((response) => response.blob())
+
+  // Pack GPS coordinates and photo into multipart/form-data payload
   const formData = new FormData()
   formData.append('latitude', String(latitude))
   formData.append('longitude', String(longitude))

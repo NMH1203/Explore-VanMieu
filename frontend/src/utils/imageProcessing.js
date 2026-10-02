@@ -1,7 +1,8 @@
-// Match the server's low-detail image budget while reducing mobile upload size.
+// Match the server's low-detail image budget while reducing mobile upload size
 export const MAX_IMAGE_EDGE = 512
 export const JPEG_QUALITY = 0.75
 
+// Calculate scaled dimensions to keep the maximum edge within MAX_IMAGE_EDGE while maintaining aspect ratio
 export function fitImageSize(width, height) {
   if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) {
     throw new Error('The camera frame has invalid dimensions.')
@@ -13,6 +14,7 @@ export function fitImageSize(width, height) {
   }
 }
 
+// Draw the current video frame onto an in-memory canvas and export as a lightweight JPEG Data URL
 export function captureOptimizedFrame(video) {
   const size = fitImageSize(video.videoWidth, video.videoHeight)
   const canvas = document.createElement('canvas')
@@ -25,3 +27,4 @@ export function captureOptimizedFrame(video) {
   context.drawImage(video, 0, 0, size.width, size.height)
   return canvas.toDataURL('image/jpeg', JPEG_QUALITY)
 }
+

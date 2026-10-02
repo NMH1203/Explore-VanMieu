@@ -3,18 +3,20 @@
 from dataclasses import dataclass
 from io import BytesIO
 import warnings
-
 from PIL import Image, ImageOps, UnidentifiedImageError
 
+# Maximum edge dimension and quality for computer vision upload optimization
 MAX_EDGE = 512
 JPEG_QUALITY = 75
 MAX_INPUT_PIXELS = 20_000_000
 
 
+# Exception raised when uploaded image fails decoding or validation
 class InvalidImageError(ValueError):
     """The upload cannot be safely decoded as a supported image."""
 
 
+# Value container for an optimized, sanitized JPEG ready for Vision AI inference
 @dataclass(frozen=True)
 class PreparedImage:
     data: bytes
@@ -23,7 +25,9 @@ class PreparedImage:
     mime_type: str = "image/jpeg"
 
 
+# Downscale image to fit 512x512, correct EXIF orientation, flatten transparency, and strip metadata
 def prepare_vision_image(image_bytes: bytes) -> PreparedImage:
+
     """Fit within 512 x 512 without cropping/upscaling; remove metadata.
 
     JPEG quality reduces transfer bytes. The provider's detail setting, rather

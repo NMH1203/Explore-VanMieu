@@ -2,11 +2,16 @@ import { Award, LockKeyhole, MapPin, Plus, ScanLine, Send, Sparkles } from 'luci
 import JourneyCard from '../../components/journey-card/JourneyCard.jsx'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
+// Home page component: hero banner, heritage introduction, journey card, milestone preview, and passport overview
 function HomePage({ userId, unlockedLocations }) {
   const { t } = useLanguage()
+
+  // Quick lookup flags for key highlight landmarks
   const khueVanCacUnlocked = unlockedLocations.has('interpret')
   const daiTrungUnlocked = unlockedLocations.has('location-dai-trung-gate')
   const thaiHocUnlocked = unlockedLocations.has('location-thai-hoc-house')
+
+  // Preview collection of stamp thumbnails for the home passport section
   const passportPreview = [
     ['interpret', 'khue-van-cac.jpg', 'Khue Van Pavilion'],
     ['location-van-mieu-gate', 'cong-van-mieu.jpg', 'Temple of Literature Gate'],
@@ -18,7 +23,9 @@ function HomePage({ userId, unlockedLocations }) {
 
   return (
     <section className="screen" id="explore">
+      {/* Hero presentation banner */}
       <div className="hero">
+
         <img
           className="hero-bg heritage-photo"
           src="/images/heritage/van-mieu-hero.jpg"
@@ -239,7 +246,7 @@ function HomePage({ userId, unlockedLocations }) {
                 <h3>{t("locations.names.khueVanCac")}</h3>
                 <p>{t("locations.descriptions.khueVanCac")}</p>
                 <div className="meta">
-                  <span>⌖ 32 m</span>
+          
                   {khueVanCacUnlocked && <span>{t("home.map.verified")}</span>}
                 </div>
                 {khueVanCacUnlocked ? (
@@ -270,7 +277,7 @@ function HomePage({ userId, unlockedLocations }) {
                 <h3>{t("locations.names.daiTrungGate")}</h3>
                 <p>{t("locations.descriptions.daiTrungGate")}</p>
                 <div className="meta">
-                  <span>⌖ 46 m</span>
+                  
                 </div>
                 {daiTrungUnlocked ? (
                   <a className="btn btn-outline btn-block" href="/Explore/Cong-Dai-Trung">
@@ -300,7 +307,7 @@ function HomePage({ userId, unlockedLocations }) {
                 <h3>{t("locations.names.thaiHocHouse")}</h3>
                 <p>{t("home.featured.unlockStory")}</p>
                 <div className="meta">
-                  <span>⌖ 210 m</span>
+  
                 </div>
                 {thaiHocUnlocked ? (
                   <a className="btn btn-outline btn-block" href="/Explore/Nha-Thai-Hoc">

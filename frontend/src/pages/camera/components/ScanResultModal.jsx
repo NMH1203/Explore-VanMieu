@@ -2,6 +2,7 @@ import { Check, ArrowRight, RotateCcw } from 'lucide-react'
 import { useLanguage } from '../../../i18n/LanguageContext.jsx'
 import { getLocationTranslationKey } from '../../../i18n/locationKeys.js'
 
+// Modal bottom sheet displayed upon successful scan verification with links to the unlocked location story
 export default function ScanResultModal({
   location,
   distanceMeters,
@@ -13,6 +14,7 @@ export default function ScanResultModal({
 
   return (
     <div className="camera-bottom scan-result-modal">
+
       <div className="result-check">
         <Check size={28} strokeWidth={3} />
       </div>

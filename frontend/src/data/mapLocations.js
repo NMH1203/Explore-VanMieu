@@ -1,3 +1,4 @@
+// Leaflet map boundary, center coordinates, and zoom limits for Văn Miếu complex
 export const VAN_MIEU_BOUNDS = {
   center: [21.02875, 105.8360],
   defaultZoom: 17,
@@ -10,11 +11,13 @@ export const VAN_MIEU_BOUNDS = {
   ],
 }
 
+// Complete list of all 10 heritage locations with GPS coordinates, imagery, order, and metadata
 export const MAP_LOCATIONS = [
   {
     id: 'location-van-mieu-gate',
     order: 1,
     name: 'Temple of Literature Gate',
+
     tagline: 'Main entrance to the complex',
     lat: 21.02758,
     lng: 105.83551,

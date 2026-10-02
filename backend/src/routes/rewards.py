@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
-
 from backend.src.config.db import engine
 from backend.src.dependencies.auth import get_current_user
 from backend.src.models.user import User
@@ -11,9 +10,11 @@ from backend.src.models.reward import RewardClaim, RewardJourney
 from backend.src.models.heritage_location import HeritageLocation
 from random import SystemRandom
 
+# Router for rewards, 5-target journey milestones, and claim certificate (/api/rewards)
 router = APIRouter(prefix="/api/rewards", tags=["Rewards"])
 
 
+# Compute user journey status: assigns 5 random targets, checks completions, and resolves theme
 def reward_status(session, user):
     journey = session.get(RewardJourney, user.user_id)
     if journey is None:
@@ -29,6 +30,7 @@ def reward_status(session, user):
         journey = session.get(RewardJourney, user.user_id)
         if journey is None:
             raise HTTPException(503, "Unable to assign journey.")
+
     verified = set(session.exec(select(CheckinLog.target_location_id).where(
         CheckinLog.user_id == user.user_id,
         CheckinLog.verification_status == 'verified',

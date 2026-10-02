@@ -1,7 +1,6 @@
 import logging
 import os
 from pathlib import Path
-
 import httpx
 from dotenv import load_dotenv
 
@@ -10,14 +9,17 @@ load_dotenv(PROJECT_ROOT / ".env")
 logger = logging.getLogger(__name__)
 
 
+# Exception raised when LLM API keys or configuration are missing
 class ChatConfigurationError(Exception):
     pass
 
 
+# Exception raised when the upstream AI model provider encounters a failure
 class ChatProviderError(Exception):
     pass
 
 
+# Call external AI API (Yescale / OpenAI-compatible endpoint) to answer visitor heritage queries
 async def answer_heritage_question(
     *,
     location_name: str,
@@ -28,6 +30,7 @@ async def answer_heritage_question(
     api_key = os.getenv("YESCALE_API_KEY", "").strip()
     if not api_key:
         raise ChatConfigurationError("YESCALE_API_KEY is missing from the .env file.")
+
 
     base_url = os.getenv("YESCALE_BASE_URL", "https://api.yescale.io/v1").rstrip("/")
     model = os.getenv("YESCALE_CHAT_MODEL", "gpt-4o-mini")

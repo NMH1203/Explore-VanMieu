@@ -1,15 +1,14 @@
 """Create or refresh the shared local-development administrator account."""
 
 import os
-
 from sqlmodel import Session, select
-
 from backend.src.config.db import engine
 from backend.src.models.user import User
 from backend.src.services.passwords import hash_password
 from backend.src.services.targets import ensure_target_column
 
 
+# Seed or update a development administrator account with hashed password
 def seed_demo_admin() -> User:
     ensure_target_column()
     email = os.getenv("DEMO_ADMIN_EMAIL", "root@example.com").strip().lower()
@@ -35,3 +34,4 @@ def seed_demo_admin() -> User:
 
 if __name__ == "__main__":
     seed_demo_admin()
+

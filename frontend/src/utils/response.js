@@ -1,3 +1,4 @@
+// Centralized HTTP response parser: safely extracts JSON and throws meaningful backend or fallback errors
 export async function handleResponse(response, fallbackMessage) {
   const data = await response.json().catch(() => null)
   if (!response.ok) {
@@ -8,3 +9,4 @@ export async function handleResponse(response, fallbackMessage) {
   }
   return data
 }
+

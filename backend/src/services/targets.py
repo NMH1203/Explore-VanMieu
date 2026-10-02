@@ -1,15 +1,14 @@
 """Assign one persistent, randomly selected heritage target to each account."""
 
 from secrets import choice
-
 from sqlalchemy import inspect, text
 from sqlmodel import Session, select
-
 from backend.src.config.db import engine
 from backend.src.models.heritage_location import HeritageLocation
 from backend.src.models.user import User
 
 
+# Add required columns (target_location_id, is_admin) to SQLite users table if missing (migration helper)
 def ensure_target_column() -> None:
     """Add current user columns to an existing SQLite database without data loss."""
     inspector = inspect(engine)
@@ -41,10 +40,12 @@ def ensure_target_column() -> None:
             ))
 
 
+# Assign a persistent random heritage target location to a user if they don't have one yet
 def assign_target_location(session: Session, user: User) -> str | None:
     """Return the account's target, assigning a random location once if needed."""
     if user.target_location_id:
         return user.target_location_id
+
 
     location_ids = list(session.exec(
         select(HeritageLocation.location_id).order_by(HeritageLocation.sequence_order)

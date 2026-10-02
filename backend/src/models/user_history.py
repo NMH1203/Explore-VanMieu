@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
-
 from sqlmodel import Field, SQLModel
 
 
+# SQLModel entity representing the 'user_history' table (records which user has unlocked which location)
 class UserHistory(SQLModel, table=True):
     __tablename__ = "user_history"
 
@@ -11,6 +11,7 @@ class UserHistory(SQLModel, table=True):
         primary_key=True,
         max_length=32,
     )
+
     location_id: str = Field(
         foreign_key="heritage_locations.location_id",
         primary_key=True,

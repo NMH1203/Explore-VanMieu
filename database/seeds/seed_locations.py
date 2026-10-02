@@ -1,12 +1,14 @@
-from sqlmodel import Session
+"""Seed or update all 10 heritage locations in the database with GPS coordinates, geofences, and story summaries."""
 
+from sqlmodel import Session
 from backend.src.config.db import engine
 from backend.src.models.heritage_location import HeritageLocation
 
-
+# Master list of 10 heritage sites with coordinates, geofence radius (30m), and computer vision labels
 LOCATIONS = [
     {
         "location_id": "location-van-mieu-gate",
+
         "yolo_label": "van_mieu_gate",
         "name": "Temple of Literature Gate",
         "sequence_order": 1,

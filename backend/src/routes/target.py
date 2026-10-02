@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
-
 from backend.src.config.db import engine
 from backend.src.dependencies.auth import get_current_user
 from backend.src.models.heritage_location import HeritageLocation
@@ -8,12 +7,14 @@ from backend.src.models.target import TargetLocationResponse
 from backend.src.models.user import User
 from backend.src.services.targets import assign_target_location
 
-
+# Router for persistent user target location assignment (/api/target)
 router = APIRouter(prefix="/api/target", tags=["Target"])
 
 
+# GET /api/target: Return the user's assigned heritage target location details
 @router.get("", response_model=TargetLocationResponse)
 def get_account_target(current_user: User = Depends(get_current_user)):
+
     with Session(engine) as session:
         user = session.get(User, current_user.user_id)
         if user is None:
